@@ -1,0 +1,38 @@
+@startuml Sequence
+skinparam sequenceMessageAlign right
+title "Sequence Diagram"
+actor Creator
+actor User
+participant EventService
+participant NotificationService
+
+database db
+
+Creator -> EventService : Create
+EventService -> db : CreateEventEntity
+db --> EventService : ok
+User -> EventService : AskToJoin
+EventService -> db : CreateRequest
+db --> EventService : ok
+EventService -> NotificationService : NotifyCreator
+NotificationService -> Creator: SendNotification
+
+Creator -> EventService : Approve
+EventService -> db : UpdateRequest
+db --> EventService : ok
+EventService -> db : UpdateEventQuota
+db --> EventService : ok
+EventService -> NotificationService : NotifyUser
+NotificationService -> User: SendNotification
+
+
+Creator -> Creator : Follow
+Creator -> User : Follow
+User -> Creator : Follow
+User -> User : Follow
+
+Creator -> Creator : Block
+Creator -> User : Block
+User -> Creator : Block
+User -> User : Block
+@enduml

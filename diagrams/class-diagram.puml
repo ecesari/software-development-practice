@@ -1,0 +1,76 @@
+@startuml Class
+class User {
+    string Id
+    string Name
+    string EmailAddress
+    string Password
+    string Bio
+    string PhotoUrl
+    UserRole Role
+    void CreateEvent()
+    void RequestParticipation()
+    void ApproveParticipation()
+    void FollowUser()
+
+}
+
+User "1" *-- "*" Event : creates  
+User "*" -- "*" User : follows  
+
+
+enum UserRole {
+    Admin
+    User
+}
+
+User  *--  UserRole 
+
+class Event {
+    string Id
+    string Header
+    string Description
+    string Location
+    DateTime Time
+    int Hours
+    DateTime CreatedDateTime
+    int CreatedUserId
+    int Quota
+    TypeEvent Type 
+    int FlagCount
+}
+
+' User "1" *-- "*" Event : creates  
+Event  *--  TypeEvent 
+
+enum TypeEvent {
+    Service
+    Event
+}
+
+class Tag{
+    int Id
+    string Name
+}
+
+User "*" -- "*" Tag   
+Event "*" -- "*" Tag  
+
+class Request{
+    int Id
+    int RequesterUserId
+    int RequestedEventId
+    int ApprovedByUserId
+    ApprovalStatus ApprovalStatus
+}
+User "1" *-- "*" Request : requests   
+Event "1" *-- "*" Request  
+User "1" *-- "*" Request : approves   
+ApprovalStatus "1" *-- "*" Request    
+
+enum ApprovalStatus {
+    Pending
+    Approved
+    Denied
+}
+
+@enduml
