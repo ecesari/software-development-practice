@@ -73,4 +73,14 @@ enum ApprovalStatus {
     Denied
 }
 
+class Notification {
+    string Id
+    string UserId
+    string Message
+    bool Read
+}
+
+
+User "1" --* "*" Notification   
+
 @enduml
