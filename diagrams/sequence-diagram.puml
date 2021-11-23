@@ -8,22 +8,24 @@ participant NotificationService
 
 database db
 
-Creator -> EventService : Create
-EventService -> db : CreateEventEntity
+Creator -> EventService : Create(string title, string description, string location, datetime time, int hours)
+EventService -> db : CreateEventEntity(string title, string description, string location, datetime time, int hours, int createdById)
 db --> EventService : ok
-User -> EventService : AskToJoin
-EventService -> db : CreateRequest
+EventService --> Creator : ok
+User -> EventService : AskToJoin(int eventId)
+EventService -> db : CreateRequest(int eventId, int userId, int approvalStauts)
 db --> EventService : ok
-EventService -> NotificationService : NotifyCreator
-NotificationService -> Creator: SendNotification
+EventService --> Creator : ok
+EventService -> NotificationService : NotifyCreator(int eventId)
+NotificationService -> Creator: SendNotification(int eventId)
 
-Creator -> EventService : Approve
-EventService -> db : UpdateRequest
+Creator -> EventService : Approve(int requestId)
+EventService -> db : UpdateRequest(int requestId, int approvalStatus)
 db --> EventService : ok
-EventService -> db : UpdateEventQuota
+EventService -> db : UpdateEventQuota(int eventId)
 db --> EventService : ok
-EventService -> NotificationService : NotifyUser
-NotificationService -> User: SendNotification
+EventService -> NotificationService : NotifyUser(int eventId)
+NotificationService -> User: SendNotification(int eventId, int userId)
 
 
 Creator -> Creator : Follow
