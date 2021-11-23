@@ -7,14 +7,16 @@ class User {
     string Bio
     string PhotoUrl
     UserRole Role
-    void CreateEvent()
-    void RequestParticipation()
-    void ApproveParticipation()
-    void FollowUser()
+    void CreateEvent(string title, string description, string location, datetime time)
+    void CreateService(string title, string description, string location, datetime time, int hours)
+    void RequestServiceParticipation(int eventId)
+    void ApproveServiceParticipation(int requestId)
+    void FollowUser(int userId)
 
 }
 
 User "1" *-- "*" Event : creates  
+User "1" *-- "*" Service : creates  
 User "*" -- "*" User : follows  
 
 
@@ -31,21 +33,36 @@ class Event {
     string Description
     string Location
     DateTime Time
+    ' int Hours
+    DateTime CreatedDateTime
+    int CreatedUserId
+    ' int Quota
+    ' TypeEvent Type 
+    ' int FlagCount
+}
+
+class Service {
+    string Id
+    string Header
+    string Description
+    string Location
+    DateTime Time
     int Hours
     DateTime CreatedDateTime
     int CreatedUserId
     int Quota
-    TypeEvent Type 
+    ' TypeEvent Type 
     int FlagCount
 }
 
-' User "1" *-- "*" Event : creates  
-Event  *--  TypeEvent 
 
-enum TypeEvent {
-    Service
-    Event
-}
+' User "1" *-- "*" Event : creates  
+' Event  *--  TypeEvent 
+
+' enum TypeEvent {
+'     Service
+'     Event
+' }
 
 class Tag{
     int Id
@@ -54,6 +71,7 @@ class Tag{
 
 User "*" -- "*" Tag   
 Event "*" -- "*" Tag  
+Service "*" -- "*" Tag  
 
 class Request{
     int Id
@@ -63,7 +81,7 @@ class Request{
     ApprovalStatus ApprovalStatus
 }
 User "1" *-- "*" Request : requests   
-Event "1" *-- "*" Request  
+Service "1" *-- "*" Request  
 User "1" *-- "*" Request : approves   
 ApprovalStatus "1" *-- "*" Request    
 
