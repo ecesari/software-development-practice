@@ -58,6 +58,26 @@ public class UserService {
         }
     }
 
+    public UserDto login(UserDto params) {
+        final String passwordHash = passwordEncoder.encode(params.getPassword());//
+
+
+        try {
+            final User user = repository.findUserByUsername(params.getUsername()).get();
+            if (user.getPassword() == passwordHash)
+            {
+                return mapUserToDTO(user);
+
+            }
+            else{
+                throw new IllegalArgumentException("Invalid username or password");
+
+            }
+        } catch (DataIntegrityViolationException e) {
+            throw new IllegalArgumentException("Username already taken.");
+        }
+    }
+
     public AuthResponse createAuthenticationToken(AuthRequest authenticationRequest) throws AuthenticationException {
         try {
             authenticationManager.authenticate(

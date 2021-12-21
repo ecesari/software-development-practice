@@ -21,11 +21,26 @@ public class UserController {
     @Autowired
     private UserService service;
 
-//    @CrossOrigin(origins = "http://localhost:8081")
+
+    @CrossOrigin(origins = "http://localhost:8081")
+
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> signUp(@RequestBody UserDto params) {
         try {
             service.register(params);
+            return ResponseEntity.ok(service.createAuthenticationToken(new AuthRequest(params.getUsername(), params.getPassword())));
+        } catch (IllegalArgumentException | DuplicateKeyException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getLocalizedMessage());
+        } catch (AuthenticationException e) {
+            throw new IllegalStateException();
+        }
+    }
+
+    @CrossOrigin(origins = "http://localhost:8081")
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponse> login(@RequestBody UserDto params) {
+        try {
+            service.login(params);
             return ResponseEntity.ok(service.createAuthenticationToken(new AuthRequest(params.getUsername(), params.getPassword())));
         } catch (IllegalArgumentException | DuplicateKeyException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getLocalizedMessage());

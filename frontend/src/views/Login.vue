@@ -40,29 +40,31 @@
                             <form role="form">
                                 <base-input alternative
                                             class="mb-3"
-                                            placeholder="Email"
+                                            placeholder="Username"
+                                            v-model="registerInputs.username"
                                             addon-left-icon="ni ni-email-83">
                                 </base-input>
                                 <base-input alternative
                                             type="password"
                                             placeholder="Password"
+                                            v-model="registerInputs.password"
                                             addon-left-icon="ni ni-lock-circle-open">
                                 </base-input>
-                                <base-checkbox>
+                                <!-- <base-checkbox>
                                     Remember me
-                                </base-checkbox>
+                                </base-checkbox> -->
                                 <div class="text-center">
-                                    <base-button type="primary" class="my-4">Sign In</base-button>
+                                    <base-button v-on:click ='Login' type="primary" class="my-4">Sign In</base-button>
                                 </div>
                             </form>
                         </template>
                     </card>
                     <div class="row mt-3">
-                        <div class="col-6">
+                        <!-- <div class="col-6">
                             <a href="#" class="text-light">
                                 <small>Forgot password?</small>
                             </a>
-                        </div>
+                        </div> -->
                         <div class="col-6 text-right">
                             <a href="#" class="text-light">
                                 <small>Create new account</small>
@@ -75,7 +77,29 @@
     </section>
 </template>
 <script>
-export default {};
+import api from '../api/register'
+
+export default {
+    components: {
+
+    },
+    data () {
+        return {
+            registerInputs: {
+                username : "",
+                password : ""
+            }
+        }
+    },
+    methods: {        
+        Login () {
+            debugger;
+            api.Login(this.registerInputs).then(r => {
+                console.log('ok.')
+            })
+        }
+    }
+};
 </script>
 <style>
 </style>
