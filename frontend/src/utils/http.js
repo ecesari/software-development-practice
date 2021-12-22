@@ -3,8 +3,10 @@ import axios from 'axios'
 import statuses from '../utils/statuses'
 import modal from '../utils/modal'
 
+
+
 const getHeaders = (headers) => {
-    const defaultHeaders = {}
+    const defaultHeaders = {}    
     return Object.assign(headers || {}, defaultHeaders)
 }
 
@@ -40,13 +42,23 @@ const handleStatusCode = (e, type) => {
 }
 
 export default {
+    authHeader() {
+        debugger;
+        let token = JSON.parse(localStorage.getItem('token'));
+      
+        if (token) {
+          return { Authorization: 'Bearer ' + token };
+        } else {
+          return {};
+        }
+    },
     delete (url, data, headers, rejectOnError, handleOnError, messageType) {
         return new Promise((resolve, reject) => {
             axios({
                 method: 'DELETE',
                 url: url,
                 data: data,
-                headers: getHeaders(headers),
+                headers: getHeaders(headers) + this.authHeader ,
                 timeout: 300 * 240 * 1000
             }).then((r) => {
                 if (handleStatusCode(r, messageType)) {
@@ -68,7 +80,7 @@ export default {
                 method: 'POST',
                 url: url,
                 data: data,
-                headers: getHeaders(headers),
+                headers: getHeaders(headers) + this.authHeader,
                 timeout: 300 * 240 * 1000
             }).then((r) => {
                 if (handleStatusCode(r, messageType)) {
@@ -90,7 +102,7 @@ export default {
                 method: 'PUT',
                 url: url,
                 data: data,
-                headers: getHeaders(headers),
+                headers: getHeaders(headers) + this.authHeader,
                 timeout: 300 * 240 * 1000
             }).then((r) => {
                 if (handleStatusCode(r, messageType)) {
@@ -122,7 +134,7 @@ export default {
             axios({
                 method: 'GET',
                 url: url + queryString,
-                headers: getHeaders(headers),
+                headers: getHeaders(headers) + this.authHeader,
                 timeout: 300 * 240 * 1000
             }).then((r) => {
                 if (handleStatusCode(r, messageType)) {
