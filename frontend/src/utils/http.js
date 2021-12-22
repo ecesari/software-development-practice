@@ -130,11 +130,13 @@ export default {
                     return [str, delimiter, key, '=', val].join('')
                 }, '')
             }
-
+            debugger;
+            // var headers = getHeaders(headers) + this.authHeader();
+            var headers = getHeaders(headers);
             axios({
                 method: 'GET',
                 url: url + queryString,
-                headers: getHeaders(headers) + this.authHeader,
+                headers: headers,
                 timeout: 300 * 240 * 1000
             }).then((r) => {
                 if (handleStatusCode(r, messageType)) {
