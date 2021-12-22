@@ -17,7 +17,7 @@
                           header-classes="bg-white pb-5"
                           body-classes="px-lg-5 py-lg-5"
                           class="border-0">
-                        <template>
+                        <!-- <template>
                             <div class="text-muted text-center mb-3">
                                 <small>Sign in with</small>
                             </div>
@@ -32,11 +32,11 @@
                                     Google
                                 </base-button>
                             </div>
-                        </template>
+                        </template> -->
                         <template>
-                            <div class="text-center text-muted mb-4">
+                            <!-- <div class="text-center text-muted mb-4">
                                 <small>Or sign up with credentials</small>
-                            </div>
+                            </div> -->
                             <form role="form">
                                 <base-input alternative
                                             class="mb-3"
@@ -54,7 +54,7 @@
                                             class="mb-3"
                                             placeholder="Short Bio"
                                             v-model="registerInputs.bio"
-                                            addon-left-icon="ni ni-email-83">
+                                            addon-left-icon="ni ni-bell-55">
                                 </base-input>
                                 <base-input alternative
                                             type="password"
@@ -62,17 +62,18 @@
                                             placeholder="Password"
                                             addon-left-icon="ni ni-lock-circle-open">
                                 </base-input>
-                      
-                                <div class="text-muted font-italic">
+                                <multiselect v-model="selectedTags" :options="tags" :multiple="true" :close-on-select="false" :show-labels="false" 
+                                placeholder="Pick a value"></multiselect>
+                                <!-- <div class="text-muted font-italic">
                                     <small>password strength:
                                         <span class="text-success font-weight-700">strong</span>
                                     </small>
-                                </div>
-                                <base-checkbox>
+                                </div> -->
+                                <!-- <base-checkbox>
                                     <span>I agree with the
                                         <a href="#">Privacy Policy</a>
                                     </span>
-                                </base-checkbox>
+                                </base-checkbox> -->
                                 <div class="text-center">
                                     <base-button v-on:click ='SendRegister' type="primary" class="my-4">Create account</base-button>
                                 </div>
@@ -86,10 +87,11 @@
 </template>
 <script>
 import apiRegister from '../api/register'
+import Multiselect from 'vue-multiselect'
 
 export default {
     components: {
-
+        Multiselect
     },
     data () {
         return {
@@ -98,13 +100,22 @@ export default {
                 email : "",
                 bio : "",
                 password : ""
-            }
+            },
+            selectedTags: [],
+            tags: []
+
         }
     },
     methods: {        
         SendRegister () {
             debugger;
             apiRegister.Register(this.registerInputs).then(r => {
+                console.log('ok.')
+            })
+        },
+        GetTags () {
+            debugger;
+            apiRegister.GetTags().then(r => {
                 console.log('ok.')
             })
         }

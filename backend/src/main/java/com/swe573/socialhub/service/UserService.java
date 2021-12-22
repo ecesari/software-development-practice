@@ -59,12 +59,10 @@ public class UserService {
     }
 
     public UserDto login(UserDto params) {
-
-
         try {
             final User user = repository.findUserByUsername(params.getUsername()).get();
             var passwordMatch = passwordEncoder.matches(params.getPassword(), user.getPassword());
-            
+
             if (passwordMatch) {
                 return mapUserToDTO(user);
 

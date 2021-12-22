@@ -1,11 +1,24 @@
 package com.swe573.socialhub.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 public class User {
+
+    public User(Long id, String username, String email, String bio, Set<Tag> tags)
+    {
+        this.id = id;
+        this.bio = bio;
+        this.username = username;
+        this.email = email;
+        this.tags = tags;
+    }
+
+    public User() {
+
+    }
+
 
     private @Id
     @GeneratedValue
@@ -13,6 +26,13 @@ public class User {
     private String username;
     private String email;
     private String bio;
+    @ManyToMany(cascade = { CascadeType.MERGE })
+    @JoinTable(
+            name = "user_tags",
+            joinColumns = { @JoinColumn(name = "user_id") },
+            inverseJoinColumns = { @JoinColumn(name = "tag_id") }
+    )
+    private Set<Tag> tags;
 
     public String getPassword() {
         return password;
@@ -23,19 +43,6 @@ public class User {
     }
 
     private String password;
-
-    public User(Long id, String username, String email, String bio)
-    {
-        this.id = id;
-        this.bio = bio;
-        this.username = username;
-        this.email = email;
-    }
-
-    public User() {
-
-    }
-
 
     public Long getId() {
         return id;
@@ -67,5 +74,19 @@ public class User {
 
     public void setBio(String bio) {
         this.bio = bio;
+    }
+
+    public Set<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
+    }
+
+
+    @Override
+    public String toString() {
+        return "User{" + "id=" + this.id + ", username='" + this.username + '\'' +'}';
     }
 }

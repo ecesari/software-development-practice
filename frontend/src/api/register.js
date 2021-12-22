@@ -7,5 +7,8 @@ export default {
     },
     Login (data) {
         return http.post(process.env.VUE_APP_API + 'login', data)
+    },
+    GetTags () {
+        return http.get(process.env.VUE_APP_API + 'tags')
     }
 }
