@@ -17,7 +17,7 @@
                           header-classes="bg-white pb-5"
                           body-classes="px-lg-5 py-lg-5"
                           class="border-0">
-                        <template>
+                        <!-- <template>
                             <div class="text-muted text-center mb-3">
                                 <small>Sign in with</small>
                             </div>
@@ -32,11 +32,11 @@
                                     Google
                                 </base-button>
                             </div>
-                        </template>
+                        </template> -->
                         <template>
-                            <div class="text-center text-muted mb-4">
+                            <!-- <div class="text-center text-muted mb-4">
                                 <small>Or sign in with credentials</small>
-                            </div>
+                            </div> -->
                             <form role="form">
                                 <base-input alternative
                                             class="mb-3"
@@ -66,7 +66,7 @@
                             </a>
                         </div> -->
                         <div class="col-6 text-right">
-                            <a href="#" class="text-light">
+                            <a href="#/register" class="text-light">
                                 <small>Create new account</small>
                             </a>
                         </div>
