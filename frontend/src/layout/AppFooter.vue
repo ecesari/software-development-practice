@@ -1,6 +1,6 @@
 <template>
-    <footer class="footer has-cards">
-        <div class="container container-lg">
+    <footer class="footer">
+        <!-- <div class="container container-lg">
             <div class="row">
                 <div class="col-md-6 mb-5 mb-md-0">
                     <div class="card card-lift--hover shadow border-0">
@@ -17,7 +17,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
         <div class="container">
             <div class="row row-grid align-items-center my-md">
                 <div class="col-lg-6">
