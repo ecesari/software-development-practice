@@ -59,17 +59,16 @@ public class UserService {
     }
 
     public UserDto login(UserDto params) {
-        final String passwordHash = passwordEncoder.encode(params.getPassword());//
 
 
         try {
             final User user = repository.findUserByUsername(params.getUsername()).get();
-            if (user.getPassword() == passwordHash)
-            {
+            var passwordMatch = passwordEncoder.matches(params.getPassword(), user.getPassword());
+            
+            if (passwordMatch) {
                 return mapUserToDTO(user);
 
-            }
-            else{
+            } else {
                 throw new IllegalArgumentException("Invalid username or password");
 
             }
@@ -83,8 +82,7 @@ public class UserService {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authenticationRequest.getUserName(), authenticationRequest.getPassword())
             );
-        }
-        catch (BadCredentialsException e) {
+        } catch (BadCredentialsException e) {
             throw new AuthenticationException();
         }
 
@@ -113,6 +111,7 @@ public class UserService {
         }
         return list;
     }
+
     private UserDto mapUserToDTO(User user) {
 
         return new UserDto(
