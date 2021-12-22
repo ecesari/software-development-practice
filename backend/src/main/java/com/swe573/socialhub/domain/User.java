@@ -1,6 +1,7 @@
 package com.swe573.socialhub.domain;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -83,7 +84,13 @@ public class User {
     public void setTags(Set<Tag> tags) {
         this.tags = tags;
     }
-
+    public void addTag(Tag tag) {
+        if (this.tags == null)
+        {
+            this.tags =  new HashSet<Tag>();
+        }
+        this.tags.add(tag);
+    }
 
     @Override
     public String toString() {

@@ -1,7 +1,5 @@
 package com.swe573.socialhub.dto;
 
-import com.swe573.socialhub.domain.Tag;
-
 import java.util.List;
 
 public class UserDto {
@@ -10,23 +8,28 @@ public class UserDto {
     private String email;
     private String bio;
     private String password;
-    private List<Tag> tags;
+    private List<Long> tags;
 
-    public List<Tag> getTags() {
+    public List<Long> getTags() {
         return tags;
     }
 
-    public void setTags(List<Tag> tags) {
+    public void setTags(List<Long> tags) {
         this.tags = tags;
     }
 
 
 
-    public UserDto(Long id, String username, String email, String bio) {
+
+
+
+
+    public UserDto(Long id, String username, String email, String bio, List<Long> tags) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.bio = bio;
+        this.tags = tags;
     }
 
     public String getEmail() {

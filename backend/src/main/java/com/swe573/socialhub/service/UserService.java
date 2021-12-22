@@ -1,9 +1,11 @@
 package com.swe573.socialhub.service;
 
+import com.swe573.socialhub.domain.Tag;
 import com.swe573.socialhub.domain.User;
 import com.swe573.socialhub.dto.AuthRequest;
 import com.swe573.socialhub.dto.AuthResponse;
 import com.swe573.socialhub.dto.UserDto;
+import com.swe573.socialhub.repository.TagRepository;
 import com.swe573.socialhub.repository.UserRepository;
 import com.swe573.socialhub.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +24,16 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
 
     @Autowired
     private UserRepository repository;
+
+    @Autowired
+    private TagRepository tagRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -49,6 +55,15 @@ public class UserService {
         userEntity.setEmail(params.getPassword());
         userEntity.setPassword(passwordHash);
         userEntity.setUsername(params.getUsername());
+        for (Long tagId: params.getTags()) {
+            var addedTag = tagRepository.findById(tagId).orElse(new Tag());
+            if (addedTag.getName() == null)
+            {
+                throw new IllegalArgumentException("Invalid tag");
+
+            }
+            userEntity.addTag(addedTag);
+        }
 
         try {
             final User createdUser = repository.save(userEntity);
@@ -116,7 +131,8 @@ public class UserService {
                 user.getId(),
                 user.getUsername(),
                 user.getEmail(),
-                user.getBio()
+                user.getBio(),
+                user.getTags().stream().map(Tag::getId).collect(Collectors.toUnmodifiableList())
         );
     }
 
