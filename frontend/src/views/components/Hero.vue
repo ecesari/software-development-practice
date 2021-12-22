@@ -20,7 +20,7 @@
                         <p class="lead text-white mt-4 mb-5">A beautiful Design System for Bootstrap 4. It's Free and Open Source.</p>
                         <div class="btn-wrapper">
                             <base-button tag="a"
-                                         href="https://demos.creative-tim.com/vue-argon-design-system/documentation"
+                                         href="#/register"
                                          class="mb-3 mb-sm-0"
                                          type="info"
                                          icon="fa fa-code">
