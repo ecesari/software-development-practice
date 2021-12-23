@@ -42,7 +42,6 @@ const handleStatusCode = (e, type) => {
 }
 
 const getHeaders= () => {
-    debugger;
     let token = JSON.parse(localStorage.getItem('token'));
   
     if (token) {
@@ -78,6 +77,8 @@ export default {
     },
     post (url, data, headers, rejectOnError, handleOnError, messageType) {
         return new Promise((resolve, reject) => {
+    debugger;
+
             axios({
                 method: 'POST',
                 url: url,
@@ -85,7 +86,6 @@ export default {
                 headers: getHeaders(headers),
                 timeout: 300 * 240 * 1000
             }).then((r) => {
-                debugger;
                 if (handleStatusCode(r, messageType)) {
                     resolve(r.data)
                 }

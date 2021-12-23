@@ -142,4 +142,12 @@ public class UserService {
         return mapUserToDTO(userOption.get());
     }
 
+    public UserDto getUserByPrincipal(Principal principal) {
+        final User loggedInUser = repository.findUserByUsername(principal.getName()).get();
+        var dto = mapUserToDTO(loggedInUser);
+        if (loggedInUser == null)
+            throw new IllegalArgumentException("User doesn't exist.");
+        return dto;
+    }
+
 }

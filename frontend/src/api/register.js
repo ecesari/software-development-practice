@@ -10,5 +10,8 @@ export default {
     },
     GetTags () {
         return http.get(process.env.VUE_APP_API + 'tags')
+    },
+    GetProfile () {
+        return http.get(process.env.VUE_APP_API + 'user')
     }
 }
