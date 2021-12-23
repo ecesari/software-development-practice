@@ -110,48 +110,46 @@
             <span class="nav-link-inner--text d-lg-none">Github</span>
           </a>
         </li>
-    
-          <li v-if="!userLoggedIn" class="nav-item d-none d-lg-block ml-lg-4">
-            <a
-              href="#/register"
-              target="_blank"
-              rel="noopener"
-              class="btn btn-neutral btn-icon"
-            >
-              <span class="btn-inner--icon">
-                <i class="fa fa-user mr-2"></i>
-              </span>
-              <span class="nav-link-inner--text">Register</span>
-            </a>
-          </li>
 
-          <li v-if="!userLoggedIn" class="nav-item d-none d-lg-block ml-lg-4">
-            <a
-              href="#/login"
-              target="_blank"
-              rel="noopener"
-              class="btn btn-neutral btn-icon"
-            >
-              <span class="btn-inner--icon">
-                <i class="fa fa-magic mr-2"></i>
-              </span>
-              <span class="nav-link-inner--text">Log In</span>
-            </a>
-          </li>
-         <li v-if="userLoggedIn" class="nav-item d-none d-lg-block ml-lg-4">
-            <a
-              href="#/profile"
-              target="_blank"
-              rel="noopener"
-              class="btn btn-neutral btn-icon"
-            >
-              <span class="btn-inner--icon">
-                <i class="fa fa-meh mr-2"></i>
-              </span>
-              <span class="nav-link-inner--text">My Profile</span>
-            </a>
-          </li>
-        
+        <li v-if="!userLoggedIn" class="nav-item d-none d-lg-block ml-lg-4">
+          <a href="#/register" rel="noopener" class="btn btn-neutral btn-icon">
+            <span class="btn-inner--icon">
+              <i class="fa fa-user mr-2"></i>
+            </span>
+            <span class="nav-link-inner--text">Register</span>
+          </a>
+        </li>
+
+        <li v-if="!userLoggedIn" class="nav-item d-none d-lg-block ml-lg-4">
+          <a href="#/login" rel="noopener" class="btn btn-neutral btn-icon">
+            <span class="btn-inner--icon">
+              <i class="fa fa-magic mr-2"></i>
+            </span>
+            <span class="nav-link-inner--text">Log In</span>
+          </a>
+        </li>
+        <li v-if="userLoggedIn" class="nav-item d-none d-lg-block ml-lg-4">
+          <a href="#/myProfile" rel="noopener" class="btn btn-neutral btn-icon">
+            <span class="btn-inner--icon">
+              <i class="fa fa-meh mr-2"></i>
+            </span>
+            <span class="nav-link-inner--text">My Profile</span>
+          </a>
+        </li>
+
+        <li v-if="userLoggedIn" class="nav-item d-none d-lg-block ml-lg-4">
+          <a
+            href="#"
+            v-on:click="EmptyLocalStorage"
+            rel="noopener"
+            class="btn btn-neutral btn-icon"
+          >
+            <span class="btn-inner--icon">
+              <i class="fa fa-meh mr-2"></i>
+            </span>
+            <span class="nav-link-inner--text">Log Out</span>
+          </a>
+        </li>
       </ul>
     </base-nav>
   </header>
@@ -168,12 +166,27 @@ export default {
     };
   },
   mounted() {
-    this.userLoggedIn = false;
+    debugger;
+    let token = JSON.parse(localStorage.getItem("token"));
+
+    if (token) {
+      this.userLoggedIn = true;
+    } else {
+      this.userLoggedIn = false;
+    }
   },
   components: {
     BaseNav,
     CloseButton,
     BaseDropdown,
+  },
+  methods: {
+    EmptyLocalStorage() {
+      debugger;
+      localStorage.clear();
+      document.location.href = '../';
+
+    },
   },
 };
 </script>

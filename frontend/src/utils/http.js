@@ -5,11 +5,10 @@ import modal from '../utils/modal'
 
 
 
-const getHeaders = (headers) => {
-    debugger;
-    const defaultHeaders = {}    
-    return Object.assign(headers || {}, defaultHeaders)
-}
+// const getHeaders = (headers) => {
+//     const defaultHeaders = {}    
+//     return Object.assign(headers || {}, defaultHeaders)
+// }
 
 const handleError = (e, errorType) => {
     if (e && e.response && e.response.data) {
@@ -42,17 +41,18 @@ const handleStatusCode = (e, type) => {
     return true
 }
 
+const getHeaders= () => {
+    let token = JSON.parse(localStorage.getItem('token'));
+  
+    if (token) {
+      return { Authorization: 'Bearer ' + token };
+    } else {
+      return {};
+    }
+}
+
 export default {
-    authHeader() {
-        debugger;
-        let token = JSON.parse(localStorage.getItem('token'));
-      
-        if (token) {
-          return { Authorization: 'Bearer ' + token };
-        } else {
-          return {};
-        }
-    },
+
     delete (url, data, headers, rejectOnError, handleOnError, messageType) {
         return new Promise((resolve, reject) => {
             axios({
@@ -77,14 +77,15 @@ export default {
     },
     post (url, data, headers, rejectOnError, handleOnError, messageType) {
         return new Promise((resolve, reject) => {
+    debugger;
+
             axios({
                 method: 'POST',
                 url: url,
                 data: data,
-                headers: getHeaders(headers) + this.authHeader,
+                headers: getHeaders(headers),
                 timeout: 300 * 240 * 1000
             }).then((r) => {
-                debugger;
                 if (handleStatusCode(r, messageType)) {
                     resolve(r.data)
                 }
@@ -104,7 +105,7 @@ export default {
                 method: 'PUT',
                 url: url,
                 data: data,
-                headers: getHeaders(headers) + this.authHeader,
+                headers: getHeaders(headers),
                 timeout: 300 * 240 * 1000
             }).then((r) => {
                 if (handleStatusCode(r, messageType)) {
@@ -132,7 +133,6 @@ export default {
                     return [str, delimiter, key, '=', val].join('')
                 }, '')
             }
-            debugger;
             // var headers = getHeaders(headers) + this.authHeader();
             var headers = getHeaders(headers);
             axios({
