@@ -3,12 +3,7 @@ import http from '../utils/http'
 
 export default {
     Register (data) {
-        return http.post(process.env.VUE_APP_API + 'register', data).then((r) => {
-            debugger;
-            if (response.jwt) {
-                localStorage.setItem('token', JSON.stringify(jwt));
-            }
-        })
+        return http.post(process.env.VUE_APP_API + 'register', data)
     },
     Login (data) {
         return http.post(process.env.VUE_APP_API + 'login', data)

@@ -2,10 +2,9 @@ package com.swe573.socialhub.controller;
 
 
 import com.swe573.socialhub.assembler.TagModelAssembler;
-import com.swe573.socialhub.exception.TagNotFoundException;
 import com.swe573.socialhub.domain.Tag;
+import com.swe573.socialhub.exception.TagNotFoundException;
 import com.swe573.socialhub.repository.TagRepository;
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.ResponseEntity;
@@ -13,9 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 public
@@ -41,13 +37,18 @@ class TagController {
     // Aggregate root
     // tag::get-aggregate-root[]
     @GetMapping("/tags")
-    public CollectionModel<EntityModel<Tag>> all() {
+    public List<Tag> all() {
 
-        List<EntityModel<Tag>> tags = repository.findAll().stream() //
-                .map(assembler::toModel) //
-                .collect(Collectors.toList());
+        List<Tag> tags = repository.findAll();
+        List<String> idList = tags.stream().map(Tag::getName).collect(Collectors.toList());
 
-        return CollectionModel.of(tags, linkTo(methodOn(TagController.class).all()).withSelfRel());
+        //        List<EntityModel<Tag>> tags = repository.findAll().stream() //
+//                .map(assembler::toModel) //
+//                .collect(Collectors.toList());
+
+//        return CollectionModel.of(tags, linkTo(methodOn(TagController.class).all()).withSelfRel());
+        return tags;
+
     }
     // end::get-aggregate-root[]
 

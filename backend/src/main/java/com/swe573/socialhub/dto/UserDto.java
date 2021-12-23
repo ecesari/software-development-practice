@@ -1,35 +1,33 @@
 package com.swe573.socialhub.dto;
 
-import java.util.List;
-
 public class UserDto {
     Long id;
     private String username;
     private String email;
     private String bio;
     private String password;
-    private List<Long> tags;
-
-    public List<Long> getTags() {
-        return tags;
-    }
-
-    public void setTags(List<Long> tags) {
-        this.tags = tags;
-    }
-
-
-
+//    private List<Long> tags;
+//
+//    public List<Long> getTags() {
+//        return tags;
+//    }
+//
+//    public void setTags(List<Long> tags) {
+//        this.tags = tags;
+//    }
+//
 
 
 
 
-    public UserDto(Long id, String username, String email, String bio, List<Long> tags) {
+
+
+    public UserDto(Long id, String username, String email, String bio) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.bio = bio;
-        this.tags = tags;
+//        this.tags = tags;
     }
 
     public String getEmail() {
