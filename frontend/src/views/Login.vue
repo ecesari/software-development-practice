@@ -93,10 +93,12 @@ export default {
     },
     methods: {        
         Login () {
-            debugger;
-            api.Login(this.registerInputs).then(r => {
-                console.log('ok.')
-            })
+            api.Login(this.registerInputs).then((r) => {
+                debugger;
+            if (response.jwt) {
+                localStorage.setItem('token', JSON.stringify(jwt));
+            }
+        })
         }
     }
 };

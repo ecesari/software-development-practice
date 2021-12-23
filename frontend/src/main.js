@@ -22,6 +22,8 @@ import Argon from "./plugins/argon-kit";
 import axios from 'axios'
 import './registerServiceWorker'
 
+import 'vue-multiselect/dist/vue-multiselect.min.css'
+
 Vue.config.productionTip = false;
 Vue.use(Argon, axios);
 new Vue({

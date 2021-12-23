@@ -6,6 +6,7 @@ import modal from '../utils/modal'
 
 
 const getHeaders = (headers) => {
+    debugger;
     const defaultHeaders = {}    
     return Object.assign(headers || {}, defaultHeaders)
 }
@@ -58,7 +59,7 @@ export default {
                 method: 'DELETE',
                 url: url,
                 data: data,
-                headers: getHeaders(headers) + this.authHeader ,
+                headers: getHeaders(headers) ,
                 timeout: 300 * 240 * 1000
             }).then((r) => {
                 if (handleStatusCode(r, messageType)) {
@@ -83,6 +84,7 @@ export default {
                 headers: getHeaders(headers) + this.authHeader,
                 timeout: 300 * 240 * 1000
             }).then((r) => {
+                debugger;
                 if (handleStatusCode(r, messageType)) {
                     resolve(r.data)
                 }

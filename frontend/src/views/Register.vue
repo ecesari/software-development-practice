@@ -128,8 +128,8 @@ export default {
             })
         },
         GetTags () {
-            debugger;
             apiRegister.GetTags().then(r => {
+            debugger;
             this.tags = r.data
 
                 console.log('ok.')
