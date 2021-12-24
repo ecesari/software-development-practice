@@ -95,4 +95,9 @@ public class Service {
         public void setQuota(int quota) {
                 Quota = quota;
         }
+
+        @Override
+        public String toString() {
+                return "Service{" + "id=" + this.id + ", header='" + this.Header + '\'' +'}';
+        }
 }
