@@ -1,12 +1,15 @@
 package com.swe573.socialhub.controller;
 
-import com.swe573.socialhub.domain.Service;
-import com.swe573.socialhub.domain.ServiceRepository;
+import com.swe573.socialhub.dto.ServiceDto;
+import com.swe573.socialhub.service.ServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,27 +19,39 @@ import java.util.Optional;
 public class ServiceController {
 
     @Autowired
-    private ServiceRepository serviceRepository;
+    private ServiceService serviceService;
 
     @GetMapping
-    public List<Service> findAllServices() {
-        return serviceRepository.findAll();
-
+    public List<ServiceDto> findAllServices() {
+        try {
+            return serviceService.findAllServices();
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getLocalizedMessage());
+        }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Service> findServiceById(@PathVariable(value = "id") long id) {
-        Optional<Service> service = serviceRepository.findById(id);
+    public ResponseEntity<ServiceDto> findServiceById(@PathVariable(value = "id") long id) {
+        try {
+            Optional<ServiceDto> service = serviceService.findById(id);
 
-        if(service.isPresent()) {
-            return ResponseEntity.ok().body(service.get());
-        } else {
-            return ResponseEntity.notFound().build();
+            if (service.isPresent()) {
+                return ResponseEntity.ok().body(service.get());
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getLocalizedMessage());
         }
     }
 
     @PostMapping
-    public Service saveService(@Validated @RequestBody Service service) {
-        return serviceRepository.save(service);
+    public ResponseEntity<Boolean> saveService(Principal principal, @Validated @RequestBody ServiceDto service) {
+        try {
+            var result = serviceService.save(principal, service);
+            return ResponseEntity.ok().body(result);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getLocalizedMessage());
+        }
     }
 }
