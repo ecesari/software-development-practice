@@ -9,7 +9,7 @@ import Login from "./views/Login.vue";
 import Register from "./views/Register.vue";
 import Profile from "./views/Profile.vue";
 import UserPage from "./views/UserPage.vue";
-import StarterHeader from "./layout/starter/StarterHeader";
+import CreateService from "./views/CreateService.vue";
 import StarterFooter from "./layout/starter/StarterFooter";
 Vue.use(Router);
 
@@ -76,6 +76,14 @@ export default new Router({
         header: AppHeader,
         default: UserPage,
         footer: AppFooter
+      }
+    },
+    {
+      path: "/createService",
+      name: "createService",
+      components: {
+        header: AppHeader,
+        default: CreateService
       }
     }
   ],
