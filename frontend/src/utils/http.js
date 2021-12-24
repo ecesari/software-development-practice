@@ -26,14 +26,19 @@ const handleError = (e, errorType) => {
 }
 
 const handleStatusCode = (e, type) => {
+    debugger;
     if (e && e.data) {
+        if(type)
+        {
+            let message = type + ' successful'
+        }
+        
         let message = ''
-
         if (message.length > 0) {
             if (type === undefined || type === 'modal') {
-                modal.show({StatusCode: 2, Message: message})
+                modal.show({StatusCode: 2, message: message})
             } else {
-                modal.show({StatusCode: 2, Message: message})
+                modal.show({StatusCode: 2, message: message})
             }
         }
     }
@@ -77,8 +82,6 @@ export default {
     },
     post (url, data, headers, rejectOnError, handleOnError, messageType) {
         return new Promise((resolve, reject) => {
-    debugger;
-
             axios({
                 method: 'POST',
                 url: url,

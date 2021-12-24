@@ -49,13 +49,25 @@ package com.swe573.socialhub.domain;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 public class Tag {
 
     private @Id @GeneratedValue Long id;
     private String name;
+    @ManyToMany(mappedBy = "tags")
+    private Set<User> users;
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
+    }
+
 
     public Tag() {}
 

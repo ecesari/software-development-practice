@@ -156,7 +156,7 @@
               Me
             </base-button>
             <router-link to="/myProfile" class="dropdown-item">My Profile</router-link>
-            <router-link to="/myProfile" class="dropdown-item">Create Service</router-link>
+            <router-link to="/createService" class="dropdown-item">Create Service</router-link>
             <div class="dropdown-divider"></div>
                 <a
             href="#"
@@ -187,7 +187,6 @@ export default {
     };
   },
   mounted() {
-    debugger;
     let token = JSON.parse(localStorage.getItem("token"));
 
     if (token) {
@@ -203,7 +202,6 @@ export default {
   },
   methods: {
     EmptyLocalStorage() {
-      debugger;
       localStorage.clear();
       document.location.href = "../";
     },
@@ -212,3 +210,4 @@ export default {
 </script>
 <style>
 </style>
+

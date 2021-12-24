@@ -22,8 +22,6 @@ public class UserController {
     private UserService service;
 
 
-    @CrossOrigin(origins = "http://localhost:8081")
-
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> signUp(@RequestBody UserDto params) {
         try {
@@ -36,7 +34,6 @@ public class UserController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:8081")
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody UserDto params) {
         try {

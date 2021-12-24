@@ -4,7 +4,7 @@
         <div class="position-relative">
             <!-- shape Hero -->
             <section class="section-shaped my-0">
-                <div class="shape shape-style-1 shape-default shape-skew">
+                <div class="shape shape-style-2 shape-default shape-skew">
                     <span></span>
                     <span></span>
                     <span></span>
@@ -25,22 +25,14 @@
                                 <p class="lead  text-white">Welcome to social hub where you can offer your services, join other services
                                     and be part of a growing community where time is the only currency.
                                 </p>
-                                <div class="btn-wrapper">
-                                    <base-button tag="a"
-                                                 href="https://demos.creative-tim.com/argon-design-system/docs/components/alerts.html"
-                                                 class="mb-3 mb-sm-0"
-                                                 type="info"
-                                                 icon="fa fa-code">
-                                        Components
-                                    </base-button>
-                                    <base-button tag="a"
-                                                 href="https://www.creative-tim.com/product/argon-design-system"
-                                                 class="mb-3 mb-sm-0"
-                                                 type="white"
-                                                 icon="ni ni-cloud-download-95">
-                                        Download HTML
-                                    </base-button>
-                                </div>
+                              <div class="btn-wrapper">
+                        <router-link to="/login" class="btn btn-success">
+                            Login Page
+                        </router-link>
+                        <router-link to="/register" class="btn btn-success">
+                            Register Page
+                        </router-link>
+                    </div>
                             </div>
                         </div>
                     </div>

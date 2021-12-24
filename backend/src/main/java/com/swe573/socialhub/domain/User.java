@@ -35,6 +35,9 @@ public class User {
     )
     private Set<Tag> tags;
 
+    @OneToMany(mappedBy = "CreatedUser")
+    private Set<Service> services;
+
     public String getPassword() {
         return password;
     }
@@ -91,6 +94,16 @@ public class User {
         }
         this.tags.add(tag);
     }
+
+
+    public Set<Service> getServices() {
+        return services;
+    }
+
+    public void setServices(Set<Service> services) {
+        this.services = services;
+    }
+
 
     @Override
     public String toString() {
