@@ -128,17 +128,37 @@
             <span class="nav-link-inner--text">Log In</span>
           </a>
         </li>
-        <li v-if="userLoggedIn" class="nav-item d-none d-lg-block ml-lg-4">
-          <a href="#/myProfile" rel="noopener" class="btn btn-neutral btn-icon">
-            <span class="btn-inner--icon">
-              <i class="fa fa-meh mr-2"></i>
-            </span>
-            <span class="nav-link-inner--text">My Profile</span>
-          </a>
-        </li>
-
-        <li v-if="userLoggedIn" class="nav-item d-none d-lg-block ml-lg-4">
-          <a
+        <li>
+          <!-- <base-dropdown tag="li" class="nav-item">
+            <a
+              slot="title"
+              href="#"
+              class="nav-link"
+              data-toggle="dropdown"
+              role="button"
+            >
+              <i class="ni ni-collection d-lg-none"></i>
+              <span class="nav-link-inner--text">Examples</span>
+            </a>
+            <router-link to="/landing" class="dropdown-item"
+              >Landing</router-link
+            >
+            <router-link to="/profile" class="dropdown-item"
+              >Profile</router-link
+            >
+            <router-link to="/login" class="dropdown-item">Login</router-link>
+            <router-link to="/register" class="dropdown-item"
+              >Register</router-link
+            >
+          </base-dropdown> -->
+          <base-dropdown v-if="userLoggedIn" class="nav-item">
+            <base-button slot="title" type="secondary" class="dropdown-toggle btn btn-neutral btn-icon">
+              Me
+            </base-button>
+            <router-link to="/myProfile" class="dropdown-item">My Profile</router-link>
+            <router-link to="/myProfile" class="dropdown-item">Create Service</router-link>
+            <div class="dropdown-divider"></div>
+                <a
             href="#"
             v-on:click="EmptyLocalStorage"
             rel="noopener"
@@ -149,6 +169,7 @@
             </span>
             <span class="nav-link-inner--text">Log Out</span>
           </a>
+          </base-dropdown>
         </li>
       </ul>
     </base-nav>
@@ -184,8 +205,7 @@ export default {
     EmptyLocalStorage() {
       debugger;
       localStorage.clear();
-      document.location.href = '../';
-
+      document.location.href = "../";
     },
   },
 };
