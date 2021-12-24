@@ -13,8 +13,9 @@ public class ServiceDto implements Serializable {
     private final int Minutes;
     private final int Quota;
     private final Long CreatedUserIdId;
+    private final String CreatedUserName;
 
-    public ServiceDto(Long id, String header, String description, String location, LocalDateTime time, int minutes, int quota, Long createdUserIdId) {
+    public ServiceDto(Long id, String header, String description, String location, LocalDateTime time, int minutes, int quota, Long createdUserIdId, String createdUserName) {
         this.id = id;
         Header = header;
         Description = description;
@@ -23,6 +24,7 @@ public class ServiceDto implements Serializable {
         Minutes = minutes;
         Quota = quota;
         CreatedUserIdId = createdUserIdId;
+        CreatedUserName = createdUserName;
     }
 
     public Long getId() {
@@ -55,6 +57,9 @@ public class ServiceDto implements Serializable {
 
     public Long getCreatedUserIdId() {
         return CreatedUserIdId;
+    }
+    public String getCreatedUserName() {
+        return CreatedUserName;
     }
 
     @Override
@@ -89,4 +94,6 @@ public class ServiceDto implements Serializable {
                 "Quota = " + Quota + ", " +
                 "CreatedUserIdId = " + CreatedUserIdId + ")";
     }
+
+
 }

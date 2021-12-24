@@ -28,8 +28,12 @@ const handleError = (e, errorType) => {
 const handleStatusCode = (e, type) => {
     debugger;
     if (e && e.data) {
-        let message = type + ' successful'
-
+        if(type)
+        {
+            let message = type + ' successful'
+        }
+        
+        let message = ''
         if (message.length > 0) {
             if (type === undefined || type === 'modal') {
                 modal.show({StatusCode: 2, message: message})

@@ -22,7 +22,6 @@ export default {
         }
     },
     show: function (status, onSuccess) {
-        debugger;
         if (status.message) {
             swal.fire({
                 title: statuses.isSuccess(status)

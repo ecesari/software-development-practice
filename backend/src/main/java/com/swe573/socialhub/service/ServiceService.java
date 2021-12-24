@@ -68,7 +68,7 @@ public class ServiceService {
 
     private ServiceDto mapToDto(Service service)
     {
-        return new ServiceDto(service.getId(), service.getHeader(),service.getDescription(),service.getLocation(),service.getTime(),service.getMinutes(),service.getQuota(),service.getCreatedUser().getId());
+        return new ServiceDto(service.getId(), service.getHeader(),service.getDescription(),service.getLocation(),service.getTime(),service.getMinutes(),service.getQuota(),service.getCreatedUser().getId(), service.getCreatedUser().getUsername());
     }
 
     private Service mapToEntity(ServiceDto dto)
