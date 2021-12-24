@@ -17,11 +17,7 @@
                     <div class="px-4">
                         <div class="row justify-content-center">
                             <div class="col-lg-3 order-lg-2">
-                                <div class="card-profile-image">
-                                    <a href="#">
-                                        <img v-lazy="'img/theme/team-4-800x800.jpg'" class="rounded-circle">
-                                    </a>
-                                </div>
+                             
                             </div>
                             <div class="col-lg-4 order-lg-3 text-lg-right align-self-lg-center">
                                 <div class="card-profile-actions py-4 mt-lg-0">
@@ -33,11 +29,11 @@
                                 <div class="card-profile-stats d-flex justify-content-center">
                                     <div>
                                         <span class="heading">22</span>
-                                        <span class="description">Friends</span>
+                                        <span class="description">Participants</span>
                                     </div>
                                     <div>
                                         <span class="heading">10</span>
-                                        <span class="description">Photos</span>
+                                        <span class="description">Approval List</span>
                                     </div>
                                     <div>
                                         <span class="heading">89</span>
@@ -47,18 +43,21 @@
                             </div>
                         </div>
                         <div class="text-center mt-5">
-                            <h3>{{ userData.username }}
-                                <span class="font-weight-light">, 27</span>
+                            <h3>{{ serviceData.header }}
+                                <span class="font-weight-light"> by {{ serviceData.createdUserName }}</span>
                             </h3>
-                            <div class="h6 font-weight-300"><i class="ni location_pin mr-2"></i>Bucharesst, Romania</div>
-                            <div class="h6 mt-4"><i class="ni business_briefcase-24 mr-2"></i>{{ userData.email }}</div>
-                            <div><i class="ni education_hat mr-2"></i>University of Computer Science</div>
+                            <!-- <div class="h6 font-weight-300"><i class="ni location_pin mr-2"></i>{{ serviceData.quota }}</div> -->
+                            <div><i class="ni ni-square-pin"></i> : {{ serviceData.location }}</div>
+                            <br>
+                            <div><i class="ni ni-time-alarm"></i>: {{ serviceData.time }}</div>
+                            <div><i class="ni ni-watch-time"></i>: {{ serviceData.minutes }} minutes</div>
+                            <div><i class="ni ni-single-02"></i>: {{ serviceData.quota }} people</div>
                         </div>
-                        <div class="mt-5 py-5 border-top text-center">
+                        <div class="mt-2 py-5 border-top text-center">
                             <div class="row justify-content-center">
                                 <div class="col-lg-9">
-                                    <p>{{ userData.bio }}</p>
-                                    <a href="#">Show more</a>
+                                    <p>{{ serviceData.description }}</p>
+                                    <!-- <a href="#">Show more</a> -->
                                 </div>
                             </div>
                         </div>
@@ -92,10 +91,17 @@ export default {
   },
   methods: {
     GetService() {
-      apiRegister.GetService().then((r) => {
-        this.userData.username = r.username;
-        this.userData.email = r.email;
-        this.userData.bio = r.bio;
+        debugger;
+        var id = this.$route.params.service_id
+      apiRegister.GetService(id).then((r) => {
+        this.serviceData.location = r.location;
+        this.serviceData.time = r.time;
+        this.serviceData.header = r.header;
+        this.serviceData.minutes = r.minutes;
+        this.serviceData.description = r.description;
+        this.serviceData.quota = r.quota;
+        this.serviceData.createdUserIdId = r.createdUserIdId;
+        this.serviceData.createdUserName = r.createdUserName;
         console.log("ok.");
       });
     },

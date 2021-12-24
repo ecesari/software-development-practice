@@ -89,7 +89,7 @@ export default new Router({
       }
     },
     {
-      path: "/service/:id",
+      path: "/service/:service_id",
       name: "singleService",
       components: {
         header: AppHeader,
