@@ -83,7 +83,8 @@ export default new Router({
       name: "createService",
       components: {
         header: AppHeader,
-        default: CreateService
+        default: CreateService,
+        footer: AppFooter
       }
     }
   ],

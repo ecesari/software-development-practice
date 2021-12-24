@@ -14,24 +14,41 @@
         </div>
         <div class="container shape-container py-0 pb-5">
             <div class="row row-grid justify-content-between align-items-center">
-                <div class="col-lg-6">
-                    <h3 class="display-3 text-white">A beautiful Design System
-                        <span class="text-white">completed with examples</span>
+                <div class="col-lg-12">
+                  <br> <br>   <h3 class="display-3 text-white">Create a Service
+                        <span class="text-white">contribute to socialhub</span>
                     </h3>
-                    <p class="lead text-white">The Design System comes with four pre-built pages to help you get started
-                        faster. You can change the text and images and you're good to go. More importantly, looking at
-                        them will give you a picture of what you can built with this powerful Bootstrap 4 Design
-                        System.</p>
-                    <div class="btn-wrapper">
-                        <router-link to="/login" class="btn btn-success">
-                            Login Page
-                        </router-link>
-                        <router-link to="/register" class="btn btn-success">
-                            Register Page
-                        </router-link>
-                    </div>
+                    <p class="lead text-white">You can create services to contribute to the socialhub community. You gain a time balance depending on the duration of the service where you can participate in other socialhub services.</p>
+                    <div class="container mb-5">
+            <!-- Inputs -->
+<br>          
+                <div class="col-lg-12 ">
+                    <base-input placeholder="Header"></base-input>          
                 </div>
-                <div class="col-lg-5 mb-lg-auto">
+                <div class="col-lg-12">
+                
+                    <base-input placeholder="Search"
+                                addon-left-icon="ni ni-zoom-split-in">
+                    </base-input>
+                </div>
+                <!-- <div class="col-lg-4 col-sm-6">
+                    <base-input placeholder="Regular" disabled>
+                    </base-input>
+                    <base-input placeholder="Birthday"
+                                addon-right-icon="ni ni-zoom-split-in">
+                    </base-input>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                    <base-input placeholder="Success" :valid="true">
+                    </base-input>
+
+                    <base-input placeholder="Success" :valid="false">
+                    </base-input>
+                </div> -->
+         
+        </div>
+                </div>
+                <!-- <div class="col-lg-5 mb-lg-auto">
                     <div class="transform-perspective-right">
                         <card class="border-0" type="secondary" shadow
                               body-classes="px-lg-5 py-lg-5"
@@ -76,66 +93,41 @@
                             </template>
                         </card>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </section>
         <!-- <inputs></inputs> -->
         <section class="section pb-0 section-components">
-        <div class="container mb-5">
-            <!-- Inputs -->
-            <h3 class="h4 text-success font-weight-bold mb-4">Create Service</h3>
-            <br>
-            <div class="row">
-                <div class="col-lg-12 col-sm-6">
-                    <base-input placeholder="Regular">
-
-                    </base-input>
-          
-                </div>
-                <div class="col-lg-12 col-sm-6">
-                
-                    <base-input placeholder="Search"
-                                addon-left-icon="ni ni-zoom-split-in">
-                    </base-input>
-                </div>
-                <!-- <div class="col-lg-4 col-sm-6">
-                    <base-input placeholder="Regular" disabled>
-                    </base-input>
-                    <base-input placeholder="Birthday"
-                                addon-right-icon="ni ni-zoom-split-in">
-                    </base-input>
-                </div>
-                <div class="col-lg-4 col-sm-6">
-                    <base-input placeholder="Success" :valid="true">
-                    </base-input>
-
-                    <base-input placeholder="Success" :valid="false">
-                    </base-input>
-                </div> -->
-            </div>
+        <div class="container mb-5 bg-secondary">
+     
         </div>
     </section>
     </div>
 </template>
 <script>
 
-// {
-//     "location": "Istanbul",
-//     "time": "2021-12-24T13:00:00",
-//     "header": "History of Christmas",
-//     "minutes": 60,
-//     "description": "I have a major in history and I would like to tell you about the history of christmas on christmas.",
-//     "quota": 15,
-//     "createdUserIdId": 8
-// }
-
 import Examples from "./components/Examples";
 
 export default {
-  components: {
-   
+  components: {   
     Examples
-  }
+  },
+  data() {
+    return {
+      serviceInputs: {
+        location: "",
+        time: "",
+        header: "",
+        minutes: "",
+        description: "",
+        quota: "",
+        createdUserIdId: "",
+        // selectedTags: [],
+      },
+
+      tags: [],
+    };
+  },
 };
 </script>
