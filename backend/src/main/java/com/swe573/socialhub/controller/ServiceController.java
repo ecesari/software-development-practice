@@ -46,7 +46,7 @@ public class ServiceController {
     }
 
     @PostMapping
-    public ResponseEntity<Boolean> saveService(Principal principal, @Validated @RequestBody ServiceDto service) {
+    public ResponseEntity<Long> saveService(Principal principal, @Validated @RequestBody ServiceDto service) {
         try {
             var result = serviceService.save(principal, service);
             return ResponseEntity.ok().body(result);

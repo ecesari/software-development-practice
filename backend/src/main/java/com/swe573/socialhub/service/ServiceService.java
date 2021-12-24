@@ -48,7 +48,7 @@ public class ServiceService {
         }
     }
 
-    public boolean save(Principal principal, ServiceDto dto)
+    public Long save(Principal principal, ServiceDto dto)
     {
         final User loggedInUser = userRepository.findUserByUsername(principal.getName()).get();
         if (loggedInUser == null)
@@ -58,7 +58,7 @@ public class ServiceService {
             var entity =  mapToEntity(dto);
             entity.setCreatedUser(loggedInUser);
             var savedEntity = serviceRepository.save(entity);
-            return savedEntity != null;
+            return savedEntity.getId();
         } catch (DataException e) {
             throw new IllegalArgumentException("There was a problem trying to save service to db");
         }

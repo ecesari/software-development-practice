@@ -187,7 +187,6 @@ export default {
     };
   },
   mounted() {
-    debugger;
     let token = JSON.parse(localStorage.getItem("token"));
 
     if (token) {
@@ -203,7 +202,6 @@ export default {
   },
   methods: {
     EmptyLocalStorage() {
-      debugger;
       localStorage.clear();
       document.location.href = "../";
     },
