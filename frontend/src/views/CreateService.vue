@@ -85,20 +85,21 @@
         <div class="container mb-5">
             <!-- Inputs -->
             <h3 class="h4 text-success font-weight-bold mb-4">Create Service</h3>
-            <!-- <div class="mb-3">
-                <small class="text-uppercase font-weight-bold">Create</small>
-            </div> -->
             <br>
             <div class="row">
-                <div class="col-lg-4 col-sm-6">
+                <div class="col-lg-12 col-sm-6">
                     <base-input placeholder="Regular">
 
                     </base-input>
+          
+                </div>
+                <div class="col-lg-12 col-sm-6">
+                
                     <base-input placeholder="Search"
                                 addon-left-icon="ni ni-zoom-split-in">
                     </base-input>
                 </div>
-                <div class="col-lg-4 col-sm-6">
+                <!-- <div class="col-lg-4 col-sm-6">
                     <base-input placeholder="Regular" disabled>
                     </base-input>
                     <base-input placeholder="Birthday"
@@ -111,13 +112,24 @@
 
                     <base-input placeholder="Success" :valid="false">
                     </base-input>
-                </div>
+                </div> -->
             </div>
         </div>
     </section>
     </div>
 </template>
 <script>
+
+// {
+//     "location": "Istanbul",
+//     "time": "2021-12-24T13:00:00",
+//     "header": "History of Christmas",
+//     "minutes": 60,
+//     "description": "I have a major in history and I would like to tell you about the history of christmas on christmas.",
+//     "quota": 15,
+//     "createdUserIdId": 8
+// }
+
 import Examples from "./components/Examples";
 
 export default {
