@@ -26,14 +26,15 @@ const handleError = (e, errorType) => {
 }
 
 const handleStatusCode = (e, type) => {
+    debugger;
     if (e && e.data) {
-        let message = ''
+        let message = type + ' successful'
 
         if (message.length > 0) {
             if (type === undefined || type === 'modal') {
-                modal.show({StatusCode: 2, Message: message})
+                modal.show({StatusCode: 2, message: message})
             } else {
-                modal.show({StatusCode: 2, Message: message})
+                modal.show({StatusCode: 2, message: message})
             }
         }
     }
