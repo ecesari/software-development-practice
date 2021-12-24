@@ -23,7 +23,7 @@ import axios from 'axios'
 import './registerServiceWorker'
 
 import 'vue-multiselect/dist/vue-multiselect.min.css'
-
+import "vue2-datepicker/index.css";
 Vue.config.productionTip = false;
 Vue.use(Argon, axios);
 new Vue({

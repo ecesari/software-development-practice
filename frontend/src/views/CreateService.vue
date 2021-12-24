@@ -1,117 +1,109 @@
 <template>
-    <div>
-
-            <section class="section section-lg section-shaped overflow-hidden my-0">
-        <div class="shape shape-style-1 shape-default shape-skew">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-        <div class="container shape-container py-0 pb-5">
-            <div class="row row-grid justify-content-between align-items-center">
+  <div>
+    <section class="section section-lg section-shaped overflow-hidden my-0">
+      <div class="shape shape-style-3 shape-default shape-skew">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <div class="container shape-container py-0 pb-5">
+        <div class="row row-grid justify-content-between align-items-center">
+          <div class="col-lg-12">
+            <br />
+            <br />
+            <h3 class="display-3 text-white">
+              Create a Service
+              <span class="text-white">contribute to socialhub</span>
+            </h3>
+            <p class="lead text-white">
+              You can create services to contribute to the socialhub community.
+              You gain a time balance depending on the duration of the service
+              where you can participate in other socialhub services.
+            </p>
+            <div class="container mb-5">
+              <!-- Inputs -->
+              <form role="form">
+                <br />
                 <div class="col-lg-12">
-                  <br> <br>   <h3 class="display-3 text-white">Create a Service
-                        <span class="text-white">contribute to socialhub</span>
-                    </h3>
-                    <p class="lead text-white">You can create services to contribute to the socialhub community. You gain a time balance depending on the duration of the service where you can participate in other socialhub services.</p>
-                    <div class="container mb-5">
-            <!-- Inputs -->
-<br>          
-                <div class="col-lg-12 ">
-                    <base-input placeholder="Header"></base-input>          
+                  <base-input
+                    placeholder="Header"
+                    addon-left-icon="ni ni-align-left-2"
+                    v-model="serviceInputs.header"
+                  ></base-input>
                 </div>
                 <div class="col-lg-12">
-                
-                    <base-input placeholder="Search"
-                                addon-left-icon="ni ni-zoom-split-in">
-                    </base-input>
+                  <textarea
+                    class="form-control form-control-alternative"
+                    v-model="serviceInputs.description"
+                    rows="3"
+                    placeholder="Write a description of the service here ..."
+                  ></textarea>
+                  <br />
                 </div>
-                <!-- <div class="col-lg-4 col-sm-6">
-                    <base-input placeholder="Regular" disabled>
-                    </base-input>
-                    <base-input placeholder="Birthday"
-                                addon-right-icon="ni ni-zoom-split-in">
-                    </base-input>
+                <div class="col-lg-12">
+                  <base-input
+                    placeholder="Location"
+                    addon-left-icon="ni ni-pin-3"
+                    v-model="serviceInputs.location"
+                  ></base-input>
                 </div>
-                <div class="col-lg-4 col-sm-6">
-                    <base-input placeholder="Success" :valid="true">
-                    </base-input>
-
-                    <base-input placeholder="Success" :valid="false">
-                    </base-input>
-                </div> -->
-         
-        </div>
+                <div class="col-lg-12">
+                  <date-picker
+                    input-class="form-control"
+                    v-model="serviceInputs.time"
+                    type="datetime"
+                  ></date-picker>
                 </div>
-                <!-- <div class="col-lg-5 mb-lg-auto">
-                    <div class="transform-perspective-right">
-                        <card class="border-0" type="secondary" shadow
-                              body-classes="px-lg-5 py-lg-5"
-                              header-classes="pb-5 bg-white">
-                            <template slot="header">
-                                <div class="text-muted text-center mb-3">
-                                    <small>Sign in with</small>
-                                </div>
-                                <div class="btn-wrapper text-center">
-                                    <base-button type="neutral">
-                                        <img slot="icon" src="img/icons/common/github.svg">
-                                        Github
-                                    </base-button>
-
-                                    <base-button type="neutral">
-                                        <img slot="icon" src="img/icons/common/google.svg">
-                                        Google
-                                    </base-button>
-                                </div>
-                            </template>
-                            <template>
-                                <div class="text-center text-muted mb-4">
-                                    <small>Or sign in with credentials</small>
-                                </div>
-                                <form role="form">
-                                    <base-input alternative
-                                                placeholder="Email"
-                                                addon-left-icon="ni ni-email-83">
-                                    </base-input>
-                                    <base-input alternative
-                                                type="password"
-                                                placeholder="Password"
-                                                addon-left-icon="ni ni-lock-circle-open">
-                                    </base-input>
-                                    <base-checkbox>
-                                        Remember me
-                                    </base-checkbox>
-                                    <div class="text-center">
-                                        <base-button type="primary" class="my-4">Sign In</base-button>
-                                    </div>
-                                </form>
-                            </template>
-                        </card>
-                    </div>
-                </div> -->
+                <br />
+                <div class="col-lg-12">
+                  <input
+                    type="number"
+                    class="form-control"
+                    v-model="serviceInputs.quota"
+                    placeholder="Quota"
+                  />
+                </div>
+                <br>
+                <div class="col-lg-12">
+                  <input
+                    type="number"
+                    class="form-control"
+                    v-model="serviceInputs.minutes"
+                    placeholder="Duration (in minutes)"
+                  />
+                </div>
+                <div class="text-center">
+                  <base-button
+                    v-on:click="SendService"
+                    type="success"
+                    class="my-4"
+                    >Create service</base-button
+                  >
+                </div>
+              </form>
             </div>
+          </div>
         </div>
+      </div>
     </section>
-        <!-- <inputs></inputs> -->
-        <section class="section pb-0 section-components">
-        <div class="container mb-5 bg-secondary">
-     
-        </div>
+    <!-- <inputs></inputs> -->
+    <section class="section pb-0 section-components">
+      <div class="container mb-5 bg-secondary"></div>
     </section>
-    </div>
+  </div>
 </template>
 <script>
-
-import Examples from "./components/Examples";
+import apiRegister from "../api/register";
+import DatePicker from "vue2-datepicker";
 
 export default {
-  components: {   
-    Examples
+  components: {
+    DatePicker,
   },
   data() {
     return {
@@ -125,9 +117,16 @@ export default {
         createdUserIdId: "",
         // selectedTags: [],
       },
-
-      tags: [],
     };
   },
+  methods:
+  {
+      SendService() {
+      console.log("Send service started")
+      apiRegister.CreateService(this.serviceInputs).then((r) => {
+             console.log("Send service ok")
+      });
+    }
+  }
 };
 </script>

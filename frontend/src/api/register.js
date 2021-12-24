@@ -13,5 +13,8 @@ export default {
     },
     GetProfile () {
         return http.get(process.env.VUE_APP_API + 'user')
-    }
+    },
+    CreateService (data) {
+        return http.post(process.env.VUE_APP_API + 'service', data)
+    },
 }

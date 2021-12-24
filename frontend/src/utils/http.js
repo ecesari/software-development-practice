@@ -77,8 +77,6 @@ export default {
     },
     post (url, data, headers, rejectOnError, handleOnError, messageType) {
         return new Promise((resolve, reject) => {
-    debugger;
-
             axios({
                 method: 'POST',
                 url: url,
