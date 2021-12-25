@@ -2,7 +2,9 @@ const webpack = require('webpack');
 
 module.exports = {
   configureWebpack: {
-    // Set up all the aliases we use in our app.
+    alias:{
+      '@': path.resolve('src')
+    },
     plugins: [
       new webpack.optimize.LimitChunkCountPlugin({
         maxChunks: 6
