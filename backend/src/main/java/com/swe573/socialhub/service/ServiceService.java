@@ -78,11 +78,11 @@ public class ServiceService {
 
 
     private ServiceDto mapToDto(Service service) {
-        return new ServiceDto(service.getId(), service.getHeader(), service.getDescription(), service.getLocation(), service.getTime(), service.getMinutes(), service.getQuota(), service.getCreatedUser().getId(), service.getCreatedUser().getUsername());
+        return new ServiceDto(service.getId(), service.getHeader(), service.getDescription(), service.getLocation(), service.getTime(), service.getMinutes(), service.getQuota(), service.getCreatedUser().getId(), service.getCreatedUser().getUsername(), service.getLatitude(), service.getLongitude());
     }
 
 
     private Service mapToEntity(ServiceDto dto) {
-        return new Service(null, dto.getHeader(), dto.getDescription(), dto.getLocation(), dto.getTime(), dto.getMinutes(), dto.getQuota(), null);
+        return new Service(null, dto.getHeader(), dto.getDescription(), dto.getLocation(), dto.getTime(), dto.getMinutes(), dto.getQuota(), null,dto.getLatitude(),dto.getLongitude());
     }
 }
