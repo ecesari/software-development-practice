@@ -75,16 +75,38 @@
                 </base-input>
                 <!-- <multiselect v-model="registerInputs.selectedTags" :options="tags" :multiple="true" :close-on-select="false" :show-labels="false" 
                                 placeholder="Pick a value"></multiselect> -->
-                <!-- <div class="text-muted font-italic">
-                                    <small>password strength:
-                                        <span class="text-success font-weight-700">strong</span>
-                                    </small>
-                                </div> -->
-                <!-- <base-checkbox>
-                                    <span>I agree with the
-                                        <a href="#">Privacy Policy</a>
-                                    </span>
-                                </base-checkbox> -->
+
+                <multiselect
+                  v-model="registerInputs.selectedTags"
+                  :options="tags"
+                  :multiple="true"
+                  :close-on-select="false"
+                  :show-labels="false"
+                  placeholder="Pick a tag"
+                  label="name"
+                  track-by="id"
+                ></multiselect>
+
+                <!-- <multiselect
+                  v-model="value"
+                  :options="options"
+                  :multiple="true"
+                  :close-on-select="false"
+                  :clear-on-select="false"
+                  :preserve-search="true"
+                  placeholder="Pick some"
+                  label="name"
+                  track-by="name"
+                  :preselect-first="true"
+                >
+                  <template slot="selection" slot-scope="{ values, isOpen }"
+                    ><span
+                      class="multiselect__single"
+                      v-if="values.length &amp;&amp; !isOpen"
+                      >{{ values.length }} options selected</span
+                    ></template
+                  >
+                </multiselect> -->
                 <div class="text-center">
                   <base-button
                     v-on:click="SendRegister"
@@ -97,11 +119,6 @@
             </template>
           </card>
           <div class="row mt-3">
-            <!-- <div class="col-6">
-                            <a href="#" class="text-light">
-                                <small>Forgot password?</small>
-                            </a>
-                        </div> -->
             <div class="col-6 text-right">
               <a href="#/login" class="text-light">
                 <small>Login</small>
@@ -123,12 +140,22 @@ export default {
   },
   data() {
     return {
+      value: [],
+      options: [
+        { name: "Vue.js", language: "JavaScript" },
+        { name: "Adonis", language: "JavaScript" },
+        { name: "Rails", language: "Ruby" },
+        { name: "Sinatra", language: "Ruby" },
+        { name: "Laravel", language: "PHP" },
+        { name: "Phoenix", language: "Elixir" },
+      ],
+
       registerInputs: {
         username: "",
         email: "",
         bio: "",
         password: "",
-        // selectedTags: [],
+        selectedTags: [],
       },
 
       tags: [],
@@ -142,14 +169,15 @@ export default {
       apiRegister.Register(this.registerInputs).then((r) => {
         if (r.jwt) {
           localStorage.setItem("token", JSON.stringify(r.jwt));
-          document.location.href = '../';
+          document.location.href = "../";
         }
       });
     },
     GetTags() {
+      console.log("Get Tags Started")
       apiRegister.GetTags().then((r) => {
+      console.log("Get Tags Finished")
         this.tags = r;
-
         console.log("ok.");
       });
     },

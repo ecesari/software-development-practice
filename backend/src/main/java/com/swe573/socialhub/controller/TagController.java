@@ -3,19 +3,24 @@ package com.swe573.socialhub.controller;
 
 import com.swe573.socialhub.assembler.TagModelAssembler;
 import com.swe573.socialhub.domain.Tag;
+import com.swe573.socialhub.dto.TagDto;
 import com.swe573.socialhub.exception.TagNotFoundException;
 import com.swe573.socialhub.repository.TagRepository;
+import com.swe573.socialhub.service.TagService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 public
 class TagController {
+
+    @Autowired
+    private TagService tagService;
 
     private final TagRepository repository;
     private final TagModelAssembler assembler;
@@ -37,10 +42,9 @@ class TagController {
     // Aggregate root
     // tag::get-aggregate-root[]
     @GetMapping("/tags")
-    public List<Tag> all() {
+    public List<TagDto> all() {
 
-        List<Tag> tags = repository.findAll();
-        List<String> idList = tags.stream().map(Tag::getName).collect(Collectors.toList());
+        List<TagDto> tags = tagService.findAllTags();
 
         //        List<EntityModel<Tag>> tags = repository.findAll().stream() //
 //                .map(assembler::toModel) //

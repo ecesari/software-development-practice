@@ -5,10 +5,10 @@ import modal from '../utils/modal'
 
 
 
-// const getHeaders = (headers) => {
-//     const defaultHeaders = {}    
-//     return Object.assign(headers || {}, defaultHeaders)
-// }
+const getHeaders = (headers) => {
+    const defaultHeaders = {}
+    return Object.assign(headers || {}, defaultHeaders)
+}
 
 const handleError = (e, errorType) => {
     if (e && e.response && e.response.data) {
@@ -27,17 +27,16 @@ const handleError = (e, errorType) => {
 
 const handleStatusCode = (e, type) => {
     if (e && e.data) {
-        if(type)
-        {
+        if (type) {
             let message = type + ' successful'
         }
-        
+
         let message = ''
         if (message.length > 0) {
             if (type === undefined || type === 'modal') {
-                modal.show({StatusCode: 2, message: message})
+                modal.show({ StatusCode: 2, message: message })
             } else {
-                modal.show({StatusCode: 2, message: message})
+                modal.show({ StatusCode: 2, message: message })
             }
         }
     }
@@ -45,25 +44,25 @@ const handleStatusCode = (e, type) => {
     return true
 }
 
-const getHeaders= () => {
-    let token = JSON.parse(localStorage.getItem('token'));
-  
-    if (token) {
-      return { Authorization: 'Bearer ' + token };
-    } else {
-      return {};
-    }
-}
+// const getHeaders= () => {
+//     let token = JSON.parse(localStorage.getItem('token'));
+
+//     if (token) {
+//       return { Authorization: 'Bearer ' + token };
+//     } else {
+//       return {};
+//     }
+// }
 
 export default {
 
-    delete (url, data, headers, rejectOnError, handleOnError, messageType) {
+    delete(url, data, headers, rejectOnError, handleOnError, messageType) {
         return new Promise((resolve, reject) => {
             axios({
                 method: 'DELETE',
                 url: url,
                 data: data,
-                headers: getHeaders(headers) ,
+                headers: getHeaders(headers),
                 timeout: 300 * 240 * 1000
             }).then((r) => {
                 if (handleStatusCode(r, messageType)) {
@@ -79,7 +78,7 @@ export default {
             })
         })
     },
-    post (url, data, headers, rejectOnError, handleOnError, messageType) {
+    post(url, data, headers, rejectOnError, handleOnError, messageType) {
         return new Promise((resolve, reject) => {
             axios({
                 method: 'POST',
@@ -101,7 +100,7 @@ export default {
             })
         })
     },
-    put (url, data, headers, rejectOnError, handleOnError, messageType) {
+    put(url, data, headers, rejectOnError, handleOnError, messageType) {
         return new Promise((resolve, reject) => {
             axios({
                 method: 'PUT',
@@ -123,7 +122,7 @@ export default {
             })
         })
     },
-    get (url, data, headers, rejectOnError, handleOnError, messageType) {
+    get(url, data, headers, rejectOnError, handleOnError, messageType) {
         return new Promise((resolve, reject) => {
             let queryString = ''
             if (data) {
@@ -147,6 +146,7 @@ export default {
                     resolve(r.data)
                 }
             }).catch((e) => {
+                debugger;
                 if (handleOnError === undefined || handleOnError === true) {
                     handleError(e, messageType)
                 }
