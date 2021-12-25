@@ -25,7 +25,6 @@ public class ServiceService {
 
     public List<ServiceDto> findAllServices() {
         var entities = serviceRepository.findAll();
-        //var list = entities.stream().map(s -> modelMapper.map(s, ServiceDto.class)).collect(Collectors.toList());
 
         var list = entities.stream().map(service -> mapToDto(service)).collect(Collectors.toUnmodifiableList());
 

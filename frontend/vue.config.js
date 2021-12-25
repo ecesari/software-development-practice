@@ -1,10 +1,18 @@
 const webpack = require('webpack');
+const path = require("path");
+const vueSrc = "./src";
 
 module.exports = {
   configureWebpack: {
-    alias:{
-      '@': path.resolve('src')
+    resolve: {
+      alias: {
+        "@": path.resolve(__dirname, vueSrc)
+      },
     },
+
+    // alias:{
+    //   '@': path.resolve('src')
+    // },
     plugins: [
       new webpack.optimize.LimitChunkCountPlugin({
         maxChunks: 6

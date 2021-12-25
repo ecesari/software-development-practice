@@ -49,9 +49,7 @@ public class UserController {
     @GetMapping("/user")
     public UserDto getUser(Principal principal) {
         try {
-
-                return service.getUserByPrincipal(principal);
-
+            return service.getUserByPrincipal(principal);
         } catch (IllegalArgumentException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getLocalizedMessage());
         }
@@ -70,7 +68,6 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getLocalizedMessage());
         }
     }
-
 
 
     @GetMapping("/user/getAll")
