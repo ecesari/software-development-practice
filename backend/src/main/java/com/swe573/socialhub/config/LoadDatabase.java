@@ -1,7 +1,7 @@
 package com.swe573.socialhub.config;
 
 import com.swe573.socialhub.domain.Service;
-import com.swe573.socialhub.domain.ServiceRepository;
+import com.swe573.socialhub.repository.ServiceRepository;
 import com.swe573.socialhub.domain.Tag;
 import com.swe573.socialhub.domain.User;
 import com.swe573.socialhub.repository.TagRepository;

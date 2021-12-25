@@ -26,7 +26,6 @@ const handleError = (e, errorType) => {
 }
 
 const handleStatusCode = (e, type) => {
-    debugger;
     if (e && e.data) {
         if(type)
         {

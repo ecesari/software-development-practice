@@ -114,7 +114,7 @@
   </section>
 </template>
 <script>
-import apiRegister from "../api/register";
+import apiRegister from "@/api/register";
 import Multiselect from "vue-multiselect";
 
 export default {

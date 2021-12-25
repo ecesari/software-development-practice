@@ -16,7 +16,7 @@ public class Service {
                 Time = time;
                 Minutes = minutes;
                 Quota = quota;
-                CreatedUser = createdUser;
+                this.createdUser = createdUser;
         }
 
         private @Id
@@ -30,10 +30,10 @@ public class Service {
         int Quota;
 
         @ManyToOne
-        @JoinColumn(name = "created_user_id")
-        User CreatedUser;
+        @JoinColumn(name = "createdUser")
+        User createdUser;
         public User getCreatedUser() {
-                return CreatedUser;
+                return createdUser;
         }
 
         public Long getId() {
@@ -85,7 +85,7 @@ public class Service {
         }
 
         public void setCreatedUser(User createdUser) {
-                CreatedUser = createdUser;
+                this.createdUser = createdUser;
         }
 
         public int getQuota() {

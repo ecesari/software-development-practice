@@ -20,4 +20,10 @@ export default {
     GetService (id) {
         return http.get(process.env.VUE_APP_API + 'service/'+ id)
     },
+    GetServicesByUser () {
+        return http.get(process.env.VUE_APP_API + 'service/userService')
+    },
+    GetAllServices () {
+        return http.get(process.env.VUE_APP_API + 'service')
+    },
 }

@@ -45,6 +45,16 @@ public class ServiceController {
         }
     }
 
+    @GetMapping("/userService")
+    public ResponseEntity<List<ServiceDto>> getListByUser(Principal principal) {
+        try {
+            List<ServiceDto> services = serviceService.findByUser(principal);
+            return ResponseEntity.ok().body(services);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getLocalizedMessage());
+        }
+    }
+
     @PostMapping
     public ResponseEntity<Long> saveService(Principal principal, @Validated @RequestBody ServiceDto service) {
         try {
