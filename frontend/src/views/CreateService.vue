@@ -168,7 +168,7 @@ export default {
       console.log("Send service started");
       apiRegister.CreateService(this.serviceInputs).then((r) => {
         console.log("Send service ok");
-        document.location.href = "../Service/" + r;
+        document.location.href = "#/service/" + r;
       });
     },
     GetGeoLocation() {

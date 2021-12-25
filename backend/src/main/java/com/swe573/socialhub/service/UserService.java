@@ -54,7 +54,7 @@ public class UserService {
         userEntity.setEmail(params.getPassword());
         userEntity.setPassword(passwordHash);
         userEntity.setUsername(params.getUsername());
-        var tags = params.getTags();
+        var tags = params.getUserTags();
         if (tags != null) {
             for (TagDto tagDto : tags) {
                 var addedTag = tagRepository.findById(tagDto.getId());

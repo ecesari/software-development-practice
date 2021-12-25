@@ -74,12 +74,12 @@
                 >
                 </base-input>
                 <multiselect
-                  v-model="registerInputs.selectedTags"
+                  v-model="registerInputs.userTags"
                   :options="tags"
                   :multiple="true"
                   :close-on-select="false"
                   :show-labels="false"
-                  placeholder="Pick a tag"
+                  placeholder="Pick your interests"
                   label="name"
                   track-by="id"
                 ></multiselect>
@@ -121,7 +121,7 @@ export default {
         email: "",
         bio: "",
         password: "",
-        selectedTags: [],
+        userTags: [],
       },
 
       tags: []
@@ -143,8 +143,8 @@ export default {
     //   debugger;
     //   var a = this.footags;
     //   var x = this.registerInputs;
-    //   var t = this.registerInputs.selectedTags;
-    //   apiRegister.SetTags(this.registerInputs.selectedTags).then((r) => {
+    //   var t = this.registerInputs.userTags;
+    //   apiRegister.SetTags(this.registerInputs.userTags).then((r) => {
     //     debugger;
     //   });
     // },
