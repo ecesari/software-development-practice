@@ -1,6 +1,7 @@
 package com.swe573.socialhub.service;
 
 import com.swe573.socialhub.domain.Service;
+import com.swe573.socialhub.domain.Tag;
 import com.swe573.socialhub.domain.User;
 import com.swe573.socialhub.dto.ServiceDto;
 import com.swe573.socialhub.dto.TagDto;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -96,11 +98,18 @@ public class ServiceService {
 
 
     private ServiceDto mapToDto(Service service) {
-        return new ServiceDto(service.getId(), service.getHeader(), service.getDescription(), service.getLocation(), service.getTime(), service.getMinutes(), service.getQuota(), service.getCreatedUser().getId(), service.getCreatedUser().getUsername(), service.getLatitude(), service.getLongitude(), null);
+        var list = new ArrayList<TagDto>();
+        if (service.getServiceTags() != null) {
+            for (Tag tag : service.getServiceTags()) {
+                var dto = new TagDto(tag.getId(), tag.getName());
+                list.add(dto);
+            }
+        }
+        return new ServiceDto(service.getId(), service.getHeader(), service.getDescription(), service.getLocation(), service.getTime(), service.getMinutes(), service.getQuota(), service.getCreatedUser().getId(), service.getCreatedUser().getUsername(), service.getLatitude(), service.getLongitude(), list);
     }
 
 
     private Service mapToEntity(ServiceDto dto) {
-        return new Service(null, dto.getHeader(), dto.getDescription(), dto.getLocation(), dto.getTime(), dto.getMinutes(), dto.getQuota(), null,dto.getLatitude(),dto.getLongitude());
+        return new Service(null, dto.getHeader(), dto.getDescription(), dto.getLocation(), dto.getTime(), dto.getMinutes(), dto.getQuota(), null, dto.getLatitude(), dto.getLongitude());
     }
 }
