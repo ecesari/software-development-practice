@@ -8,68 +8,39 @@
           class="row row-grid"
         >
           <div
-            v-for="service in serviceArray"
-            :key="service.id"
+            v-for="(service, index) in serviceArray"
+            :key="index"
             class="col-lg-4"
           >
             <card class="border-0" hover shadow body-classes="py-5">
-              <icon name="ni ni-check-bold" type="primary" rounded class="mb-4">
+              <icon
+                v-bind:type="GetClass(index)"
+                v-bind:name="GetIcon(index)"
+                rounded
+                class="mb-4"
+              >
               </icon>
-              <h6 class="text-primary text-uppercase">{{ service.id }}</h6>
+              <h6 v-bind:class="GetTextClass(index)">{{ service.header }}</h6>
               <p class="description mt-3">
-                Argon is a great free UI package based on Bootstrap 4 that
-                includes the most important components and features.
+                {{ service.description }}
               </p>
               <div>
-                <badge type="primary" rounded>{{ service.id }}</badge>
-                <badge type="primary" rounded>system</badge>
-                <badge type="primary" rounded>creative</badge>
+                <badge v-bind:type="GetClass(index)" rounded>{{
+                  service.location
+                }}</badge>
               </div>
-              <base-button tag="a" href="#" type="primary" class="mt-4">
+              <base-button
+                tag="a"
+                :href="'#/service/' + service.id"
+                v-bind:type="GetClass(index)"
+                class="mt-4"
+              >
                 Learn more
               </base-button>
             </card>
           </div>
-          <!-- <div class="col-lg-4">
-            <card class="border-0" hover shadow body-classes="py-5">
-              <icon name="ni ni-istanbul" type="success" rounded class="mb-4">
-              </icon>
-              <h6 class="text-success text-uppercase">Build Something</h6>
-              <p class="description mt-3">
-                Argon is a great free UI package based on Bootstrap 4 that
-                includes the most important components and features.
-              </p>
-              <div>
-                <badge type="success" rounded>business</badge>
-                <badge type="success" rounded>vision</badge>
-                <badge type="success" rounded>success</badge>
-              </div>
-              <base-button tag="a" href="#" type="success" class="mt-4">
-                Learn more
-              </base-button>
-            </card>
-          </div>
-          <div class="col-lg-4">
-            <card class="border-0" hover shadow body-classes="py-5">
-              <icon name="ni ni-planet" type="warning" rounded class="mb-4">
-              </icon>
-              <h6 class="text-warning text-uppercase">Prepare Launch</h6>
-              <p class="description mt-3">
-                Argon is a great free UI package based on Bootstrap 4 that
-                includes the most important components and features.
-              </p>
-              <div>
-                <badge type="warning" rounded>marketing</badge>
-                <badge type="warning" rounded>product</badge>
-                <badge type="warning" rounded>launch</badge>
-              </div>
-              <base-button tag="a" href="#" type="warning" class="mt-4">
-                Learn more
-              </base-button>
-            </card>
-          </div> -->
         </div>
-        <div class="row row-grid">
+        <!-- <div class="row row-grid">
           <div class="col-lg-4">
             <card class="border-0" hover shadow body-classes="py-5">
               <icon name="ni ni-check-bold" type="primary" rounded class="mb-4">
@@ -127,7 +98,7 @@
               </base-button>
             </card>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -162,14 +133,12 @@ export default {
       if (this.getByUser) {
         console.log("Get Services by User Started");
         apiRegister.GetServicesByUser().then((response) => {
-          debugger;
           this.serviceResult = response;
           this.nestedServiceArray = this.SplitList();
         });
       } else {
         console.log("Get All Services Started");
         apiRegister.GetAllServices().then((response) => {
-          debugger;
           this.serviceResult = response;
           this.nestedServiceArray = this.SplitList();
         });
@@ -190,7 +159,38 @@ export default {
         listOfArrays.push(temporary);
       }
       return listOfArrays;
-    }
+    },
+    GetClass(index) {
+      var i = index + (1 % 3);
+      if (i == 1) {
+        return "primary";
+      } else if (i == 2) {
+        return "success";
+      } else {
+        return "warning";
+      }
+    },
+    GetIcon(index) {
+      var i = index + (1 % 3);
+      if (i == 1) {
+        return "ni ni-check-bold";
+      } else if (i == 2) {
+        return "ni ni-istanbul";
+      } else {
+        return "ni ni-planet";
+      }
+    },
+    GetTextClass(index) {
+
+      var i = index + (1 % 3);
+      if (i == 1) {
+        return "text-primary text-uppercase";
+      } else if (i == 2) {
+        return "text-success text-uppercase";
+      } else {
+        return "text-warning text-uppercase";
+      }
+    },
   },
   props: {
     getByUser: Boolean,
