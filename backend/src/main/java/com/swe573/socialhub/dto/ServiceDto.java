@@ -2,6 +2,7 @@ package com.swe573.socialhub.dto;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 public class ServiceDto implements Serializable {
@@ -16,8 +17,9 @@ public class ServiceDto implements Serializable {
     private final String CreatedUserName;
     private Double Latitude;
     private Double Longitude;
+    private List<TagDto> ServiceTags;
 
-    public ServiceDto(Long id, String header, String description, String location, LocalDateTime time, int minutes, int quota, Long createdUserIdId, String createdUserName, Double latitude, Double longitude) {
+    public ServiceDto(Long id, String header, String description, String location, LocalDateTime time, int minutes, int quota, Long createdUserIdId, String createdUserName, Double latitude, Double longitude, List<TagDto> serviceTags) {
         this.id = id;
         Header = header;
         Description = description;
@@ -29,6 +31,7 @@ public class ServiceDto implements Serializable {
         CreatedUserName = createdUserName;
         Latitude = latitude;
         Longitude = longitude;
+        ServiceTags = serviceTags;
     }
 
     public Long getId() {
@@ -106,5 +109,9 @@ public class ServiceDto implements Serializable {
 
     public Double getLongitude() {
         return Longitude;
+    }
+
+    public List<TagDto> getServiceTags() {
+        return ServiceTags;
     }
 }

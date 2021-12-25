@@ -94,7 +94,7 @@
                 </div>
                 <div class="col-lg-12">
                   <multiselect
-                    v-model="serviceInputs.selectedTags"
+                    v-model="serviceInputs.serviceTags"
                     :options="tags"
                     :multiple="true"
                     :close-on-select="false"
@@ -157,7 +157,7 @@ export default {
         createdUserIdId: "",
         latitude: "",
         longitude: "",
-        selectedTags: [],
+        serviceTags: [],
       },
 
       tags: [],

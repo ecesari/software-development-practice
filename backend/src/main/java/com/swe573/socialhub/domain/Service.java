@@ -2,6 +2,8 @@ package com.swe573.socialhub.domain;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Service {
@@ -38,6 +40,14 @@ public class Service {
     @ManyToOne
     @JoinColumn(name = "createdUser")
     User createdUser;
+
+    @ManyToMany(cascade = { CascadeType.MERGE })
+    @JoinTable(
+            name = "service_tags",
+            joinColumns = { @JoinColumn(name = "service_id") },
+            inverseJoinColumns = { @JoinColumn(name = "tag_id") }
+    )
+    Set<Tag> ServiceTags;
 
     public User getCreatedUser() {
         return createdUser;
@@ -119,9 +129,24 @@ public class Service {
         Longitude = longitude;
     }
 
+    public Set<Tag> getServiceTags() {
+        return ServiceTags;
+    }
+
+    public void setServiceTags(Set<Tag> serviceTags) {
+        ServiceTags = serviceTags;
+    }
 
     @Override
     public String toString() {
         return "Service{" + "id=" + this.id + ", header='" + this.Header + '\'' + '}';
+    }
+
+    public void addTag(Tag tag) {
+        if (this.ServiceTags == null)
+        {
+            this.ServiceTags =  new HashSet<Tag>();
+        }
+        this.ServiceTags.add(tag);
     }
 }
