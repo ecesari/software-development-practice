@@ -68,7 +68,7 @@
                     placeholder="Quota"
                   />
                 </div>
-                <br>
+                <br />
                 <div class="col-lg-12">
                   <input
                     type="number"
@@ -76,7 +76,35 @@
                     v-model="serviceInputs.minutes"
                     placeholder="Duration (in minutes)"
                   />
+                  <br />
                 </div>
+                <div class="col-lg-12">
+                  <base-input
+                    placeholder="Latitude"
+                    addon-left-icon="ni ni-pin-3"
+                    v-model="serviceInputs.latitude"
+                  ></base-input>
+                </div>
+                <div class="col-lg-12">
+                  <base-input
+                    placeholder="Longitude"
+                    addon-left-icon="ni ni-pin-3"
+                    v-model="serviceInputs.longitude"
+                  ></base-input>
+                </div>
+                <div class="col-lg-12">
+                  <multiselect
+                    v-model="serviceInputs.selectedTags"
+                    :options="tags"
+                    :multiple="true"
+                    :close-on-select="false"
+                    :show-labels="false"
+                    placeholder="Pick a tag"
+                    label="name"
+                    track-by="id"
+                  ></multiselect>
+                </div>
+
                 <div class="text-center">
                   <base-button
                     v-on:click="SendService"
@@ -91,7 +119,13 @@
         </div>
       </div>
     </section>
-    <!-- <inputs></inputs> -->
+    <!-- <div>
+      <p>Click the button to get your coordinates.</p>
+
+      <button @click="GetGeoLocation()">Try It</button>
+
+      <p id="demo"></p>
+    </div> -->
     <section class="section pb-0 section-components">
       <div class="container mb-5 bg-secondary"></div>
     </section>
@@ -100,10 +134,16 @@
 <script>
 import apiRegister from "../api/register";
 import DatePicker from "vue2-datepicker";
+import Multiselect from "vue-multiselect";
 
 export default {
   components: {
     DatePicker,
+    Multiselect,
+  },
+  mounted() {
+    this.GetGeoLocation();
+    this.GetTags();
   },
   data() {
     return {
@@ -115,19 +155,38 @@ export default {
         description: "",
         quota: "",
         createdUserIdId: "",
-        // selectedTags: [],
+        latitude: "",
+        longitude: "",
+        selectedTags: [],
       },
+
+      tags: [],
     };
   },
-  methods:
-  {
-      SendService() {
-      console.log("Send service started")
+  methods: {
+    SendService() {
+      console.log("Send service started");
       apiRegister.CreateService(this.serviceInputs).then((r) => {
-            console.log("Send service ok")
-              document.location.href = '../Service/' + r;
+        console.log("Send service ok");
+        document.location.href = "../Service/" + r;
       });
-    }
-  }
+    },
+    GetGeoLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(this.ShowPosition);
+      }
+    },
+    ShowPosition(position) {
+      this.serviceInputs.latitude = position.coords.latitude;
+      this.serviceInputs.longitude = position.coords.longitude;
+    },
+    GetTags() {
+      console.log("Get Tags Started");
+      apiRegister.GetTags().then((r) => {
+        console.log("Get Tags Finished");
+        this.tags = r;
+      });
+    },
+  },
 };
 </script>

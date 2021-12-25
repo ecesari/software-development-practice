@@ -35,7 +35,7 @@ public class User {
     )
     private Set<Tag> tags;
 
-    @OneToMany(mappedBy = "CreatedUser")
+    @OneToMany(mappedBy = "createdUser")
     private Set<Service> services;
 
     public String getPassword() {

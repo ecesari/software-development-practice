@@ -152,23 +152,35 @@
             >
           </base-dropdown> -->
           <base-dropdown v-if="userLoggedIn" class="nav-item">
-            <base-button slot="title" type="secondary" class="dropdown-toggle btn btn-neutral btn-icon">
+            <base-button
+              slot="title"
+              type="secondary"
+              class="dropdown-toggle btn btn-neutral btn-icon"
+            >
               Me
             </base-button>
-            <router-link to="/myProfile" class="dropdown-item">My Profile</router-link>
-            <router-link to="/createService" class="dropdown-item">Create Service</router-link>
+            <router-link to="/myProfile" class="dropdown-item"
+              >My Profile</router-link
+            >
             <div class="dropdown-divider"></div>
-                <a
-            href="#"
-            v-on:click="EmptyLocalStorage"
-            rel="noopener"
-            class="btn btn-neutral btn-icon"
-          >
-            <span class="btn-inner--icon">
-              <i class="fa fa-meh mr-2"></i>
-            </span>
-            <span class="nav-link-inner--text">Log Out</span>
-          </a>
+            <router-link to="/createService" class="dropdown-item"
+              >Create Service</router-link
+            >
+            <router-link to="/myServices" class="dropdown-item"
+              >My Services</router-link
+            >
+            <div class="dropdown-divider"></div>
+            <a
+              href="#"
+              v-on:click="EmptyLocalStorage"
+              rel="noopener"
+              class="btn btn-neutral btn-icon"
+            >
+              <span class="btn-inner--icon">
+                <i class="fa fa-meh mr-2"></i>
+              </span>
+              <span class="nav-link-inner--text">Log Out</span>
+            </a>
           </base-dropdown>
         </li>
       </ul>

@@ -11,6 +11,7 @@ import Profile from "./views/Profile.vue";
 import UserPage from "./views/UserPage.vue";
 import CreateService from "./views/CreateService.vue";
 import SingleService from "./views/SingleService.vue";
+import MyServices from "./views/MyServices.vue";
 import StarterFooter from "./layout/starter/StarterFooter";
 Vue.use(Router);
 
@@ -94,6 +95,15 @@ export default new Router({
       components: {
         header: AppHeader,
         default: SingleService,
+        footer: AppFooter
+      }
+    },
+    {
+      path: "/myServices",
+      name: "myServices",
+      components: {
+        header: AppHeader,
+        default: MyServices,
         footer: AppFooter
       }
     }

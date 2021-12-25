@@ -1,22 +1,14 @@
 package com.swe573.socialhub.dto;
 
+import java.util.List;
+
 public class UserDto {
     Long id;
     private String username;
     private String email;
     private String bio;
     private String password;
-//    private List<Long> tags;
-//
-//    public List<Long> getTags() {
-//        return tags;
-//    }
-//
-//    public void setTags(List<Long> tags) {
-//        this.tags = tags;
-//    }
-//
-
+    private List<TagDto> tags;
 
 
 
@@ -69,4 +61,15 @@ public class UserDto {
     public void setPassword(String password) {
         this.password = password;
     }
+
+
+
+    public List<TagDto> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<TagDto> tags) {
+        this.tags = tags;
+    }
+
 }

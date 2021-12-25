@@ -2,6 +2,7 @@ package com.swe573.socialhub.controller;
 
 import com.swe573.socialhub.dto.AuthRequest;
 import com.swe573.socialhub.dto.AuthResponse;
+import com.swe573.socialhub.dto.TagDto;
 import com.swe573.socialhub.dto.UserDto;
 import com.swe573.socialhub.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,11 @@ public class UserController {
         }
     }
 
+    @PostMapping("/user/setTags")
+    public ResponseEntity<AuthResponse> setTags(@RequestBody List<TagDto> params) {
+        return null;
+    }
+
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody UserDto params) {
         try {
@@ -49,9 +55,7 @@ public class UserController {
     @GetMapping("/user")
     public UserDto getUser(Principal principal) {
         try {
-
-                return service.getUserByPrincipal(principal);
-
+            return service.getUserByPrincipal(principal);
         } catch (IllegalArgumentException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getLocalizedMessage());
         }
@@ -70,7 +74,6 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getLocalizedMessage());
         }
     }
-
 
 
     @GetMapping("/user/getAll")

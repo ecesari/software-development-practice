@@ -73,18 +73,16 @@
                   addon-left-icon="ni ni-lock-circle-open"
                 >
                 </base-input>
-                <!-- <multiselect v-model="registerInputs.selectedTags" :options="tags" :multiple="true" :close-on-select="false" :show-labels="false" 
-                                placeholder="Pick a value"></multiselect> -->
-                <!-- <div class="text-muted font-italic">
-                                    <small>password strength:
-                                        <span class="text-success font-weight-700">strong</span>
-                                    </small>
-                                </div> -->
-                <!-- <base-checkbox>
-                                    <span>I agree with the
-                                        <a href="#">Privacy Policy</a>
-                                    </span>
-                                </base-checkbox> -->
+                <multiselect
+                  v-model="registerInputs.selectedTags"
+                  :options="tags"
+                  :multiple="true"
+                  :close-on-select="false"
+                  :show-labels="false"
+                  placeholder="Pick a tag"
+                  label="name"
+                  track-by="id"
+                ></multiselect>
                 <div class="text-center">
                   <base-button
                     v-on:click="SendRegister"
@@ -97,16 +95,11 @@
             </template>
           </card>
           <div class="row mt-3">
-            <!-- <div class="col-6">
-                            <a href="#" class="text-light">
-                                <small>Forgot password?</small>
-                            </a>
-                        </div> -->
-            <div class="col-6 text-right">
-              <a href="#/login" class="text-light">
-                <small>Login</small>
+            <!-- <div class="col-6 text-right">
+              <a v-on:click="SendTags" href="#/login" class="text-light">
+                <small>Test</small>
               </a>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
@@ -114,7 +107,7 @@
   </section>
 </template>
 <script>
-import apiRegister from "../api/register";
+import apiRegister from "@/api/register";
 import Multiselect from "vue-multiselect";
 
 export default {
@@ -128,10 +121,10 @@ export default {
         email: "",
         bio: "",
         password: "",
-        // selectedTags: [],
+        selectedTags: [],
       },
 
-      tags: [],
+      tags: []
     };
   },
   mounted() {
@@ -142,14 +135,24 @@ export default {
       apiRegister.Register(this.registerInputs).then((r) => {
         if (r.jwt) {
           localStorage.setItem("token", JSON.stringify(r.jwt));
-          document.location.href = '../';
+          document.location.href = "../";
         }
       });
     },
+    // SendTags() {
+    //   debugger;
+    //   var a = this.footags;
+    //   var x = this.registerInputs;
+    //   var t = this.registerInputs.selectedTags;
+    //   apiRegister.SetTags(this.registerInputs.selectedTags).then((r) => {
+    //     debugger;
+    //   });
+    // },
     GetTags() {
+      console.log("Get Tags Started");
       apiRegister.GetTags().then((r) => {
+        console.log("Get Tags Finished");
         this.tags = r;
-
         console.log("ok.");
       });
     },

@@ -14,8 +14,10 @@ public class ServiceDto implements Serializable {
     private final int Quota;
     private final Long CreatedUserIdId;
     private final String CreatedUserName;
+    private Double Latitude;
+    private Double Longitude;
 
-    public ServiceDto(Long id, String header, String description, String location, LocalDateTime time, int minutes, int quota, Long createdUserIdId, String createdUserName) {
+    public ServiceDto(Long id, String header, String description, String location, LocalDateTime time, int minutes, int quota, Long createdUserIdId, String createdUserName, Double latitude, Double longitude) {
         this.id = id;
         Header = header;
         Description = description;
@@ -25,6 +27,8 @@ public class ServiceDto implements Serializable {
         Quota = quota;
         CreatedUserIdId = createdUserIdId;
         CreatedUserName = createdUserName;
+        Latitude = latitude;
+        Longitude = longitude;
     }
 
     public Long getId() {
@@ -96,4 +100,11 @@ public class ServiceDto implements Serializable {
     }
 
 
+    public Double getLatitude() {
+        return Latitude;
+    }
+
+    public Double getLongitude() {
+        return Longitude;
+    }
 }

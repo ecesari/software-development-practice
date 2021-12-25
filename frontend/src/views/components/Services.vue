@@ -1,0 +1,145 @@
+<template>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-12">
+         <div
+          v-for="(serviceArray, index) in nestedServiceArray"
+          :key="index"
+          class="row row-grid"
+        >
+          <div
+            v-for="(service, index) in serviceArray"
+            :key="index"
+            class="col-lg-4"
+          >
+            <card class="border-0" hover shadow body-classes="py-5">
+              <icon
+                v-bind:type="GetClass(index)"
+                v-bind:name="GetIcon(index)"
+                rounded
+                class="mb-4"
+              >
+              </icon>
+              <h6 v-bind:class="GetTextClass(index)">{{ service.header }}</h6>
+              <p class="description mt-3">
+                {{ service.description }}
+              </p>
+              <div>
+                <badge v-bind:type="GetClass(index)" rounded>{{
+                  service.location
+                }}</badge>
+              </div>
+              <base-button
+                tag="a"
+                :href="'#/service/' + service.id"
+                v-bind:type="GetClass(index)"
+                class="mt-4"
+              >
+                Learn more
+              </base-button>
+            </card>
+          </div>
+        </div> 
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import Hero from "./Hero";
+import apiRegister from "@/api/register";
+
+export default {
+  name: "services",
+  data() {
+    return {
+      serviceResult: [
+        // location: "",
+        // time: "",
+        // header: "",
+        // minutes: "",
+        // description: "",
+        // quota: "",
+        // createdUserIdId: "",
+        // selectedTags: [],
+        // id:""
+      ],
+      nestedServiceArray: [],
+    };
+  },
+  mounted() {
+    this.GetServices();
+  },
+  methods: {
+    GetServices() {
+      if (this.getByUser) {
+        console.log("Get Services by User Started");
+        apiRegister.GetServicesByUser().then((response) => {
+          this.serviceResult = response;
+          this.nestedServiceArray = this.SplitList();
+        });
+      } else {
+
+        console.log("Get All Services Started");
+        apiRegister.GetAllServices().then((response) => {
+          this.serviceResult = response;
+          this.nestedServiceArray = this.SplitList();
+        });
+      }
+
+      console.log("Get Services Finished");
+    },
+    SplitList() {
+      var array = this.serviceResult;
+      var listOfArrays = [];
+
+      var i,
+        j,
+        temporary,
+        chunk = 3;
+      for (i = 0, j = array.length; i < j; i += chunk) {
+        temporary = array.slice(i, i + chunk);
+        listOfArrays.push(temporary);
+      }
+      return listOfArrays;
+    },
+    GetClass(index) {
+      var i = index + (1 % 3);
+      if (i == 1) {
+        return "primary";
+      } else if (i == 2) {
+        return "success";
+      } else {
+        return "warning";
+      }
+    },
+    GetIcon(index) {
+      var i = index + (1 % 3);
+      if (i == 1) {
+        return "ni ni-check-bold";
+      } else if (i == 2) {
+        return "ni ni-istanbul";
+      } else {
+        return "ni ni-planet";
+      }
+    },
+    GetTextClass(index) {
+
+      var i = index + (1 % 3);
+      if (i == 1) {
+        return "text-primary text-uppercase";
+      } else if (i == 2) {
+        return "text-success text-uppercase";
+      } else {
+        return "text-warning text-uppercase";
+      }
+    },
+  },
+  props: {
+    getByUser: Boolean,
+  },
+  components: {
+    Hero,
+  },
+};
+</script>
