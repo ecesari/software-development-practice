@@ -3,6 +3,7 @@ package com.swe573.socialhub.service;
 import com.swe573.socialhub.domain.User;
 import com.swe573.socialhub.dto.AuthRequest;
 import com.swe573.socialhub.dto.AuthResponse;
+import com.swe573.socialhub.dto.TagDto;
 import com.swe573.socialhub.dto.UserDto;
 import com.swe573.socialhub.repository.TagRepository;
 import com.swe573.socialhub.repository.UserRepository;
@@ -53,15 +54,17 @@ public class UserService {
         userEntity.setEmail(params.getPassword());
         userEntity.setPassword(passwordHash);
         userEntity.setUsername(params.getUsername());
-//        for (Long tagId: params.getTags()) {
-//            var addedTag = tagRepository.findById(tagId).orElse(new Tag());
-//            if (addedTag.getName() == null)
-//            {
-//                throw new IllegalArgumentException("Invalid tag");
-//
-//            }
-//            userEntity.addTag(addedTag);
-//        }
+        var tags = params.getTags();
+        if (tags != null) {
+            for (TagDto tagDto : tags) {
+                var addedTag = tagRepository.findById(tagDto.getId());
+                if (addedTag.isEmpty()) {
+                    throw new IllegalArgumentException("There is no tag with this Id.");
+                }
+                userEntity.addTag(addedTag.get());
+            }
+        }
+
 
         try {
             final User createdUser = repository.save(userEntity);

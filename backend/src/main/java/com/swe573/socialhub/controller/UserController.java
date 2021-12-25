@@ -2,6 +2,7 @@ package com.swe573.socialhub.controller;
 
 import com.swe573.socialhub.dto.AuthRequest;
 import com.swe573.socialhub.dto.AuthResponse;
+import com.swe573.socialhub.dto.TagDto;
 import com.swe573.socialhub.dto.UserDto;
 import com.swe573.socialhub.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,11 @@ public class UserController {
         } catch (AuthenticationException e) {
             throw new IllegalStateException();
         }
+    }
+
+    @PostMapping("/user/setTags")
+    public ResponseEntity<AuthResponse> setTags(@RequestBody List<TagDto> params) {
+        return null;
     }
 
     @PostMapping("/login")

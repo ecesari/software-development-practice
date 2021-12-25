@@ -5,10 +5,10 @@ import modal from '../utils/modal'
 
 
 
-const getHeaders = (headers) => {
-    const defaultHeaders = {}
-    return Object.assign(headers || {}, defaultHeaders)
-}
+// const getHeaders = (headers) => {
+//     const defaultHeaders = {}
+//     return Object.assign(headers || {}, defaultHeaders)
+// }
 
 const handleError = (e, errorType) => {
     if (e && e.response && e.response.data) {
@@ -44,15 +44,15 @@ const handleStatusCode = (e, type) => {
     return true
 }
 
-// const getHeaders= () => {
-//     let token = JSON.parse(localStorage.getItem('token'));
+const getHeaders= () => {
+    let token = JSON.parse(localStorage.getItem('token'));
 
-//     if (token) {
-//       return { Authorization: 'Bearer ' + token };
-//     } else {
-//       return {};
-//     }
-// }
+    if (token) {
+      return { Authorization: 'Bearer ' + token };
+    } else {
+      return {};
+    }
+}
 
 export default {
 
