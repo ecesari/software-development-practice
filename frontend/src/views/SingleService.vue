@@ -21,12 +21,25 @@
                 class="col-lg-4 order-lg-3 text-lg-right align-self-lg-center"
               >
                 <div class="card-profile-actions py-4 mt-lg-0">
-                  <base-button type="info" size="sm" class="mr-4"
-                    >Connect</base-button
+                  <base-button
+                    v-if="!userData.hasServiceRequest && !userData.ownsService"
+                    @click="SendApproval"
+                    type="info"
+                    size="sm"
+                    class="mr-4"
+                    >Send Request to Join</base-button
                   >
-                  <base-button type="default" size="sm" class="float-right"
+                  <base-button
+                    disabled
+                    v-if="userData.hasServiceRequest"
+                    type="info"
+                    size="sm"
+                    class="mr-4"
+                    >Already requested to join</base-button
+                  >
+                  <!-- <base-button type="default" size="sm" class="float-right"
                     >Message</base-button
-                  >
+                  > -->
                 </div>
               </div>
               <div class="col-lg-4 order-lg-1">
@@ -38,7 +51,7 @@
                     <span class="description">Participants</span>
                   </div>
                   <div>
-                    <span class="heading">{{serviceData.quota}}</span>
+                    <span class="heading">{{ serviceData.quota }}</span>
                     <span class="description">Quota</span>
                   </div>
                   <!-- <div>
@@ -96,6 +109,8 @@
 </template>
 <script>
 import apiRegister from "../api/register";
+import modal from '../utils/modal'
+
 export default {
   components: {},
   data() {
@@ -112,14 +127,18 @@ export default {
         createdUserName: "",
         serviceTags: [],
       },
+      userData: {
+        hasServiceRequest: "",
+        ownsService: "",
+      },
     };
   },
   mounted() {
     this.GetService();
+    this.GetUserDetails();
   },
   methods: {
-    GetService() {
-      debugger;
+    GetService() {      
       var id = this.$route.params.service_id;
       apiRegister.GetService(id).then((r) => {
         this.serviceData.location = r.location;
@@ -132,7 +151,13 @@ export default {
         this.serviceData.createdUserName = r.createdUserName;
         this.serviceData.serviceTags = r.serviceTags;
         this.serviceData.attendingUserCount = r.attendingUserCount;
-        console.log("ok.");
+      });
+    },
+    GetUserDetails() {
+      var id = this.$route.params.service_id;
+      apiRegister.GetUserServiceDetails(id).then((r) => {
+        this.userData.hasServiceRequest = r.hasServiceRequest;
+        this.userData.ownsService = r.ownsService;
       });
     },
     GetClass(index) {
@@ -145,6 +170,16 @@ export default {
         return "warning";
       }
     },
+    ConfirmApproval() {
+      modal.confirm("Send Request to Join?","The owner of the service will get a notification about your approval request",this.SendApproval)
+    },
+    SendApproval(){
+      debugger;
+        apiRegister.SendUserServiceApproval(id).then((r) => {
+          
+      });
+    },
+    
   },
 };
 </script>

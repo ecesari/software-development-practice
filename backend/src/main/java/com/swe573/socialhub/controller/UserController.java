@@ -1,9 +1,6 @@
 package com.swe573.socialhub.controller;
 
-import com.swe573.socialhub.dto.AuthRequest;
-import com.swe573.socialhub.dto.AuthResponse;
-import com.swe573.socialhub.dto.TagDto;
-import com.swe573.socialhub.dto.UserDto;
+import com.swe573.socialhub.dto.*;
 import com.swe573.socialhub.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -70,6 +67,16 @@ public class UserController {
             } else {
                 return service.getUserByUsername(userId, principal);
             }
+        } catch (IllegalArgumentException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getLocalizedMessage());
+        }
+    }
+
+    @GetMapping("/user/getServiceDetails/{serviceId}")
+    public UserServiceDto getServiceDetails(Principal principal, @PathVariable Long serviceId) {
+        try {
+            return service.getUserServiceDetails(principal, serviceId);
+
         } catch (IllegalArgumentException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getLocalizedMessage());
         }

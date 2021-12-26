@@ -9,8 +9,8 @@ export default {
                 text: message,
                 type: image ? '' : 'question',
                 showCancelButton: true,
-                confirmButtonText: 'Evet',
-                cancelButtonText: 'Hayır',
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'No',
                 imageUrl: image
             }).then((result) => {
                 if (result.value && result.value === true && typeof onSuccess === 'function') {

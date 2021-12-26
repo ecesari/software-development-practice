@@ -29,4 +29,10 @@ export default {
     SetTags (data) {
         return http.post(process.env.VUE_APP_API + 'user/setTags',data)
     },
+    GetUserServiceDetails (serviceId) {
+        return http.get(process.env.VUE_APP_API + 'user/getServiceDetails/'+ serviceId)
+    },
+    SetTags (data) {
+        return http.post(process.env.VUE_APP_API + 'user/setTags',data)
+    },
 }
