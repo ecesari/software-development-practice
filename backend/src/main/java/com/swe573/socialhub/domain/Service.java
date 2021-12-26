@@ -34,12 +34,21 @@ public class Service {
     LocalDateTime Time;
     int Minutes;
     int Quota;
+    int AttendingUserCount;
     Double Latitude;
     Double Longitude;
 
     @ManyToOne
     @JoinColumn(name = "createdUser")
     User createdUser;
+
+    @ManyToMany(cascade = { CascadeType.MERGE })
+    @JoinTable(
+            name = "service_tags",
+            joinColumns = { @JoinColumn(name = "service_id") },
+            inverseJoinColumns = { @JoinColumn(name = "tag_id") }
+    )
+    Set<Tag> ServiceTags;
 
     @ManyToMany(cascade = { CascadeType.MERGE })
     @JoinTable(
