@@ -15,7 +15,7 @@ export default {
         return http.get(process.env.VUE_APP_API + 'user')
     },
     CreateService (data) {
-        return http.post(process.env.VUE_APP_API + 'service', data,null,null,null,'Create Service')
+        return http.post(process.env.VUE_APP_API + 'service', data,null,null,true,'Create Service')
     },
     GetService (id) {
         return http.get(process.env.VUE_APP_API + 'service/'+ id)
@@ -30,9 +30,11 @@ export default {
         return http.post(process.env.VUE_APP_API + 'user/setTags',data)
     },
     GetUserServiceDetails (serviceId) {
+        debugger;
         return http.get(process.env.VUE_APP_API + 'user/getServiceDetails/'+ serviceId)
     },
-    SetTags (data) {
-        return http.post(process.env.VUE_APP_API + 'user/setTags',data)
+    SendUserServiceApproval (serviceId) {
+        debugger;
+        return http.get(process.env.VUE_APP_API + 'approval/request/'+serviceId)
     },
 }

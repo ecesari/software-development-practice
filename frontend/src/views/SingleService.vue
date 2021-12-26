@@ -23,7 +23,7 @@
                 <div class="card-profile-actions py-4 mt-lg-0">
                   <base-button
                     v-if="!userData.hasServiceRequest && !userData.ownsService"
-                    @click="SendApproval"
+                    @click="ConfirmApproval"
                     type="info"
                     size="sm"
                     class="mr-4"
@@ -109,7 +109,7 @@
 </template>
 <script>
 import apiRegister from "../api/register";
-import modal from '../utils/modal'
+import modal from "../utils/modal";
 
 export default {
   components: {},
@@ -138,7 +138,7 @@ export default {
     this.GetUserDetails();
   },
   methods: {
-    GetService() {      
+    GetService() {
       var id = this.$route.params.service_id;
       apiRegister.GetService(id).then((r) => {
         this.serviceData.location = r.location;
@@ -171,15 +171,19 @@ export default {
       }
     },
     ConfirmApproval() {
-      modal.confirm("Send Request to Join?","The owner of the service will get a notification about your approval request",this.SendApproval)
+      modal.confirm(
+        "Send Request to Join?",
+        "You will be added to the pending request list",
+        this.SendApproval
+      );
     },
-    SendApproval(){
-      debugger;
-        apiRegister.SendUserServiceApproval(id).then((r) => {
-          
+    SendApproval() {
+      var serviceId = this.$route.params.service_id;
+
+      apiRegister.SendUserServiceApproval(serviceId).then((r) => {
+        location.reload();
       });
     },
-    
   },
 };
 </script>

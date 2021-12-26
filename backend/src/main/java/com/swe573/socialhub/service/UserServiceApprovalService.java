@@ -2,11 +2,11 @@ package com.swe573.socialhub.service;
 
 import com.swe573.socialhub.domain.User;
 import com.swe573.socialhub.domain.UserServiceApproval;
+import com.swe573.socialhub.domain.key.UserServiceApprovalKey;
 import com.swe573.socialhub.enums.ApprovalStatus;
 import com.swe573.socialhub.repository.ServiceRepository;
 import com.swe573.socialhub.repository.UserRepository;
 import com.swe573.socialhub.repository.UserServiceApprovalRepository;
-import org.hibernate.exception.DataException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +32,8 @@ public class UserServiceApprovalService {
         if (loggedInUser == null)
             throw new IllegalArgumentException("User doesn't exist.");
         var service = serviceRepository.findById(serviceId).get();
-        var entity = new UserServiceApproval(null,loggedInUser,service, ApprovalStatus.PENDING);
+        var key = new UserServiceApprovalKey(loggedInUser.getId(), serviceId);
+        var entity = new UserServiceApproval(key,loggedInUser,service, ApprovalStatus.PENDING);
         try{
             final UserServiceApproval approval = repository.save(entity);
         }

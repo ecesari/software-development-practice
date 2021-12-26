@@ -15,4 +15,13 @@ public class UserServiceApprovalKey implements Serializable {
 
     // standard constructors, getters, and setters
     // hashcode and equals implementation
+
+    public UserServiceApprovalKey(Long userId, Long serviceId) {
+        this.userId = userId;
+        this.serviceId = serviceId;
+    }
+
+    public UserServiceApprovalKey() {
+
+    }
 }
