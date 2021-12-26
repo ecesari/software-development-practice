@@ -13,5 +13,7 @@ import java.util.Optional;
 public interface UserServiceApprovalRepository extends JpaRepository<UserServiceApproval, UserServiceApprovalKey> {
     Optional<UserServiceApproval> findUserServiceApprovalByServiceAndUser(Service service, User user);
     List<UserServiceApproval> findUserServiceApprovalByService_CreatedUserAndApprovalStatus(User user, ApprovalStatus status);
+    Optional<UserServiceApproval> findUserServiceApprovalByService_IdAndUser_Id(Long serviceId, Long userId);
+
 
 }

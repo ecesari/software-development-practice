@@ -81,34 +81,33 @@
                   <p class="description mt-3">
                     Requested by: {{ approvalItem.user.username }}
                   </p>
-                  <div>
+                  <!-- <div>
                     <badge v-bind:type="GetClass(index)" rounded>{{
                       approvalItem.location
                     }}</badge>
-                  </div>
+                  </div> -->
                   <div class="row">
                     <base-button
                       tag="a"
                       v-on:click="
                         Approve(approvalItem.user.id, approvalItem.service.id)
                       "
-                      href="'#'"
+                      href="#"
                       type="success"
                       class="mt-4"
                     >
                       Approve
                     </base-button>
-                     <base-button
+                    <base-button
                       tag="a"
                       v-on:click="
                         Deny(approvalItem.user.id, approvalItem.service.id)
                       "
-                      href="'#'"
+                      href="#"
                       type="warning"
                       class="mt-4"
                     >
                       Deny
-                      
                     </base-button>
                   </div>
                 </card>
@@ -164,16 +163,7 @@ export default {
       }
       return listOfArrays;
     },
-    GetClass(index) {
-      var i = index + (1 % 3);
-      if (i == 1) {
-        return "primary";
-      } else if (i == 2) {
-        return "success";
-      } else {
-        return "warning";
-      }
-    },
+
     GetIcon(index) {
       var i = index + (1 % 3);
       if (i == 1) {
@@ -184,27 +174,23 @@ export default {
         return "ni ni-planet";
       }
     },
-    GetTextClass(index) {
-      var i = index + (1 % 3);
-      if (i == 1) {
-        return "text-primary text-uppercase";
-      } else if (i == 2) {
-        return "text-success text-uppercase";
-      } else {
-        return "text-warning text-uppercase";
-      }
-    },
     Approve(userId, serviceId) {
       debugger;
       this.approveItem.userId = userId;
       this.approveItem.serviceId = serviceId;
-      alert(userId + " " + serviceId);
+      apiRegister.ApproveRequest(this.approveItem).then((response) => {
+        alert("Request Approved");
+        window.location.reload();
+      });
     },
-     Deny(userId, serviceId) {
+    Deny(userId, serviceId) {
       debugger;
       this.approveItem.userId = userId;
       this.approveItem.serviceId = serviceId;
-      alert(userId + " " + serviceId);
+      apiRegister.DenyRequest(this.approveItem).then((response) => {
+        alert("Request Denied");
+        window.location.reload();
+      });
     },
   },
   components: {},

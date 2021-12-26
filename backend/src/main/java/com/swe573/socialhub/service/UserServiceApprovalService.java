@@ -2,6 +2,7 @@ package com.swe573.socialhub.service;
 
 import com.swe573.socialhub.domain.User;
 import com.swe573.socialhub.domain.UserServiceApproval;
+import com.swe573.socialhub.dto.SimpleApprovalDto;
 import com.swe573.socialhub.dto.UserServiceApprovalDto;
 import com.swe573.socialhub.domain.key.UserServiceApprovalKey;
 import com.swe573.socialhub.dto.ServiceDto;
@@ -10,6 +11,7 @@ import com.swe573.socialhub.enums.ApprovalStatus;
 import com.swe573.socialhub.repository.ServiceRepository;
 import com.swe573.socialhub.repository.UserRepository;
 import com.swe573.socialhub.repository.UserServiceApprovalRepository;
+import org.hibernate.exception.DataException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -72,4 +74,20 @@ public class UserServiceApprovalService {
     }
 
 
+    public void updateRequestStatus(SimpleApprovalDto dto, ApprovalStatus status) {
+        var request = repository.findUserServiceApprovalByService_IdAndUser_Id(dto.getServiceId(),dto.getUserId());
+        if (!request.isPresent())
+        {
+            throw new IllegalArgumentException("No approval request has been found");
+        }
+        var entity = request.get();
+        entity.setApprovalStatus(status);
+        try {
+            var returnData = repository.save(entity);
+        }
+        catch (DataException e)
+        {
+            throw  new IllegalArgumentException(e.getMessage());
+        }
+    }
 }
