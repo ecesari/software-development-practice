@@ -8,7 +8,7 @@ public class UserDto {
     private String email;
     private String bio;
     private String password;
-    private List<TagDto> tags;
+    private List<TagDto> userTags;
 
 
 
@@ -19,7 +19,7 @@ public class UserDto {
         this.username = username;
         this.email = email;
         this.bio = bio;
-//        this.tags = tags;
+//        this.userTags = userTags;
     }
 
     public String getEmail() {
@@ -64,12 +64,12 @@ public class UserDto {
 
 
 
-    public List<TagDto> getTags() {
-        return tags;
+    public List<TagDto> getUserTags() {
+        return userTags;
     }
 
-    public void setTags(List<TagDto> tags) {
-        this.tags = tags;
+    public void setUserTags(List<TagDto> userTags) {
+        this.userTags = userTags;
     }
 
 }

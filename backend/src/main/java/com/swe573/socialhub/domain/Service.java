@@ -2,6 +2,8 @@ package com.swe573.socialhub.domain;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Service {
@@ -10,7 +12,7 @@ public class Service {
 
     }
 
-    public Service(Long id, String header, String description, String location, LocalDateTime time, int minutes, int quota, User createdUser, Double latitude,Double longitude) {
+    public Service(Long id, String header, String description, String location, LocalDateTime time, int minutes, int quota,int attendingUserCount, User createdUser, Double latitude,Double longitude) {
         this.id = id;
         Header = header;
         Description = description;
@@ -21,6 +23,7 @@ public class Service {
         this.createdUser = createdUser;
         Latitude = latitude;
         Longitude = longitude;
+        AttendingUserCount = attendingUserCount;
     }
 
     private @Id
@@ -32,13 +35,21 @@ public class Service {
     LocalDateTime Time;
     int Minutes;
     int Quota;
+    int AttendingUserCount;
     Double Latitude;
     Double Longitude;
-
     @ManyToOne
     @JoinColumn(name = "createdUser")
     User createdUser;
-
+    @ManyToMany(cascade = { CascadeType.MERGE })
+    @JoinTable(
+            name = "service_tags",
+            joinColumns = { @JoinColumn(name = "service_id") },
+            inverseJoinColumns = { @JoinColumn(name = "tag_id") }
+    )
+    Set<Tag> ServiceTags;
+    @OneToMany(mappedBy = "service")
+    Set<UserServiceApproval> approvalSet;
     public User getCreatedUser() {
         return createdUser;
     }
@@ -119,9 +130,41 @@ public class Service {
         Longitude = longitude;
     }
 
+    public Set<Tag> getServiceTags() {
+        return ServiceTags;
+    }
+
+    public void setServiceTags(Set<Tag> serviceTags) {
+        ServiceTags = serviceTags;
+    }
+
+    public int getAttendingUserCount() {
+        return AttendingUserCount;
+    }
+
+    public void setAttendingUserCount(int attendingUserCount) {
+        AttendingUserCount = attendingUserCount;
+    }
+
+    public Set<UserServiceApproval> getApprovalSet() {
+        return approvalSet;
+    }
+
+    public void setApprovalSet(Set<UserServiceApproval> approvalSet) {
+        this.approvalSet = approvalSet;
+    }
+
 
     @Override
     public String toString() {
         return "Service{" + "id=" + this.id + ", header='" + this.Header + '\'' + '}';
+    }
+
+    public void addTag(Tag tag) {
+        if (this.ServiceTags == null)
+        {
+            this.ServiceTags =  new HashSet<Tag>();
+        }
+        this.ServiceTags.add(tag);
     }
 }

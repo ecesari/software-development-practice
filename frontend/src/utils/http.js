@@ -11,14 +11,16 @@ import modal from '../utils/modal'
 // }
 
 const handleError = (e, errorType) => {
-    if (e && e.response && e.response.data) {
-        if (statuses.isWarning(e.response.data) || statuses.isError(e.response.data)) {
-            if (errorType === undefined || errorType === 'modal') {
-                modal.show(e.response.data)
-            } else {
-                modal.show(e.response.data)
-            }
-        }
+    debugger;
+    if (e && e.message) {
+        //     if (statuses.isWarning(e.response.data) || statuses.isError(e.response.data)) {
+        //         if (errorType === undefined || errorType === 'modal') {
+        //             modal.show(e.response.data)
+        //         } else {
+        //             modal.show(e.response.data)
+        //         }
+        //     }
+        modal.show(4,e.message)
     } else if (e && e.message && e.message.indexOf('timeout') !== -1) {
         modal.show(e)
     }
@@ -44,13 +46,13 @@ const handleStatusCode = (e, type) => {
     return true
 }
 
-const getHeaders= () => {
+const getHeaders = () => {
     let token = JSON.parse(localStorage.getItem('token'));
 
     if (token) {
-      return { Authorization: 'Bearer ' + token };
+        return { Authorization: 'Bearer ' + token };
     } else {
-      return {};
+        return {};
     }
 }
 
@@ -79,8 +81,10 @@ export default {
         })
     },
     post(url, data, headers, rejectOnError, handleOnError, messageType) {
+        debugger;
         return new Promise((resolve, reject) => {
             axios({
+                
                 method: 'POST',
                 url: url,
                 data: data,
@@ -91,7 +95,8 @@ export default {
                     resolve(r.data)
                 }
             }).catch((e) => {
-                if (handleOnError === undefined || handleOnError === true) {
+                debugger;
+                if (handleOnError === true) {
                     handleError(e, messageType)
                 }
                 if (rejectOnError === undefined || rejectOnError === true) {

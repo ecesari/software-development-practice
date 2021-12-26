@@ -1,13 +1,16 @@
-FROM node:lts-alpine
+# Choose the Image which has Node installed already
+FROM node:12.14-alpine
 
 # install simple http server for serving static content
 RUN npm install -g http-server
 
 # make the 'app' folder the current working directory
-WORKDIR /app
+WORKDIR /src
+
+
 
 # copy both 'package.json' and 'package-lock.json' (if available)
-COPY package*.json ./
+COPY package.json ./
 
 # install project dependencies
 RUN npm install

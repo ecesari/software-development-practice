@@ -1,12 +1,11 @@
 package com.swe573.socialhub.service;
 
 import com.swe573.socialhub.domain.User;
-import com.swe573.socialhub.dto.AuthRequest;
-import com.swe573.socialhub.dto.AuthResponse;
-import com.swe573.socialhub.dto.TagDto;
-import com.swe573.socialhub.dto.UserDto;
+import com.swe573.socialhub.dto.*;
+import com.swe573.socialhub.repository.ServiceRepository;
 import com.swe573.socialhub.repository.TagRepository;
 import com.swe573.socialhub.repository.UserRepository;
+import com.swe573.socialhub.repository.UserServiceApprovalRepository;
 import com.swe573.socialhub.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -35,6 +34,12 @@ public class UserService {
     private TagRepository tagRepository;
 
     @Autowired
+    private ServiceRepository serviceRepository;
+
+    @Autowired
+    private UserServiceApprovalRepository userServiceApprovalRepository;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -54,7 +59,7 @@ public class UserService {
         userEntity.setEmail(params.getPassword());
         userEntity.setPassword(passwordHash);
         userEntity.setUsername(params.getUsername());
-        var tags = params.getTags();
+        var tags = params.getUserTags();
         if (tags != null) {
             for (TagDto tagDto : tags) {
                 var addedTag = tagRepository.findById(tagDto.getId());
@@ -153,4 +158,20 @@ public class UserService {
         return dto;
     }
 
+    public UserServiceDto getUserServiceDetails(Principal principal, Long serviceId) {
+        final User loggedInUser = repository.findUserByUsername(principal.getName()).get();
+        if (loggedInUser == null)
+            throw new IllegalArgumentException("User doesn't exist.");
+        var serviceOptional = serviceRepository.findById(serviceId);
+        if (serviceOptional == null)
+        {
+            throw new IllegalArgumentException("Service doesn't exist.");
+        }
+        var service = serviceOptional.get();
+        var ownsService = service.getCreatedUser().getId() == loggedInUser.getId();
+        var userServiceApproval = userServiceApprovalRepository.findUserServiceApprovalByServiceAndUser(service,loggedInUser);
+        var dto = new UserServiceDto(userServiceApproval != null && !userServiceApproval.isEmpty(),ownsService);
+        return dto;
+
+    }
 }

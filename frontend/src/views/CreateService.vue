@@ -94,7 +94,7 @@
                 </div>
                 <div class="col-lg-12">
                   <multiselect
-                    v-model="serviceInputs.selectedTags"
+                    v-model="serviceInputs.serviceTags"
                     :options="tags"
                     :multiple="true"
                     :close-on-select="false"
@@ -157,7 +157,7 @@ export default {
         createdUserIdId: "",
         latitude: "",
         longitude: "",
-        selectedTags: [],
+        serviceTags: [],
       },
 
       tags: [],
@@ -168,7 +168,7 @@ export default {
       console.log("Send service started");
       apiRegister.CreateService(this.serviceInputs).then((r) => {
         console.log("Send service ok");
-        document.location.href = "../Service/" + r;
+        document.location.href = "#/service/" + r;
       });
     },
     GetGeoLocation() {

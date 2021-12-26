@@ -9,8 +9,8 @@ export default {
                 text: message,
                 type: image ? '' : 'question',
                 showCancelButton: true,
-                confirmButtonText: 'Evet',
-                cancelButtonText: 'Hayır',
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'No',
                 imageUrl: image
             }).then((result) => {
                 if (result.value && result.value === true && typeof onSuccess === 'function') {
@@ -22,6 +22,7 @@ export default {
         }
     },
     show: function (status, onSuccess) {
+        
         if (status.message) {
             swal.fire({
                 title: statuses.isSuccess(status)

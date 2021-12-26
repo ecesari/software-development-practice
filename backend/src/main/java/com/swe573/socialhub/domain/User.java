@@ -7,13 +7,13 @@ import java.util.Set;
 @Entity
 public class User {
 
-    public User(Long id, String username, String email, String bio, Set<Tag> tags)
+    public User(Long id, String username, String email, String bio, Set<Tag> userTags)
     {
         this.id = id;
         this.bio = bio;
         this.username = username;
         this.email = email;
-        this.tags = tags;
+        this.userTags = userTags;
     }
 
     public User() {
@@ -33,10 +33,12 @@ public class User {
             joinColumns = { @JoinColumn(name = "user_id") },
             inverseJoinColumns = { @JoinColumn(name = "tag_id") }
     )
-    private Set<Tag> tags;
-
+    private Set<Tag> userTags;
     @OneToMany(mappedBy = "createdUser")
-    private Set<Service> services;
+    private Set<Service> createdServices;
+    @OneToMany(mappedBy = "user")
+    Set<UserServiceApproval> approvalSet;
+
 
     public String getPassword() {
         return password;
@@ -81,27 +83,27 @@ public class User {
     }
 
     public Set<Tag> getTags() {
-        return tags;
+        return userTags;
     }
 
-    public void setTags(Set<Tag> tags) {
-        this.tags = tags;
+    public void setTags(Set<Tag> userTags) {
+        this.userTags = userTags;
     }
     public void addTag(Tag tag) {
-        if (this.tags == null)
+        if (this.userTags == null)
         {
-            this.tags =  new HashSet<Tag>();
+            this.userTags =  new HashSet<Tag>();
         }
-        this.tags.add(tag);
+        this.userTags.add(tag);
     }
 
 
-    public Set<Service> getServices() {
-        return services;
+    public Set<Service> getCreatedServices() {
+        return createdServices;
     }
 
-    public void setServices(Set<Service> services) {
-        this.services = services;
+    public void setCreatedServices(Set<Service> createdServices) {
+        this.createdServices = createdServices;
     }
 
 

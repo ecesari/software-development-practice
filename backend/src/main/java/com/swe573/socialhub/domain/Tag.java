@@ -58,7 +58,7 @@ public class Tag {
 
     private @Id @GeneratedValue Long id;
     private String name;
-    @ManyToMany(mappedBy = "tags")
+    @ManyToMany(mappedBy = "userTags")
     private Set<User> users;
     public Set<User> getUsers() {
         return users;
