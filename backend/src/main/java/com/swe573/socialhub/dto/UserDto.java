@@ -21,7 +21,6 @@ public class UserDto {
         this.bio = bio;
 //        this.userTags = userTags;
     }
-
     public String getEmail() {
         return email;
     }

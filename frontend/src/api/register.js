@@ -30,11 +30,12 @@ export default {
         return http.post(process.env.VUE_APP_API + 'user/setTags',data)
     },
     GetUserServiceDetails (serviceId) {
-        debugger;
         return http.get(process.env.VUE_APP_API + 'user/getServiceDetails/'+ serviceId)
     },
     SendUserServiceApproval (serviceId) {
-        debugger;
         return http.get(process.env.VUE_APP_API + 'approval/request/'+serviceId)
+    },
+    GetApprovalListByUser () {
+        return http.get(process.env.VUE_APP_API + 'approval/userRequests')
     },
 }

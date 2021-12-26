@@ -147,6 +147,9 @@
             <router-link to="/myServices" class="dropdown-item"
               >My Services</router-link
             >
+            <router-link to="/pendingRequests" class="dropdown-item"
+              >PendingRequests</router-link
+            >
             <div class="dropdown-divider"></div>
             <a
               href="#"

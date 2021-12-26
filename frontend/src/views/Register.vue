@@ -132,6 +132,7 @@ export default {
   },
   methods: {
     SendRegister() {
+      debugger;
       apiRegister.Register(this.registerInputs).then((r) => {
         if (r.jwt) {
           localStorage.setItem("token", JSON.stringify(r.jwt));

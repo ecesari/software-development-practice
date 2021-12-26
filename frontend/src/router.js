@@ -12,6 +12,7 @@ import UserPage from "./views/UserPage.vue";
 import CreateService from "./views/CreateService.vue";
 import SingleService from "./views/SingleService.vue";
 import MyServices from "./views/MyServices.vue";
+import PendingRequests from "./views/PendingRequests.vue";
 import StarterFooter from "./layout/starter/StarterFooter";
 Vue.use(Router);
 
@@ -104,6 +105,15 @@ export default new Router({
       components: {
         header: AppHeader,
         default: MyServices,
+        footer: AppFooter
+      }
+    },
+    {
+      path: "/pendingRequests",
+      name: "pendingRequests",
+      components: {
+        header: AppHeader,
+        default: PendingRequests,
         footer: AppFooter
       }
     }
