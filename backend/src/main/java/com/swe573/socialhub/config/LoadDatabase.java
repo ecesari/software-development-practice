@@ -72,7 +72,7 @@ class LoadDatabase {
                     LocalDateTime.of(2022, 1, 10, 18, 0),
                     120,
                     20,
-                    user2,
+                    8, user2,
                     41.08486331615685,
                     29.033532028860485
             );
@@ -84,7 +84,7 @@ class LoadDatabase {
                     LocalDateTime.of(2022, 2, 20, 20, 0),
                     60,
                     10,
-                    user2,
+                    30, user2,
                     40.98713967228238, 28.839091492848105
             );
 
@@ -95,7 +95,7 @@ class LoadDatabase {
                     LocalDateTime.of(2022, 3, 15, 12, 0),
                     180,
                     10,
-                    user1,
+                    10, user1,
                     41.012524056384144, 28.951326923194756
             );
 
@@ -106,7 +106,7 @@ class LoadDatabase {
                     LocalDateTime.of(2022, 2, 23, 13, 0),
                     30,
                     100,
-                    user3,
+                    29, user3,
                     41.045570653598446, 28.993261953340998
             );
 

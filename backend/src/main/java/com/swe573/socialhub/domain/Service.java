@@ -12,7 +12,7 @@ public class Service {
 
     }
 
-    public Service(Long id, String header, String description, String location, LocalDateTime time, int minutes, int quota, User createdUser, Double latitude,Double longitude) {
+    public Service(Long id, String header, String description, String location, LocalDateTime time, int minutes, int quota,int attendingUserCount, User createdUser, Double latitude,Double longitude) {
         this.id = id;
         Header = header;
         Description = description;
@@ -23,6 +23,7 @@ public class Service {
         this.createdUser = createdUser;
         Latitude = latitude;
         Longitude = longitude;
+        AttendingUserCount = attendingUserCount;
     }
 
     private @Id
@@ -34,6 +35,15 @@ public class Service {
     LocalDateTime Time;
     int Minutes;
     int Quota;
+
+    public int getAttendingUserCount() {
+        return AttendingUserCount;
+    }
+
+    public void setAttendingUserCount(int attendingUserCount) {
+        AttendingUserCount = attendingUserCount;
+    }
+
     int AttendingUserCount;
     Double Latitude;
     Double Longitude;
@@ -50,13 +60,7 @@ public class Service {
     )
     Set<Tag> ServiceTags;
 
-    @ManyToMany(cascade = { CascadeType.MERGE })
-    @JoinTable(
-            name = "service_tags",
-            joinColumns = { @JoinColumn(name = "service_id") },
-            inverseJoinColumns = { @JoinColumn(name = "tag_id") }
-    )
-    Set<Tag> ServiceTags;
+
 
     public User getCreatedUser() {
         return createdUser;

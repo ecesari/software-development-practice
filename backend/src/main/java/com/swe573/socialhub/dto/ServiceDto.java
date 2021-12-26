@@ -13,13 +13,14 @@ public class ServiceDto implements Serializable {
     private final LocalDateTime Time;
     private final int Minutes;
     private final int Quota;
+    private final int AttendingUserCount;
     private final Long CreatedUserIdId;
     private final String CreatedUserName;
     private Double Latitude;
     private Double Longitude;
     private List<TagDto> ServiceTags;
 
-    public ServiceDto(Long id, String header, String description, String location, LocalDateTime time, int minutes, int quota, Long createdUserIdId, String createdUserName, Double latitude, Double longitude, List<TagDto> serviceTags) {
+    public ServiceDto(Long id, String header, String description, String location, LocalDateTime time, int minutes, int quota, int attendingUserCount, Long createdUserIdId, String createdUserName, Double latitude, Double longitude, List<TagDto> serviceTags) {
         this.id = id;
         Header = header;
         Description = description;
@@ -27,6 +28,7 @@ public class ServiceDto implements Serializable {
         Time = time;
         Minutes = minutes;
         Quota = quota;
+        AttendingUserCount = attendingUserCount;
         CreatedUserIdId = createdUserIdId;
         CreatedUserName = createdUserName;
         Latitude = latitude;
@@ -113,5 +115,9 @@ public class ServiceDto implements Serializable {
 
     public List<TagDto> getServiceTags() {
         return ServiceTags;
+    }
+
+    public int getAttendingUserCount() {
+        return AttendingUserCount;
     }
 }

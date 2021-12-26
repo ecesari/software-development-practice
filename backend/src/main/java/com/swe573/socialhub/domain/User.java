@@ -36,7 +36,7 @@ public class User {
     private Set<Tag> userTags;
 
     @OneToMany(mappedBy = "createdUser")
-    private Set<Service> services;
+    private Set<Service> createdServices;
 
     public String getPassword() {
         return password;
@@ -96,12 +96,12 @@ public class User {
     }
 
 
-    public Set<Service> getServices() {
-        return services;
+    public Set<Service> getCreatedServices() {
+        return createdServices;
     }
 
-    public void setServices(Set<Service> services) {
-        this.services = services;
+    public void setCreatedServices(Set<Service> createdServices) {
+        this.createdServices = createdServices;
     }
 
 
