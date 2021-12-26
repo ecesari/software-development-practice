@@ -34,9 +34,11 @@ public class User {
             inverseJoinColumns = { @JoinColumn(name = "tag_id") }
     )
     private Set<Tag> userTags;
-
     @OneToMany(mappedBy = "createdUser")
     private Set<Service> createdServices;
+    @OneToMany(mappedBy = "user")
+    Set<UserServiceApproval> approvalSet;
+
 
     public String getPassword() {
         return password;

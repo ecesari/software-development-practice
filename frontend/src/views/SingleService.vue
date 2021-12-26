@@ -32,17 +32,19 @@
               <div class="col-lg-4 order-lg-1">
                 <div class="card-profile-stats d-flex justify-content-center">
                   <div>
-                    <span class="heading">22</span>
+                    <span class="heading">{{
+                      serviceData.attendingUserCount
+                    }}</span>
                     <span class="description">Participants</span>
                   </div>
                   <div>
-                    <span class="heading">10</span>
-                    <span class="description">Approval List</span>
+                    <span class="heading">{{serviceData.quota}}</span>
+                    <span class="description">Quota</span>
                   </div>
-                  <div>
+                  <!-- <div>
                     <span class="heading">89</span>
                     <span class="description">Comments</span>
-                  </div>
+                  </div> -->
                 </div>
               </div>
             </div>
@@ -65,9 +67,9 @@
                 <i class="ni ni-watch-time"></i>:
                 {{ serviceData.minutes }} minutes
               </div>
-              <div>
+              <!-- <div>
                 <i class="ni ni-single-02"></i>: {{ serviceData.quota }} people
-              </div>
+              </div> -->
             </div>
             <div class="mt-2 py-5 border-top text-center">
               <div class="row justify-content-center">
@@ -105,6 +107,7 @@ export default {
         minutes: "",
         description: "",
         quota: "",
+        attendingUserCount: "",
         createdUserIdId: "",
         createdUserName: "",
         serviceTags: [],
@@ -128,6 +131,7 @@ export default {
         this.serviceData.createdUserIdId = r.createdUserIdId;
         this.serviceData.createdUserName = r.createdUserName;
         this.serviceData.serviceTags = r.serviceTags;
+        this.serviceData.attendingUserCount = r.attendingUserCount;
         console.log("ok.");
       });
     },

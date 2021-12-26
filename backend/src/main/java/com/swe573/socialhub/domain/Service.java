@@ -35,23 +35,12 @@ public class Service {
     LocalDateTime Time;
     int Minutes;
     int Quota;
-
-    public int getAttendingUserCount() {
-        return AttendingUserCount;
-    }
-
-    public void setAttendingUserCount(int attendingUserCount) {
-        AttendingUserCount = attendingUserCount;
-    }
-
     int AttendingUserCount;
     Double Latitude;
     Double Longitude;
-
     @ManyToOne
     @JoinColumn(name = "createdUser")
     User createdUser;
-
     @ManyToMany(cascade = { CascadeType.MERGE })
     @JoinTable(
             name = "service_tags",
@@ -59,9 +48,8 @@ public class Service {
             inverseJoinColumns = { @JoinColumn(name = "tag_id") }
     )
     Set<Tag> ServiceTags;
-
-
-
+    @OneToMany(mappedBy = "service")
+    Set<UserServiceApproval> approvalSet;
     public User getCreatedUser() {
         return createdUser;
     }
@@ -149,6 +137,23 @@ public class Service {
     public void setServiceTags(Set<Tag> serviceTags) {
         ServiceTags = serviceTags;
     }
+
+    public int getAttendingUserCount() {
+        return AttendingUserCount;
+    }
+
+    public void setAttendingUserCount(int attendingUserCount) {
+        AttendingUserCount = attendingUserCount;
+    }
+
+    public Set<UserServiceApproval> getApprovalSet() {
+        return approvalSet;
+    }
+
+    public void setApprovalSet(Set<UserServiceApproval> approvalSet) {
+        this.approvalSet = approvalSet;
+    }
+
 
     @Override
     public String toString() {
