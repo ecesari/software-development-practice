@@ -7,13 +7,14 @@ import java.util.Set;
 @Entity
 public class User {
 
-    public User(Long id, String username, String email, String bio, Set<Tag> userTags)
+    public User(Long id, String username, String email, String bio, Set<Tag> userTags, Integer balance)
     {
         this.id = id;
         this.bio = bio;
         this.username = username;
         this.email = email;
         this.userTags = userTags;
+        this.balance = balance;
     }
 
     public User() {
@@ -38,6 +39,7 @@ public class User {
     private Set<Service> createdServices;
     @OneToMany(mappedBy = "user")
     Set<UserServiceApproval> approvalSet;
+    private Integer balance;
 
 
     public String getPassword() {

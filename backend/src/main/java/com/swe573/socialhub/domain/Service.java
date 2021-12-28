@@ -12,32 +12,34 @@ public class Service {
 
     }
 
-    public Service(Long id, String header, String description, String location, LocalDateTime time, int minutes, int quota,int attendingUserCount, User createdUser, Double latitude,Double longitude) {
+    public Service(Long id, String header, String description, String location, LocalDateTime time, int minutes, int quota, int attendingUserCount, User createdUser, Double latitude, Double longitude, Set<Tag> serviceTags) {
         this.id = id;
         Header = header;
         Description = description;
         Location = location;
         Time = time;
-        Minutes = minutes;
+        Credit = minutes;
         Quota = quota;
         this.createdUser = createdUser;
         Latitude = latitude;
         Longitude = longitude;
         AttendingUserCount = attendingUserCount;
+        ServiceTags = serviceTags;
+
     }
 
     private @Id
     @GeneratedValue
     Long id;
-    String Header;
-    String Description;
-    String Location;
-    LocalDateTime Time;
-    int Minutes;
-    int Quota;
-    int AttendingUserCount;
-    Double Latitude;
-    Double Longitude;
+    private String Header;
+    private String Description;
+    private String Location;
+    private LocalDateTime Time;
+    private int Credit;
+    private int Quota;
+    private int AttendingUserCount;
+    private Double Latitude;
+    private Double Longitude;
     @ManyToOne
     @JoinColumn(name = "createdUser")
     User createdUser;
@@ -94,12 +96,12 @@ public class Service {
         Time = time;
     }
 
-    public int getMinutes() {
-        return Minutes;
+    public int getCredit() {
+        return Credit;
     }
 
-    public void setMinutes(int minutes) {
-        Minutes = minutes;
+    public void setCredit(int credit) {
+        Credit = credit;
     }
 
     public void setCreatedUser(User createdUser) {
