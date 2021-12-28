@@ -65,7 +65,7 @@
               <h3>
                 {{ serviceData.header }}
                 <span class="font-weight-light">
-                  by {{ serviceData.createdUserName }}</span
+                  <a :href="'#/profile/' + serviceData.createdUserIdId" > by {{ serviceData.createdUserName }}</a></span
                 >
               </h3>
               <!-- <div class="h6 font-weight-300"><i class="ni location_pin mr-2"></i>{{ serviceData.quota }}</div> -->
