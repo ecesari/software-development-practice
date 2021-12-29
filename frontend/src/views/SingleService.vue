@@ -109,7 +109,7 @@
             >
               <div class="row justify-content-center">
                 <div class="col-lg-9">
-                  <base-button @click="ConfirmApproval" type="success"
+                  <base-button @click="ConfirmServiceOver" type="success"
                     >Service Is Over?</base-button
                   >
                 </div>

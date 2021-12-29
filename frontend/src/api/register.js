@@ -45,7 +45,7 @@ export default {
         return http.post(process.env.VUE_APP_API + 'approval/deny', data)
     },
     SendServiceOverApproval (serviceId) {
-        return http.post(process.env.VUE_APP_API + 'service/complete/'+serviceId)
+        return http.get(process.env.VUE_APP_API + 'service/complete/'+serviceId)
     },
 
     

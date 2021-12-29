@@ -104,6 +104,7 @@ public class ServiceService {
     }
 
 
+    @Transactional
     public void complete(Principal principal, Long serviceId) {
         final User loggedInUser = userRepository.findUserByUsername(principal.getName()).get();
         if (loggedInUser == null)
