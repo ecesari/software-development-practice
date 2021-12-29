@@ -2,51 +2,56 @@
 import http from '../utils/http'
 
 export default {
-    Register (data) {
+    Register(data) {
         return http.post(process.env.VUE_APP_API + 'register', data)
     },
-    Login (data) {
+    Login(data) {
         return http.post(process.env.VUE_APP_API + 'login', data)
     },
-    GetTags () {
+    GetTags() {
         return http.get(process.env.VUE_APP_API + 'tags')
     },
-    GetProfile () {
-        return http.get(process.env.VUE_APP_API + 'user')
+    GetProfile(id) {
+        debugger;
+        if (id == null)
+            return http.get(process.env.VUE_APP_API + 'user')
+        else
+            return http.get(process.env.VUE_APP_API + 'user/' + id)
+
     },
-    CreateService (data) {
-        return http.post(process.env.VUE_APP_API + 'service', data,null,null,true,'Create Service')
+    CreateService(data) {
+        return http.post(process.env.VUE_APP_API + 'service', data, null, null, true, 'Create Service')
     },
-    GetService (id) {
-        return http.get(process.env.VUE_APP_API + 'service/'+ id)
+    GetService(id) {
+        return http.get(process.env.VUE_APP_API + 'service/' + id)
     },
-    GetServicesByUser () {
+    GetServicesByUser() {
         return http.get(process.env.VUE_APP_API + 'service/userService')
     },
-    GetAllServices () {
+    GetAllServices() {
         return http.get(process.env.VUE_APP_API + 'service')
     },
-    SetTags (data) {
-        return http.post(process.env.VUE_APP_API + 'user/setTags',data)
+    SetTags(data) {
+        return http.post(process.env.VUE_APP_API + 'user/setTags', data)
     },
-    GetUserServiceDetails (serviceId) {
-        return http.get(process.env.VUE_APP_API + 'user/getServiceDetails/'+ serviceId)
+    GetUserServiceDetails(serviceId) {
+        return http.get(process.env.VUE_APP_API + 'user/getServiceDetails/' + serviceId)
     },
-    SendUserServiceApproval (serviceId) {
-        return http.get(process.env.VUE_APP_API + 'approval/request/'+serviceId)
+    SendUserServiceApproval(serviceId) {
+        return http.get(process.env.VUE_APP_API + 'approval/request/' + serviceId)
     },
-    GetApprovalListByUser () {
+    GetApprovalListByUser() {
         return http.get(process.env.VUE_APP_API + 'approval/userRequests')
     },
-    ApproveRequest (data) {
-        return http.post(process.env.VUE_APP_API + 'approval/approve', data,null,null,true,'Request Approval')
+    ApproveRequest(data) {
+        return http.post(process.env.VUE_APP_API + 'approval/approve', data, null, null, true, 'Request Approval')
     },
-    DenyRequest (data) {
+    DenyRequest(data) {
         return http.post(process.env.VUE_APP_API + 'approval/deny', data)
     },
-    SendServiceOverApproval (serviceId) {
-        return http.get(process.env.VUE_APP_API + 'service/complete/'+serviceId)
+    SendServiceOverApproval(serviceId) {
+        return http.get(process.env.VUE_APP_API + 'service/complete/' + serviceId)
     },
 
-    
+
 }

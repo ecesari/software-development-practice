@@ -176,7 +176,6 @@ export default {
       });
     },
     GetUserDetails() {
-      debugger;
       var id = this.$route.params.service_id;
       apiRegister.GetUserServiceDetails(id).then((r) => {
         this.userData.hasServiceRequest = r.hasServiceRequest;

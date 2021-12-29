@@ -17,19 +17,19 @@
           <div class="px-4">
             <div class="row justify-content-center">
               <div class="col-lg-3 order-lg-2">
-                <div class="card-profile-image">
+                <!-- <div class="card-profile-image">
                   <a href="#">
                     <img
                       v-lazy="'img/theme/team-4-800x800.jpg'"
                       class="rounded-circle"
                     />
                   </a>
-                </div>
+                </div> -->
               </div>
               <div
                 class="col-lg-4 order-lg-3 text-lg-right align-self-lg-center"
               >
-                <div class="card-profile-actions py-4 mt-lg-0">
+                <div v-if="!isOwnProfile" class="card-profile-actions py-4 mt-lg-0">
                   <base-button type="info" size="sm" class="mr-4"
                     >Connect</base-button
                   >
@@ -42,15 +42,19 @@
                 <div class="card-profile-stats d-flex justify-content-center">
                   <div>
                     <span class="heading">22</span>
-                    <span class="description">Friends</span>
+                    <span class="description">Following</span>
                   </div>
-                  <div>
+                    <div>
+                    <span class="heading">10</span>
+                    <span class="description">Followers</span>
+                  </div>
+                  <!-- <div>
                     <span class="heading">10</span>
                     <span class="description">Photos</span>
-                  </div>
-                  <div>
-                    <span class="heading">89</span>
-                    <span class="description">Comments</span>
+                  </div> -->
+                  <div v-if="isOwnProfile">
+                    <span class="heading">{{userData.balance}}</span>
+                    <span class="description">Credits</span>
                   </div>
                 </div>
               </div>
@@ -60,23 +64,23 @@
                 {{ userData.username }}
                 <span class="font-weight-light">, 27</span>
               </h3>
-              <div class="h6 font-weight-300">
+              <!-- <div class="h6 font-weight-300">
                 <i class="ni location_pin mr-2"></i>Bucharesst, Romania
-              </div>
+              </div> -->
               <div class="h6 mt-4">
                 <i class="ni business_briefcase-24 mr-2"></i
                 >{{ userData.email }}
               </div>
-              <div>
+              <!-- <div>
                 <i class="ni education_hat mr-2"></i>University of Computer
                 Science
-              </div>
+              </div> -->
             </div>
             <div class="mt-5 py-5 border-top text-center">
               <div class="row justify-content-center">
                 <div class="col-lg-9">
                   <p>{{ userData.bio }}</p>
-                  <a href="#">Show more</a>
+                  <!-- <a href="#">Show more</a> -->
                 </div>
               </div>
             </div>
@@ -96,7 +100,9 @@ export default {
         username: "",
         email: "",
         bio: "",
+        balance: 0
       },
+      isOwnProfile: this.$route.params.userId == null
     };
   },
   mounted() {
@@ -104,13 +110,12 @@ export default {
   },
   methods: {
     GetProfile() {
-      debugger;
-      var id = this.userId;
+      var id = this.$route.params.userId;
       apiRegister.GetProfile(id).then((r) => {
-        debugger;
         this.userData.username = r.username;
         this.userData.email = r.email;
         this.userData.bio = r.bio;
+        this.userData.balance = r.balance;
         console.log("ok.");
       });
     },

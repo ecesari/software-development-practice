@@ -63,7 +63,7 @@ public class UserServiceApprovalService {
 
     private UserServiceApprovalDto getApprovalDto(UserServiceApproval entity) {
         var service = entity.getService();
-        var userDto = new UserDto(entity.getUser().getId(), entity.getUser().getUsername(), entity.getUser().getEmail(), entity.getUser().getBio());
+        var userDto = new UserDto(entity.getUser().getId(), entity.getUser().getUsername(), entity.getUser().getEmail(), entity.getUser().getBio(), entity.getUser().getBalance());
         var serviceDto = new ServiceDto(service.getId(), service.getHeader(), "", service.getLocation(), service.getTime(), 0, service.getQuota(), service.getAttendingUserCount(), 0L, "", 0.0, 0.0, Collections.emptyList(), service.getStatus());
         var dto = new UserServiceApprovalDto(userDto, serviceDto, entity.getApprovalStatus());
         return dto;
