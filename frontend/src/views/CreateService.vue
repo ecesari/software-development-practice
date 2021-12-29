@@ -74,7 +74,7 @@
                     type="number"
                     class="form-control"
                     v-model="serviceInputs.minutes"
-                    placeholder="Duration (in minutes)"
+                    placeholder="Credits"
                   />
                   <br />
                 </div>

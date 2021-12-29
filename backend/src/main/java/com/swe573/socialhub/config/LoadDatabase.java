@@ -1,16 +1,21 @@
 package com.swe573.socialhub.config;
 
 import com.swe573.socialhub.domain.Service;
-import com.swe573.socialhub.repository.ServiceRepository;
 import com.swe573.socialhub.domain.Tag;
 import com.swe573.socialhub.domain.User;
+import com.swe573.socialhub.domain.UserServiceApproval;
+import com.swe573.socialhub.domain.key.UserServiceApprovalKey;
+import com.swe573.socialhub.enums.ApprovalStatus;
+import com.swe573.socialhub.repository.ServiceRepository;
 import com.swe573.socialhub.repository.TagRepository;
 import com.swe573.socialhub.repository.UserRepository;
+import com.swe573.socialhub.repository.UserServiceApprovalRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -21,7 +26,7 @@ class LoadDatabase {
     private static final Logger log = LoggerFactory.getLogger(LoadDatabase.class);
 
     @Bean
-    CommandLineRunner initDatabase(TagRepository tagRepository, UserRepository userRepository, ServiceRepository serviceRepository) {
+    CommandLineRunner initDatabase(TagRepository tagRepository, UserRepository userRepository, ServiceRepository serviceRepository, UserServiceApprovalRepository approvalRepository, PasswordEncoder passwordEncoder) {
 
         return args -> {
 
@@ -52,6 +57,7 @@ class LoadDatabase {
                 add(tag2);
                 add(tag5);
             }}, 2);
+            user1.setPassword(passwordEncoder.encode("1"));
 
 
             var user2 = new User(null, "joshua", "joshua.osborne@gmail.com", "Life's uncertain. Eat dessert first.", new HashSet<Tag>() {{
@@ -59,10 +65,14 @@ class LoadDatabase {
                 add(tag3);
                 add(tag1);
             }}, 5);
+            user2.setPassword(passwordEncoder.encode("1"));
+
             var user3 = new User(null, "jane", "jane.austen@gmail.com", "Probably the best TV binge-watcher you’ll ever find.", new HashSet<Tag>() {{
                 add(tag4);
                 add(tag5);
             }}, -1);
+            user3.setPassword(passwordEncoder.encode("3"));
+
             userRepository.save(user1);
             userRepository.save(user2);
             userRepository.save(user3);
@@ -141,7 +151,43 @@ class LoadDatabase {
             });
             //endregion
 
+            //region Approval
+//            var service4 = new Service(null,
+//                    "Pet My Dog",
+//                    "Well technically this is a service from my dog but anyways you can come to Maçka Park and pet my cute dog. He won't bite(I can't promise). He's definitely worth your time.",
+//                    "Maçka Park, Istanbul",
+//                    LocalDateTime.of(2022, 2, 23, 13, 0),
+//                    1,
+//                    100,
+//                    29, user3,
+//                    41.045570653598446, 28.993261953340998,
+//                    new HashSet<Tag>() {{
+//                        add(tag3);
+//                        add(tag4);
+//                        add(tag5);
+//                    }});
+            var approval = saveAndGetApproval(approvalRepository, user1, service);
+            var approval2 = saveAndGetApproval(approvalRepository, user3, service);
+            var approval3 = saveAndGetApproval(approvalRepository, user1, service2);
+            var approval4 = saveAndGetApproval(approvalRepository, user3, service2);
+            var approval5 = saveAndGetApproval(approvalRepository, user3, service3);
+            var approval6 = saveAndGetApproval(approvalRepository, user2, service3);
+            var approval7 = saveAndGetApproval(approvalRepository, user1, service4);
+            var approval8 = saveAndGetApproval(approvalRepository, user2, service4);
+
+            approvalRepository.findAll().forEach(s -> {
+                log.info("Preloaded " + s);
+            });
+
+            //endregion
+
 
         };
+    }
+
+    private UserServiceApproval saveAndGetApproval(UserServiceApprovalRepository approvalRepository, User user1, Service service) {
+        var approval = new UserServiceApproval(new UserServiceApprovalKey(user1.getId(), service.getId()), user1, service, ApprovalStatus.PENDING);
+        approvalRepository.save(approval);
+        return approval;
     }
 }

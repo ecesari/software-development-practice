@@ -70,15 +70,16 @@
               </h3>
               <!-- <div class="h6 font-weight-300"><i class="ni location_pin mr-2"></i>{{ serviceData.quota }}</div> -->
               <div>
-                <i class="ni ni-square-pin"></i> : {{ serviceData.location }}
               </div>
               <br />
               <div>
-                <i class="ni ni-time-alarm"></i>: {{ serviceData.time }}
+               
               </div>
               <div>
+                <i class="ni ni-square-pin"></i> : {{ serviceData.location }} 
+                 <i class="ni ni-time-alarm"></i>: {{ serviceData.time }}   
                 <i class="ni ni-watch-time"></i>:
-                {{ serviceData.minutes }} minutes
+                {{ serviceData.minutes }} credits
               </div>
               <!-- <div>
                 <i class="ni ni-single-02"></i>: {{ serviceData.quota }} people
@@ -90,11 +91,9 @@
                   <p>{{ serviceData.description }}</p>
                   <!-- <a href="#">Show more</a> -->
 
-                  <div
-                    v-for="(tag, index) in serviceData.serviceTags"
-                    :key="index"
-                  >
-                    <badge v-bind:type="GetClass(index)" rounded>{{
+                  <div>
+                    <badge v-for="(tag, index) in serviceData.serviceTags"
+                    :key="index" v-bind:type="GetClass(index)" rounded>{{
                       tag.name
                     }}</badge>
                   </div>
