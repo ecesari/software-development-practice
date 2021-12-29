@@ -3,11 +3,15 @@ package com.swe573.socialhub.service;
 import com.swe573.socialhub.domain.Service;
 import com.swe573.socialhub.domain.Tag;
 import com.swe573.socialhub.domain.User;
+import com.swe573.socialhub.domain.UserServiceApproval;
 import com.swe573.socialhub.dto.ServiceDto;
 import com.swe573.socialhub.dto.TagDto;
+import com.swe573.socialhub.enums.ApprovalStatus;
+import com.swe573.socialhub.enums.ServiceStatus;
 import com.swe573.socialhub.repository.ServiceRepository;
 import com.swe573.socialhub.repository.TagRepository;
 import com.swe573.socialhub.repository.UserRepository;
+import com.swe573.socialhub.repository.UserServiceApprovalRepository;
 import org.hibernate.exception.DataException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +33,9 @@ public class ServiceService {
 
     @Autowired
     private TagRepository tagRepository;
+
+    @Autowired
+    private UserServiceApprovalRepository approvalRepository;
 
     public List<ServiceDto> findAllServices() {
         var entities = serviceRepository.findAll();
@@ -97,6 +104,39 @@ public class ServiceService {
     }
 
 
+    public void complete(Principal principal, Long serviceId) {
+        final User loggedInUser = userRepository.findUserByUsername(principal.getName()).get();
+        if (loggedInUser == null)
+            throw new IllegalArgumentException("User doesn't exist.");
+        Optional<Service> service = serviceRepository.findById(serviceId);
+
+        if (service.isPresent()) {
+            var entity = service.get();
+            entity.setStatus(ServiceStatus.APPROVED);
+            //TODO:balance
+            //TODO:send notif to approved and denied
+            var pendingUserRequests = approvalRepository.findUserServiceApprovalByService_IdAndApprovalStatus(serviceId, ApprovalStatus.PENDING);
+            for(UserServiceApproval pendingUserRequest : pendingUserRequests)
+            {
+                pendingUserRequest.setApprovalStatus(ApprovalStatus.DENIED);
+            }
+            var approvedUserRequests = approvalRepository.findUserServiceApprovalByService_IdAndApprovalStatus(serviceId, ApprovalStatus.PENDING);
+            for(UserServiceApproval approvedUserRequest : approvedUserRequests)
+            {
+                var balance = approvedUserRequest.getUser().getBalance();
+                approvedUserRequest.getUser().setBalance(balance - approvedUserRequest.getService().getCredit());
+            }
+            var createdUser = service.get().getCreatedUser();
+            var createdUserBalance = createdUser.getBalance();
+            createdUser.setBalance(createdUserBalance + service.get().getCredit());
+
+
+        } else {
+            throw new IllegalArgumentException("No services have been found");
+        }
+
+    }
+
     private ServiceDto mapToDto(Service service) {
         var list = new ArrayList<TagDto>();
         if (service.getServiceTags() != null) {
@@ -112,4 +152,5 @@ public class ServiceService {
     private Service mapToEntity(ServiceDto dto) {
         return new Service(null, dto.getHeader(), dto.getDescription(), dto.getLocation(), dto.getTime(), dto.getMinutes(), dto.getQuota(), 0, null, dto.getLatitude(), dto.getLongitude(), null);
     }
+
 }

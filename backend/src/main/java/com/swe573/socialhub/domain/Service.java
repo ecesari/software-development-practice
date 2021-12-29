@@ -55,6 +55,10 @@ public class Service {
     Set<Tag> ServiceTags;
     @OneToMany(mappedBy = "service")
     Set<UserServiceApproval> approvalSet;
+
+
+
+
     public User getCreatedUser() {
         return createdUser;
     }

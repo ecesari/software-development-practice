@@ -55,12 +55,23 @@ public class ServiceController {
         }
     }
     @PostMapping
-
     public ResponseEntity<Long> saveService(Principal principal, @Validated @RequestBody ServiceDto service) {
         try {
             var result = serviceService.save(principal, service);
             return ResponseEntity.ok().body(result);
         } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getLocalizedMessage());
+        }
+    }
+
+
+    @GetMapping("/complete/{serviceId}")
+    public void App(Principal principal, @PathVariable Long serviceId) {
+        try {
+            serviceService.complete(principal,serviceId);
+        }
+        catch (RuntimeException e)
+        {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getLocalizedMessage());
         }
     }
