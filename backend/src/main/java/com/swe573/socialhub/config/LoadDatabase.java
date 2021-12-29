@@ -159,7 +159,6 @@ class LoadDatabase {
             var approval4 = saveAndGetApproval(approvalRepository, user3, service2, ApprovalStatus.APPROVED);
             var approval5 = saveAndGetApproval(approvalRepository, user3, service3, ApprovalStatus.APPROVED);
             var approval6 = saveAndGetApproval(approvalRepository, user2, service3, ApprovalStatus.PENDING);
-            var approval7 = saveAndGetApproval(approvalRepository, user1, service4, ApprovalStatus.PENDING);
             var approval8 = saveAndGetApproval(approvalRepository, user2, service4, ApprovalStatus.APPROVED);
 
             approvalRepository.findAll().forEach(s -> {

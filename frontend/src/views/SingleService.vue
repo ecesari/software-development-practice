@@ -23,7 +23,7 @@
                 <div class="card-profile-actions py-4 mt-lg-0">
                   <base-button
                     v-if="!userData.hasServiceRequest && !userData.ownsService"
-                    @click="ConfirmApproval"
+                    @click="ConfirmRequest"
                     type="info"
                     size="sm"
                     class="mr-4"
@@ -109,7 +109,9 @@
             >
               <div class="row justify-content-center">
                 <div class="col-lg-9">
-                  <base-button type="success">Service Is Over?</base-button>
+                  <base-button @click="ConfirmApproval" type="success"
+                    >Service Is Over?</base-button
+                  >
                 </div>
               </div>
             </div>
@@ -141,7 +143,7 @@ export default {
         createdUserName: "",
         serviceTags: [],
         status: "",
-        showServiceButton: false
+        showServiceButton: false,
       },
       userData: {
         hasServiceRequest: "",
@@ -153,8 +155,7 @@ export default {
     this.GetService();
     this.GetUserDetails();
   },
-  computed: {
-  },
+  computed: {},
   methods: {
     GetService() {
       var id = this.$route.params.service_id;
@@ -171,7 +172,7 @@ export default {
         this.serviceData.serviceTags = r.serviceTags;
         this.serviceData.attendingUserCount = r.attendingUserCount;
         this.serviceData.status = r.status;
-        this.serviceData.showServiceButton = r.showServiceOverButton
+        this.serviceData.showServiceButton = r.showServiceOverButton;
       });
     },
     GetUserDetails() {
@@ -192,17 +193,30 @@ export default {
         return "warning";
       }
     },
-    ConfirmApproval() {
+    ConfirmRequest() {
       modal.confirm(
         "Send Request to Join?",
         "You will be added to the pending request list",
-        this.SendApproval
+        this.SendRequest
       );
     },
-    SendApproval() {
+    SendRequest() {
       var serviceId = this.$route.params.service_id;
 
       apiRegister.SendUserServiceApproval(serviceId).then((r) => {
+        location.reload();
+      });
+    },
+    ConfirmServiceOver() {
+      modal.confirm(
+        "Do you accept that the service is over?",
+        "The participants' and your balance will be updated",
+        this.SendServiceOverApproval
+      );
+    },
+    SendServiceOverApproval() {
+      var serviceId = this.$route.params.service_id;
+      apiRegister.SendServiceOverApproval(serviceId).then((r) => {
         location.reload();
       });
     },

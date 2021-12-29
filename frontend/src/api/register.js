@@ -38,11 +38,15 @@ export default {
     GetApprovalListByUser () {
         return http.get(process.env.VUE_APP_API + 'approval/userRequests')
     },
-
     ApproveRequest (data) {
         return http.post(process.env.VUE_APP_API + 'approval/approve', data,null,null,true,'Request Approval')
     },
-    ApproveRequest (data) {
+    DenyRequest (data) {
         return http.post(process.env.VUE_APP_API + 'approval/deny', data)
     },
+    SendServiceOverApproval (serviceId) {
+        return http.post(process.env.VUE_APP_API + 'service/complete/'+serviceId)
+    },
+
+    
 }
