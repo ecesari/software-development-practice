@@ -59,6 +59,7 @@ public class UserService {
         userEntity.setEmail(params.getPassword());
         userEntity.setPassword(passwordHash);
         userEntity.setUsername(params.getUsername());
+        userEntity.setBalance(5);
         var tags = params.getUserTags();
         if (tags != null) {
             for (TagDto tagDto : tags) {

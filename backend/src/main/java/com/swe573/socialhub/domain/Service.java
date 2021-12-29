@@ -1,5 +1,7 @@
 package com.swe573.socialhub.domain;
 
+import com.swe573.socialhub.enums.ServiceStatus;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -25,7 +27,7 @@ public class Service {
         Longitude = longitude;
         AttendingUserCount = attendingUserCount;
         ServiceTags = serviceTags;
-
+        this.Status = ServiceStatus.ONGOING;
     }
 
     private @Id
@@ -40,6 +42,7 @@ public class Service {
     private int AttendingUserCount;
     private Double Latitude;
     private Double Longitude;
+    private ServiceStatus Status;
     @ManyToOne
     @JoinColumn(name = "createdUser")
     User createdUser;
@@ -155,6 +158,15 @@ public class Service {
     public void setApprovalSet(Set<UserServiceApproval> approvalSet) {
         this.approvalSet = approvalSet;
     }
+
+    public ServiceStatus getStatus() {
+        return Status;
+    }
+
+    public void setStatus(ServiceStatus status) {
+        Status = status;
+    }
+
 
 
     @Override

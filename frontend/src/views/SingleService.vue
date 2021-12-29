@@ -65,19 +65,18 @@
               <h3>
                 {{ serviceData.header }}
                 <span class="font-weight-light">
-                  <a :href="'#/profile/' + serviceData.createdUserIdId" > by {{ serviceData.createdUserName }}</a></span
+                  <a :href="'#/profile/' + serviceData.createdUserIdId">
+                    by {{ serviceData.createdUserName }}</a
+                  ></span
                 >
               </h3>
               <!-- <div class="h6 font-weight-300"><i class="ni location_pin mr-2"></i>{{ serviceData.quota }}</div> -->
-              <div>
-              </div>
+              <div></div>
               <br />
+              <div></div>
               <div>
-               
-              </div>
-              <div>
-                <i class="ni ni-square-pin"></i> : {{ serviceData.location }} 
-                 <i class="ni ni-time-alarm"></i>: {{ serviceData.time }}   
+                <i class="ni ni-square-pin"></i> : {{ serviceData.location }}
+                <i class="ni ni-time-alarm"></i>: {{ serviceData.timeString }}
                 <i class="ni ni-watch-time"></i>:
                 {{ serviceData.minutes }} credits
               </div>
@@ -92,11 +91,25 @@
                   <!-- <a href="#">Show more</a> -->
 
                   <div>
-                    <badge v-for="(tag, index) in serviceData.serviceTags"
-                    :key="index" v-bind:type="GetClass(index)" rounded>{{
-                      tag.name
-                    }}</badge>
+                    <badge
+                      v-for="(tag, index) in serviceData.serviceTags"
+                      :key="index"
+                      v-bind:type="GetClass(index)"
+                      rounded
+                      >{{ tag.name }}</badge
+                    >
                   </div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              v-if="userData.ownsService && serviceData.showServiceButton"
+              class="mt-2 py-5 border-top text-center"
+            >
+              <div class="row justify-content-center">
+                <div class="col-lg-9">
+                  <base-button type="success">Service Is Over?</base-button>
                 </div>
               </div>
             </div>
@@ -107,16 +120,18 @@
   </div>
 </template>
 <script>
+import BaseButton from "../../assets/components/BaseButton.vue";
 import apiRegister from "../api/register";
 import modal from "../utils/modal";
 
 export default {
-  components: {},
+  components: { BaseButton },
   data() {
     return {
       serviceData: {
         location: "",
         time: "",
+        timeString: "",
         header: "",
         minutes: "",
         description: "",
@@ -125,6 +140,8 @@ export default {
         createdUserIdId: "",
         createdUserName: "",
         serviceTags: [],
+        status: "",
+        showServiceButton: false
       },
       userData: {
         hasServiceRequest: "",
@@ -136,12 +153,15 @@ export default {
     this.GetService();
     this.GetUserDetails();
   },
+  computed: {
+  },
   methods: {
     GetService() {
       var id = this.$route.params.service_id;
       apiRegister.GetService(id).then((r) => {
         this.serviceData.location = r.location;
         this.serviceData.time = r.time;
+        this.serviceData.timeString = r.timeString;
         this.serviceData.header = r.header;
         this.serviceData.minutes = r.minutes;
         this.serviceData.description = r.description;
@@ -150,9 +170,12 @@ export default {
         this.serviceData.createdUserName = r.createdUserName;
         this.serviceData.serviceTags = r.serviceTags;
         this.serviceData.attendingUserCount = r.attendingUserCount;
+        this.serviceData.status = r.status;
+        this.serviceData.showServiceButton = r.showServiceOverButton
       });
     },
     GetUserDetails() {
+      debugger;
       var id = this.$route.params.service_id;
       apiRegister.GetUserServiceDetails(id).then((r) => {
         this.userData.hasServiceRequest = r.hasServiceRequest;

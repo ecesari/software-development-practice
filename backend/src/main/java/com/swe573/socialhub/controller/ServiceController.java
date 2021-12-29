@@ -54,7 +54,6 @@ public class ServiceController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getLocalizedMessage());
         }
     }
-
     @PostMapping
 
     public ResponseEntity<Long> saveService(Principal principal, @Validated @RequestBody ServiceDto service) {

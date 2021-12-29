@@ -98,8 +98,6 @@ public class User {
         }
         this.userTags.add(tag);
     }
-
-
     public Set<Service> getCreatedServices() {
         return createdServices;
     }
@@ -108,6 +106,13 @@ public class User {
         this.createdServices = createdServices;
     }
 
+    public Integer getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Integer balance) {
+        this.balance = balance;
+    }
 
     @Override
     public String toString() {

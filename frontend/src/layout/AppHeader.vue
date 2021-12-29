@@ -137,9 +137,10 @@
             >
               Me
             </base-button>
-            <router-link to="/myProfile" class="dropdown-item"
+            <router-link to="/profile" class="dropdown-item"
               >My Profile</router-link
             >
+            
             <div class="dropdown-divider"></div>
             <router-link to="/createService" class="dropdown-item"
               >Create Service</router-link
@@ -148,7 +149,7 @@
               >My Services</router-link
             >
             <router-link to="/pendingRequests" class="dropdown-item"
-              >PendingRequests</router-link
+              >Pending Requests</router-link
             >
             <div class="dropdown-divider"></div>
             <a

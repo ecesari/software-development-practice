@@ -78,15 +78,11 @@
                   <h6 class="text-success text-uppercase">
                     {{ approvalItem.service.header }}
                   </h6>
-                  <p class="description mt-3">
+                  <p class="description mt-3" :href="'#/profile/' + approvalItem.user.id"
+ >
                     Requested by: {{ approvalItem.user.username }}
                   </p>
-                  <!-- <div>
-                    <badge v-bind:type="GetClass(index)" rounded>{{
-                      approvalItem.location
-                    }}</badge>
-                  </div> -->
-                  <div class="row">
+                  <div class="row text-center">
                     <base-button
                       tag="a"
                       v-on:click="

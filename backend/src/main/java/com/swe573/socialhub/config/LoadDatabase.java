@@ -100,6 +100,7 @@ class LoadDatabase {
                         add(tag2);
                     }});
 
+
             var service2 = new Service(null,
                     "Football!",
                     "I will be teaching how to play football! We can have a small match afterwards as well.",
@@ -107,7 +108,7 @@ class LoadDatabase {
                     LocalDateTime.of(2022, 2, 20, 20, 0),
                     3,
                     10,
-                    30, user2,
+                    30, user1,
                     40.98713967228238, 28.839091492848105,
                     new HashSet<Tag>() {{
                         add(tag3);
@@ -117,7 +118,7 @@ class LoadDatabase {
                     "Eminönü Tour",
                     "Hey everyone! I'm a professional tourist and I would like to give you a tour of Eminönü. We will start and finish at Eminönü Meydan. We will be visiting many historical places as well as bazaars. We will also visit popular restaurants.",
                     "Eminönü, Istanbul",
-                    LocalDateTime.of(2022, 3, 15, 12, 0),
+                    LocalDateTime.of(2021, 12, 15, 12, 0),
                     4,
                     10,
                     10, user1,
@@ -152,28 +153,14 @@ class LoadDatabase {
             //endregion
 
             //region Approval
-//            var service4 = new Service(null,
-//                    "Pet My Dog",
-//                    "Well technically this is a service from my dog but anyways you can come to Maçka Park and pet my cute dog. He won't bite(I can't promise). He's definitely worth your time.",
-//                    "Maçka Park, Istanbul",
-//                    LocalDateTime.of(2022, 2, 23, 13, 0),
-//                    1,
-//                    100,
-//                    29, user3,
-//                    41.045570653598446, 28.993261953340998,
-//                    new HashSet<Tag>() {{
-//                        add(tag3);
-//                        add(tag4);
-//                        add(tag5);
-//                    }});
-            var approval = saveAndGetApproval(approvalRepository, user1, service);
-            var approval2 = saveAndGetApproval(approvalRepository, user3, service);
-            var approval3 = saveAndGetApproval(approvalRepository, user1, service2);
-            var approval4 = saveAndGetApproval(approvalRepository, user3, service2);
-            var approval5 = saveAndGetApproval(approvalRepository, user3, service3);
-            var approval6 = saveAndGetApproval(approvalRepository, user2, service3);
-            var approval7 = saveAndGetApproval(approvalRepository, user1, service4);
-            var approval8 = saveAndGetApproval(approvalRepository, user2, service4);
+            var approval = saveAndGetApproval(approvalRepository, user1, service, ApprovalStatus.APPROVED);
+            var approval2 = saveAndGetApproval(approvalRepository, user3, service, ApprovalStatus.APPROVED);
+            var approval3 = saveAndGetApproval(approvalRepository, user2, service2, ApprovalStatus.DENIED);
+            var approval4 = saveAndGetApproval(approvalRepository, user3, service2, ApprovalStatus.APPROVED);
+            var approval5 = saveAndGetApproval(approvalRepository, user3, service3, ApprovalStatus.APPROVED);
+            var approval6 = saveAndGetApproval(approvalRepository, user2, service3, ApprovalStatus.PENDING);
+            var approval7 = saveAndGetApproval(approvalRepository, user1, service4, ApprovalStatus.PENDING);
+            var approval8 = saveAndGetApproval(approvalRepository, user2, service4, ApprovalStatus.APPROVED);
 
             approvalRepository.findAll().forEach(s -> {
                 log.info("Preloaded " + s);
@@ -185,8 +172,8 @@ class LoadDatabase {
         };
     }
 
-    private UserServiceApproval saveAndGetApproval(UserServiceApprovalRepository approvalRepository, User user1, Service service) {
-        var approval = new UserServiceApproval(new UserServiceApprovalKey(user1.getId(), service.getId()), user1, service, ApprovalStatus.PENDING);
+    private UserServiceApproval saveAndGetApproval(UserServiceApprovalRepository approvalRepository, User user1, Service service, ApprovalStatus approved) {
+        var approval = new UserServiceApproval(new UserServiceApprovalKey(user1.getId(), service.getId()), user1, service, approved);
         approvalRepository.save(approval);
         return approval;
     }
