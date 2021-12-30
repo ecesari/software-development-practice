@@ -10,17 +10,17 @@ public class UserDto {
     private String password;
     private List<TagDto> userTags;
     private Integer balance;
+    private List<NotificationDto> notifications;
 
 
 
-
-
-    public UserDto(Long id, String username, String email, String bio, Integer balance) {
+    public UserDto(Long id, String username, String email, String bio, Integer balance, List<NotificationDto> notifications) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.bio = bio;
         this.balance = balance;
+        this.notifications = notifications;
     }
     public String getEmail() {
         return email;
@@ -62,8 +62,6 @@ public class UserDto {
         this.password = password;
     }
 
-
-
     public List<TagDto> getUserTags() {
         return userTags;
     }
@@ -78,5 +76,13 @@ public class UserDto {
 
     public void setBalance(Integer balance) {
         this.balance = balance;
+    }
+
+    public List<NotificationDto> getNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(List<NotificationDto> notifications) {
+        this.notifications = notifications;
     }
 }

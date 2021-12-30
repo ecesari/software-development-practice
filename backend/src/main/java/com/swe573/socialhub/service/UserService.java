@@ -50,6 +50,9 @@ public class UserService {
 
     @Autowired
     private UserDetailsService userDetailsService;
+    @Autowired
+    private NotificationService notificationService;
+
 
     @Transactional
     public UserDto register(UserDto params) {
@@ -132,15 +135,22 @@ public class UserService {
         return list;
     }
 
-    private UserDto mapUserToDTO(User user) {
+    public UserDto mapUserToDTO(User user) {
+        var notificationList = new ArrayList<NotificationDto>();
+        if (user.getNotificationSet() != null) {
+            for (var notification : user.getNotificationSet()) {
+                var dto = notificationService.mapNotificationToDTO(notification);
+                notificationList.add(dto);
+            }
+        }
 
         return new UserDto(
                 user.getId(),
                 user.getUsername(),
                 user.getEmail(),
                 user.getBio(),
-                user.getBalance()
-//                user.getTags().stream().map(Tag::getId).collect(Collectors.toUnmodifiableList())
+                user.getBalance(),
+                notificationList
         );
     }
 
@@ -175,4 +185,6 @@ public class UserService {
         return dto;
 
     }
+
+
 }

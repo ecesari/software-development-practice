@@ -52,6 +52,13 @@ export default {
     SendServiceOverApproval(serviceId) {
         return http.get(process.env.VUE_APP_API + 'service/complete/' + serviceId,true, 'Service has been completed. Thank you!')
     },
+    GetNotificationDetails() {
+        return http.get(process.env.VUE_APP_API + 'notification/getByUser')
+    },
+    ReadAllNotifications() {
+        return http.get(process.env.VUE_APP_API + 'notification/readAllByUser')
+    },
+    
 
 
 }

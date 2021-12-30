@@ -90,7 +90,7 @@
                       "
                       href="#"
                       type="success"
-                      class="mt-4"
+                      class="col-sm"
                     >
                       Approve
                     </base-button>
@@ -101,7 +101,7 @@
                       "
                       href="#"
                       type="warning"
-                      class="mt-4"
+                      class="col-sm"
                     >
                       Deny
                     </base-button>

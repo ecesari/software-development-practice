@@ -1,15 +1,9 @@
 package com.swe573.socialhub.config;
 
-import com.swe573.socialhub.domain.Service;
-import com.swe573.socialhub.domain.Tag;
-import com.swe573.socialhub.domain.User;
-import com.swe573.socialhub.domain.UserServiceApproval;
+import com.swe573.socialhub.domain.*;
 import com.swe573.socialhub.domain.key.UserServiceApprovalKey;
 import com.swe573.socialhub.enums.ApprovalStatus;
-import com.swe573.socialhub.repository.ServiceRepository;
-import com.swe573.socialhub.repository.TagRepository;
-import com.swe573.socialhub.repository.UserRepository;
-import com.swe573.socialhub.repository.UserServiceApprovalRepository;
+import com.swe573.socialhub.repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -26,7 +20,7 @@ class LoadDatabase {
     private static final Logger log = LoggerFactory.getLogger(LoadDatabase.class);
 
     @Bean
-    CommandLineRunner initDatabase(TagRepository tagRepository, UserRepository userRepository, ServiceRepository serviceRepository, UserServiceApprovalRepository approvalRepository, PasswordEncoder passwordEncoder) {
+    CommandLineRunner initDatabase(TagRepository tagRepository, UserRepository userRepository, ServiceRepository serviceRepository, UserServiceApprovalRepository approvalRepository, NotificationRepository notificationRepository, PasswordEncoder passwordEncoder) {
 
         return args -> {
 
@@ -160,6 +154,7 @@ class LoadDatabase {
             var approval5 = saveAndGetApproval(approvalRepository, user3, service3, ApprovalStatus.APPROVED);
             var approval6 = saveAndGetApproval(approvalRepository, user2, service3, ApprovalStatus.PENDING);
             var approval8 = saveAndGetApproval(approvalRepository, user2, service4, ApprovalStatus.APPROVED);
+            var approval9 = saveAndGetApproval(approvalRepository, user1, service4, ApprovalStatus.DENIED);
 
             approvalRepository.findAll().forEach(s -> {
                 log.info("Preloaded " + s);
@@ -167,8 +162,26 @@ class LoadDatabase {
 
             //endregion
 
+            //region notification
+
+            var notif1 = saveAndGetNotification(userRepository, notificationRepository, "Your Request for Service Film Analysis has been approved.", "/service/" + service.getId(), false, user1);
+            var notif2 = saveAndGetNotification(userRepository, notificationRepository, "Your Request for Service Film Analysis has been sent.", "/service/" + service.getId(), true, user1);
+            var notif3 = saveAndGetNotification(userRepository, notificationRepository, "Your Service Eminönü Tour's date has passed, don't forget to approve the service!", "/service/" + service3.getId(), false, user1);
+            var notif4 = saveAndGetNotification(userRepository, notificationRepository, "Hooray! There is a new request for Eminönü Tour by jane! You can approve or deny this request. ", "/service/" + service3.getId(), false, user1);
+            var notif6 = saveAndGetNotification(userRepository, notificationRepository, "Hooray! There is a new request for Football! by joshua! You can approve or deny this request.", "/service/" + service2.getId(), true, user1);
+            var notif5 = saveAndGetNotification(userRepository, notificationRepository, "Hooray! There is a new request for Eminönü Tour by joshua! You can approve or deny this request.", "/service/" + service3.getId(), true, user1);
+            notificationRepository.findAll().forEach(s -> {
+                log.info("Preloaded " + s);
+            });
+            //endregion
 
         };
+    }
+
+    private Notification saveAndGetNotification(UserRepository userRepository, NotificationRepository notificationRepository, String message, String url, Boolean read, User user) {
+        var notification = new Notification(null, message, url, read,user);
+        notificationRepository.save(notification);
+        return notification;
     }
 
     private UserServiceApproval saveAndGetApproval(UserServiceApprovalRepository approvalRepository, User user1, Service service, ApprovalStatus approved) {

@@ -2,7 +2,11 @@
   <header class="header-global">
     <base-nav class="navbar-main" transparent type="" effect="light" expand>
       <router-link slot="brand" class="navbar-brand mr-lg-5" to="/">
-        <img style="height='45px !important'" src="img/brand/foo.png" alt="logo" />
+        <img
+          style="height='45px !important'"
+          src="img/brand/foo.png"
+          alt="logo"
+        />
       </router-link>
 
       <div class="row" slot="content-header" slot-scope="{ closeMenu }">
@@ -111,6 +115,19 @@
           </a>
         </li>
 
+        <li v-if="userLoggedIn" class="nav-item">
+          <a
+            class="nav-link nav-link-icon"
+            href="#/myNotifications"
+            data-toggle="tooltip"
+            v-bind:title="notificationMessage"
+          >
+            <i
+              v-bind:class="hasNewNotification ? 'fa fa-bell' : 'fa fa-bell-o'"
+            ></i>
+          </a>
+        </li>
+
         <li v-if="!userLoggedIn" class="nav-item d-none d-lg-block ml-lg-4">
           <a href="#/register" rel="noopener" class="btn btn-neutral btn-icon">
             <span class="btn-inner--icon">
@@ -140,7 +157,7 @@
             <router-link to="/profile" class="dropdown-item"
               >My Profile</router-link
             >
-            
+
             <div class="dropdown-divider"></div>
             <router-link to="/createService" class="dropdown-item"
               >Create Service</router-link
@@ -173,11 +190,15 @@
 import BaseNav from "@/components/BaseNav";
 import BaseDropdown from "@/components/BaseDropdown";
 import CloseButton from "@/components/CloseButton";
+import apiRegister from "@/api/register.js";
 
 export default {
   data() {
     return {
       userLoggedIn: "",
+      notificationMessage: "You have no new messages",
+      hasNewNotification: false,
+      r: {},
     };
   },
   mounted() {
@@ -185,6 +206,16 @@ export default {
 
     if (token) {
       this.userLoggedIn = true;
+      debugger;
+      apiRegister.GetNotificationDetails().then((r) => {
+          this.unreadCount = notificationList.filter(
+          (notificationList) => notificationList.read === false
+        ).length;
+        if (unreadCount > 0) {
+          this.hasNewNotification = true;
+          this.notificationMessage = "You have " + unreadCount + " new messages";
+        }
+      });
     } else {
       this.userLoggedIn = false;
     }

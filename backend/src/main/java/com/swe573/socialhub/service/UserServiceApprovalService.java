@@ -5,7 +5,6 @@ import com.swe573.socialhub.domain.UserServiceApproval;
 import com.swe573.socialhub.domain.key.UserServiceApprovalKey;
 import com.swe573.socialhub.dto.ServiceDto;
 import com.swe573.socialhub.dto.SimpleApprovalDto;
-import com.swe573.socialhub.dto.UserDto;
 import com.swe573.socialhub.dto.UserServiceApprovalDto;
 import com.swe573.socialhub.enums.ApprovalStatus;
 import com.swe573.socialhub.repository.ServiceRepository;
@@ -14,6 +13,7 @@ import com.swe573.socialhub.repository.UserServiceApprovalRepository;
 import org.hibernate.exception.DataException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -32,7 +32,14 @@ public class UserServiceApprovalService {
     @Autowired
     ServiceRepository serviceRepository;
 
+    @Autowired
+    UserService userService;
 
+    @Autowired
+    NotificationService notificationService;
+
+
+    @Transactional
     public void RequestApproval(Principal principal, Long serviceId) {
         final User loggedInUser = userRepository.findUserByUsername(principal.getName()).get();
         if (loggedInUser == null)
@@ -42,6 +49,8 @@ public class UserServiceApprovalService {
         var entity = new UserServiceApproval(key, loggedInUser, service, ApprovalStatus.PENDING);
         try {
             final UserServiceApproval approval = repository.save(entity);
+            notificationService.sendNotification("Hooray! There is a new request for " + service.getHeader() + " by " + loggedInUser.getUsername(),
+                    "/service/" + entity.getId(), service.getCreatedUser());
         } catch (Exception e) {
             throw new IllegalArgumentException("There was an error trying to send the request");
         }
@@ -63,7 +72,7 @@ public class UserServiceApprovalService {
 
     private UserServiceApprovalDto getApprovalDto(UserServiceApproval entity) {
         var service = entity.getService();
-        var userDto = new UserDto(entity.getUser().getId(), entity.getUser().getUsername(), entity.getUser().getEmail(), entity.getUser().getBio(), entity.getUser().getBalance());
+        var userDto = userService.mapUserToDTO(entity.getUser());
         var serviceDto = new ServiceDto(service.getId(), service.getHeader(), "", service.getLocation(), service.getTime(), 0, service.getQuota(), service.getAttendingUserCount(), 0L, "", 0.0, 0.0, Collections.emptyList(), service.getStatus());
         var dto = new UserServiceApprovalDto(userDto, serviceDto, entity.getApprovalStatus());
         return dto;
@@ -80,11 +89,10 @@ public class UserServiceApprovalService {
         var service = request.get().getService();
         var current = service.getAttendingUserCount();
         service.setAttendingUserCount(current + 1);
-//        var user = entity.getUser();
-//        var balance = user.getBalance();
-//        user.setBalance(balance+ entity.getService().getCredit());
+
         try {
             var returnData = repository.save(entity);
+            notificationService.sendNotification("Your request for service " + service.getHeader() + " has been " + status.name().toLowerCase(), "/service/" + entity.getId(), entity.getUser());
         } catch (DataException e) {
             throw new IllegalArgumentException(e.getMessage());
         }
