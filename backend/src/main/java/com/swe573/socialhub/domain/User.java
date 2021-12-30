@@ -6,9 +6,29 @@ import java.util.Set;
 
 @Entity
 public class User {
+    private @Id
+    @GeneratedValue
+    Long id;
+    private String username;
+    private String email;
+    private String bio;
+    @ManyToMany(cascade = {CascadeType.MERGE})
+    @JoinTable(
+            name = "user_tags",
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "tag_id")}
+    )
+    private Set<Tag> userTags;
+    @OneToMany(mappedBy = "createdUser")
+    private Set<Service> createdServices;
+    @OneToMany(mappedBy = "user")
+    Set<UserServiceApproval> approvalSet;
+    private Integer balance;
+    @OneToMany(cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    Set<Notification> notificationSet;
 
-    public User(Long id, String username, String email, String bio, Set<Tag> userTags, Integer balance)
-    {
+    public User(Long id, String username, String email, String bio, Set<Tag> userTags, Integer balance) {
         this.id = id;
         this.bio = bio;
         this.username = username;
@@ -20,27 +40,6 @@ public class User {
     public User() {
 
     }
-
-
-    private @Id
-    @GeneratedValue
-    Long id;
-    private String username;
-    private String email;
-    private String bio;
-    @ManyToMany(cascade = { CascadeType.MERGE })
-    @JoinTable(
-            name = "user_tags",
-            joinColumns = { @JoinColumn(name = "user_id") },
-            inverseJoinColumns = { @JoinColumn(name = "tag_id") }
-    )
-    private Set<Tag> userTags;
-    @OneToMany(mappedBy = "createdUser")
-    private Set<Service> createdServices;
-    @OneToMany(mappedBy = "user")
-    Set<UserServiceApproval> approvalSet;
-    private Integer balance;
-
 
     public String getPassword() {
         return password;
@@ -91,13 +90,14 @@ public class User {
     public void setTags(Set<Tag> userTags) {
         this.userTags = userTags;
     }
+
     public void addTag(Tag tag) {
-        if (this.userTags == null)
-        {
-            this.userTags =  new HashSet<Tag>();
+        if (this.userTags == null) {
+            this.userTags = new HashSet<Tag>();
         }
         this.userTags.add(tag);
     }
+
     public Set<Service> getCreatedServices() {
         return createdServices;
     }
@@ -114,8 +114,32 @@ public class User {
         this.balance = balance;
     }
 
+    public Set<Tag> getUserTags() {
+        return userTags;
+    }
+
+    public void setUserTags(Set<Tag> userTags) {
+        this.userTags = userTags;
+    }
+
+    public Set<UserServiceApproval> getApprovalSet() {
+        return approvalSet;
+    }
+
+    public void setApprovalSet(Set<UserServiceApproval> approvalSet) {
+        this.approvalSet = approvalSet;
+    }
+
+    public Set<Notification> getNotificationSet() {
+        return notificationSet;
+    }
+
+    public void setNotificationSet(Set<Notification> notificationSet) {
+        this.notificationSet = notificationSet;
+    }
+
     @Override
     public String toString() {
-        return "User{" + "id=" + this.id + ", username='" + this.username + '\'' +'}';
+        return "User{" + "id=" + this.id + ", username='" + this.username + '\'' + '}';
     }
 }

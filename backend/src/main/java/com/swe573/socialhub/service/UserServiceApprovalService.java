@@ -5,7 +5,6 @@ import com.swe573.socialhub.domain.UserServiceApproval;
 import com.swe573.socialhub.domain.key.UserServiceApprovalKey;
 import com.swe573.socialhub.dto.ServiceDto;
 import com.swe573.socialhub.dto.SimpleApprovalDto;
-import com.swe573.socialhub.dto.UserDto;
 import com.swe573.socialhub.dto.UserServiceApprovalDto;
 import com.swe573.socialhub.enums.ApprovalStatus;
 import com.swe573.socialhub.repository.ServiceRepository;
@@ -31,6 +30,9 @@ public class UserServiceApprovalService {
 
     @Autowired
     ServiceRepository serviceRepository;
+
+    @Autowired
+    UserService userService;
 
 
     public void RequestApproval(Principal principal, Long serviceId) {
@@ -63,7 +65,7 @@ public class UserServiceApprovalService {
 
     private UserServiceApprovalDto getApprovalDto(UserServiceApproval entity) {
         var service = entity.getService();
-        var userDto = new UserDto(entity.getUser().getId(), entity.getUser().getUsername(), entity.getUser().getEmail(), entity.getUser().getBio(), entity.getUser().getBalance());
+        var userDto = userService.mapUserToDTO(entity.getUser());
         var serviceDto = new ServiceDto(service.getId(), service.getHeader(), "", service.getLocation(), service.getTime(), 0, service.getQuota(), service.getAttendingUserCount(), 0L, "", 0.0, 0.0, Collections.emptyList(), service.getStatus());
         var dto = new UserServiceApprovalDto(userDto, serviceDto, entity.getApprovalStatus());
         return dto;
