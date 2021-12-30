@@ -34,7 +34,6 @@ public class ServiceService {
     @Autowired
     private NotificationService notificationService;
 
-
     public List<ServiceDto> findAllServices() {
         var entities = serviceRepository.findAll();
 
@@ -116,13 +115,13 @@ public class ServiceService {
             var pendingUserRequests = approvalRepository.findUserServiceApprovalByService_IdAndApprovalStatus(serviceId, ApprovalStatus.PENDING);
             for (UserServiceApproval pendingUserRequest : pendingUserRequests) {
                 pendingUserRequest.setApprovalStatus(ApprovalStatus.DENIED);
-                sendNotification(entity, pendingUserRequest, String.format("Your request for service ", entity.getHeader(), "has been denied."), String.format("/service/", entity.getId()), pendingUserRequest.getUser());
+                notificationService.sendNotification(String.format("Your request for service ", entity.getHeader(), "has been denied."), String.format("/service/", entity.getId()), pendingUserRequest.getUser());
             }
             var approvedUserRequests = approvalRepository.findUserServiceApprovalByService_IdAndApprovalStatus(serviceId, ApprovalStatus.PENDING);
             for (UserServiceApproval approvedUserRequest : approvedUserRequests) {
                 var balance = approvedUserRequest.getUser().getBalance();
                 approvedUserRequest.getUser().setBalance(balance - approvedUserRequest.getService().getCredit());
-                sendNotification(entity, approvedUserRequest, String.format("Your request for service ", entity.getHeader(), "has been approved."), String.format("/service/", entity.getId()), approvedUserRequest.getUser());
+                notificationService.sendNotification(String.format("Your request for service ", entity.getHeader(), "has been approved."), String.format("/service/", entity.getId()), approvedUserRequest.getUser());
             }
             var createdUser = service.get().getCreatedUser();
             var createdUserBalance = createdUser.getBalance();
@@ -133,14 +132,6 @@ public class ServiceService {
             throw new IllegalArgumentException("No services have been found");
         }
 
-    }
-
-    private void sendNotification(Service entity, UserServiceApproval pendingUserRequest, String message, String url, User user) {
-        var notification = new Notification(null, message, url, false, user);
-        var notifications = user.getNotificationSet();
-        notifications.add(notification);
-        user.setNotificationSet(notifications);
-        userRepository.save(user);
     }
 
     private ServiceDto mapToDto(Service service) {
