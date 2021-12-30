@@ -140,15 +140,6 @@ export default {
         }
       });
     },
-    // SendTags() {
-    //   debugger;
-    //   var a = this.footags;
-    //   var x = this.registerInputs;
-    //   var t = this.registerInputs.userTags;
-    //   apiRegister.SetTags(this.registerInputs.userTags).then((r) => {
-    //     debugger;
-    //   });
-    // },
     GetTags() {
       console.log("Get Tags Started");
       apiRegister.GetTags().then((r) => {

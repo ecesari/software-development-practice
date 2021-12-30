@@ -67,6 +67,7 @@ public class ServiceController {
 
     @GetMapping("/complete/{serviceId}")
     public void App(Principal principal, @PathVariable Long serviceId) {
+        //TODO:change to responseentity
         try {
             serviceService.complete(principal,serviceId);
         }
