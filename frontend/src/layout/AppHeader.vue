@@ -206,10 +206,14 @@ export default {
 
     if (token) {
       this.userLoggedIn = true;
+      debugger;
       apiRegister.GetNotificationDetails().then((r) => {
-        if (r.length > 0) {
+          this.unreadCount = notificationList.filter(
+          (notificationList) => notificationList.read === false
+        ).length;
+        if (unreadCount > 0) {
           this.hasNewNotification = true;
-          this.notificationMessage = "You have " + r.length + " new messages";
+          this.notificationMessage = "You have " + unreadCount + " new messages";
         }
       });
     } else {

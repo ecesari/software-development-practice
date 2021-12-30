@@ -55,7 +55,9 @@ export default {
     GetNotificationDetails() {
         return http.get(process.env.VUE_APP_API + 'notification/getByUser')
     },
-
+    ReadAllNotifications() {
+        return http.get(process.env.VUE_APP_API + 'notification/readAllByUser')
+    },
     
 
 

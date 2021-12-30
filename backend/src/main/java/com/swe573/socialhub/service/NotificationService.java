@@ -44,4 +44,21 @@ public class NotificationService {
         }
 
     }
+
+    public Boolean setStatusToRead(Principal principal) {
+        final User loggedInUser = userRepository.findUserByUsername(principal.getName()).get();
+        if (loggedInUser == null)
+            throw new IllegalArgumentException("User doesn't exist.");
+        try {
+            var notifications = loggedInUser.getNotificationSet();
+            for (Notification notification : notifications)
+            {
+                notification.setRead(true);
+                repository.save(notification);
+            }
+            return true;
+        } catch (DataException e) {
+            throw new IllegalArgumentException("There was a problem trying to save service to db");
+        }
+    }
 }

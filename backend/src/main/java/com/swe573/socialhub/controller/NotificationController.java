@@ -30,5 +30,15 @@ public class NotificationController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getLocalizedMessage());
         }
     }
+
+    @GetMapping("/readAllByUser")
+    public ResponseEntity<Boolean> readAllByUser(Principal principal) {
+        try {
+            var result = service.setStatusToRead(principal);
+            return ResponseEntity.ok(result);
+        } catch (IllegalArgumentException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getLocalizedMessage());
+        }
+    }
 }
 
