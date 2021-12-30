@@ -122,8 +122,9 @@
             data-toggle="tooltip"
             v-bind:title="notificationMessage"
           >
-            <i 
-            v-bind:class = "(hasNewNotification)?'fa fa-bell':'fa fa-bell-o'"></i>
+            <i
+              v-bind:class="hasNewNotification ? 'fa fa-bell' : 'fa fa-bell-o'"
+            ></i>
           </a>
         </li>
 
@@ -189,7 +190,7 @@
 import BaseNav from "@/components/BaseNav";
 import BaseDropdown from "@/components/BaseDropdown";
 import CloseButton from "@/components/CloseButton";
-import apiRegister from "@/api/register.js"
+import apiRegister from "@/api/register.js";
 
 export default {
   data() {
@@ -197,7 +198,7 @@ export default {
       userLoggedIn: "",
       notificationMessage: "You have no new messages",
       hasNewNotification: false,
-      r: {}
+      r: {},
     };
   },
   mounted() {
@@ -205,18 +206,12 @@ export default {
 
     if (token) {
       this.userLoggedIn = true;
-      debugger;
-         apiRegister.GetNotificationDetails().then((r) => {
-          debugger;
-          if (r.length === 0) {
-            this.hasNewNotification = false;
-            this.notificationMessage = "You have no new messages";
-          } else {
-            this.hasNewNotification = true;
-            this.notificationMessage =
-              "You have " + r.length + " new messages";
-          }
-        });
+      apiRegister.GetNotificationDetails().then((r) => {
+        if (r.length > 0) {
+          this.hasNewNotification = true;
+          this.notificationMessage = "You have " + r.length + " new messages";
+        }
+      });
     } else {
       this.userLoggedIn = false;
     }
@@ -230,22 +225,6 @@ export default {
     EmptyLocalStorage() {
       localStorage.clear();
       document.location.href = "../";
-    },
-    GetNotificationDetails() {
-      debugger;
-      if (this.userLoggedIn) {
-        apiRegister.GetNotificationDetails().then((r) => {
-          debugger;
-          if (r.count() === 0) {
-            this.hasNewNotification = false;
-            this.notificationMessage = "You have no new messages";
-          } else {
-            his.hasNewNotification = true;
-            this.notificationMessage =
-              "You have " + r.count() + " new messages";
-          }
-        });
-      }
     },
   },
 };

@@ -13,7 +13,7 @@ import CreateService from "./views/CreateService.vue";
 import SingleService from "./views/SingleService.vue";
 import MyServices from "./views/MyServices.vue";
 import PendingRequests from "./views/PendingRequests.vue";
-import StarterFooter from "./layout/starter/StarterFooter";
+import Notifications from "./views/Notifications.vue";
 Vue.use(Router);
 
 export default new Router({
@@ -114,6 +114,16 @@ export default new Router({
       components: {
         header: AppHeader,
         default: PendingRequests,
+        footer: AppFooter
+      }
+    },
+    ,
+    {
+      path: "/myNotifications",
+      name: "myNotifications",
+      components: {
+        header: AppHeader,
+        default: Notifications,
         footer: AppFooter
       }
     }
