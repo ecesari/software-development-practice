@@ -66,4 +66,13 @@ public class UserServiceApproval {
     public void setApprovalStatus(ApprovalStatus approvalStatus) {
         this.approvalStatus = approvalStatus;
     }
+
+    @Override
+    public String toString() {
+        return "UserServiceApproval{" +
+                "user=" + user.getUsername() +
+                ", service=" + service.getHeader() +
+                ", approvalStatus=" + approvalStatus +
+                '}';
+    }
 }

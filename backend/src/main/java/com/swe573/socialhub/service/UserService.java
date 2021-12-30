@@ -59,6 +59,7 @@ public class UserService {
         userEntity.setEmail(params.getPassword());
         userEntity.setPassword(passwordHash);
         userEntity.setUsername(params.getUsername());
+        userEntity.setBalance(5);
         var tags = params.getUserTags();
         if (tags != null) {
             for (TagDto tagDto : tags) {
@@ -137,7 +138,8 @@ public class UserService {
                 user.getId(),
                 user.getUsername(),
                 user.getEmail(),
-                user.getBio()
+                user.getBio(),
+                user.getBalance()
 //                user.getTags().stream().map(Tag::getId).collect(Collectors.toUnmodifiableList())
         );
     }
@@ -163,14 +165,13 @@ public class UserService {
         if (loggedInUser == null)
             throw new IllegalArgumentException("User doesn't exist.");
         var serviceOptional = serviceRepository.findById(serviceId);
-        if (serviceOptional == null)
-        {
+        if (serviceOptional == null) {
             throw new IllegalArgumentException("Service doesn't exist.");
         }
         var service = serviceOptional.get();
         var ownsService = service.getCreatedUser().getId() == loggedInUser.getId();
-        var userServiceApproval = userServiceApprovalRepository.findUserServiceApprovalByServiceAndUser(service,loggedInUser);
-        var dto = new UserServiceDto(userServiceApproval != null && !userServiceApproval.isEmpty(),ownsService);
+        var userServiceApproval = userServiceApprovalRepository.findUserServiceApprovalByServiceAndUser(service, loggedInUser);
+        var dto = new UserServiceDto(userServiceApproval != null && !userServiceApproval.isEmpty(), ownsService);
         return dto;
 
     }

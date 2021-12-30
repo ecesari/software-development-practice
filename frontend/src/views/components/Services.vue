@@ -26,7 +26,7 @@
               </p>
               <div>
                 <badge v-bind:type="GetClass(index)" rounded>{{
-                  service.location
+                  service.status
                 }}</badge>
               </div>
               <base-button

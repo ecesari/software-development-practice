@@ -1,7 +1,10 @@
 package com.swe573.socialhub.dto;
 
+import com.swe573.socialhub.enums.ServiceStatus;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 
@@ -16,11 +19,14 @@ public class ServiceDto implements Serializable {
     private final int AttendingUserCount;
     private final Long CreatedUserIdId;
     private final String CreatedUserName;
-    private Double Latitude;
-    private Double Longitude;
-    private List<TagDto> ServiceTags;
+    private final Double Latitude;
+    private final Double Longitude;
+    private final List<TagDto> ServiceTags;
+    private final ServiceStatus Status;
+    private final String TimeString;
+    private final Boolean ShowServiceOverButton;
 
-    public ServiceDto(Long id, String header, String description, String location, LocalDateTime time, int minutes, int quota, int attendingUserCount, Long createdUserIdId, String createdUserName, Double latitude, Double longitude, List<TagDto> serviceTags) {
+    public ServiceDto(Long id, String header, String description, String location, LocalDateTime time, int minutes, int quota, int attendingUserCount, Long createdUserIdId, String createdUserName, Double latitude, Double longitude, List<TagDto> serviceTags, ServiceStatus status) {
         this.id = id;
         Header = header;
         Description = description;
@@ -34,6 +40,15 @@ public class ServiceDto implements Serializable {
         Latitude = latitude;
         Longitude = longitude;
         ServiceTags = serviceTags;
+        Status = status;
+//        DateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm");
+//        String strDate = formatter.format(time);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E, dd MMM yyyy HH:mm");
+
+        String formattedDateTime = time.format(formatter); // "1986-04-08 12:30"
+        TimeString = formattedDateTime;
+        ShowServiceOverButton = time.isBefore(LocalDateTime.now()) && status == ServiceStatus.ONGOING;
     }
 
     public Long getId() {
@@ -67,8 +82,21 @@ public class ServiceDto implements Serializable {
     public Long getCreatedUserIdId() {
         return CreatedUserIdId;
     }
+
     public String getCreatedUserName() {
         return CreatedUserName;
+    }
+
+    public ServiceStatus getStatus() {
+        return Status;
+    }
+
+    public String getTimeString() {
+        return TimeString;
+    }
+
+    public Boolean getShowServiceOverButton() {
+        return ShowServiceOverButton;
     }
 
     @Override
@@ -120,4 +148,5 @@ public class ServiceDto implements Serializable {
     public int getAttendingUserCount() {
         return AttendingUserCount;
     }
+
 }

@@ -9,19 +9,19 @@ public class UserDto {
     private String bio;
     private String password;
     private List<TagDto> userTags;
+    private Integer balance;
 
 
 
 
 
-    public UserDto(Long id, String username, String email, String bio) {
+    public UserDto(Long id, String username, String email, String bio, Integer balance) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.bio = bio;
-//        this.userTags = userTags;
+        this.balance = balance;
     }
-
     public String getEmail() {
         return email;
     }
@@ -72,4 +72,11 @@ public class UserDto {
         this.userTags = userTags;
     }
 
+    public Integer getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Integer balance) {
+        this.balance = balance;
+    }
 }

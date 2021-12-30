@@ -2,7 +2,7 @@
   <header class="header-global">
     <base-nav class="navbar-main" transparent type="" effect="light" expand>
       <router-link slot="brand" class="navbar-brand mr-lg-5" to="/">
-        <img src="img/brand/white.png" alt="logo" />
+        <img style="height='45px !important'" src="img/brand/foo.png" alt="logo" />
       </router-link>
 
       <div class="row" slot="content-header" slot-scope="{ closeMenu }">
@@ -137,15 +137,19 @@
             >
               Me
             </base-button>
-            <router-link to="/myProfile" class="dropdown-item"
+            <router-link to="/profile" class="dropdown-item"
               >My Profile</router-link
             >
+            
             <div class="dropdown-divider"></div>
             <router-link to="/createService" class="dropdown-item"
               >Create Service</router-link
             >
             <router-link to="/myServices" class="dropdown-item"
               >My Services</router-link
+            >
+            <router-link to="/pendingRequests" class="dropdown-item"
+              >Pending Requests</router-link
             >
             <div class="dropdown-divider"></div>
             <a

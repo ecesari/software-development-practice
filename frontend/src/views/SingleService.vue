@@ -23,7 +23,7 @@
                 <div class="card-profile-actions py-4 mt-lg-0">
                   <base-button
                     v-if="!userData.hasServiceRequest && !userData.ownsService"
-                    @click="ConfirmApproval"
+                    @click="ConfirmRequest"
                     type="info"
                     size="sm"
                     class="mr-4"
@@ -65,20 +65,20 @@
               <h3>
                 {{ serviceData.header }}
                 <span class="font-weight-light">
-                  by {{ serviceData.createdUserName }}</span
+                  <a :href="'#/profile/' + serviceData.createdUserIdId">
+                    by {{ serviceData.createdUserName }}</a
+                  ></span
                 >
               </h3>
               <!-- <div class="h6 font-weight-300"><i class="ni location_pin mr-2"></i>{{ serviceData.quota }}</div> -->
+              <div></div>
+              <br />
+              <div></div>
               <div>
                 <i class="ni ni-square-pin"></i> : {{ serviceData.location }}
-              </div>
-              <br />
-              <div>
-                <i class="ni ni-time-alarm"></i>: {{ serviceData.time }}
-              </div>
-              <div>
+                <i class="ni ni-time-alarm"></i>: {{ serviceData.timeString }}
                 <i class="ni ni-watch-time"></i>:
-                {{ serviceData.minutes }} minutes
+                {{ serviceData.minutes }} credits
               </div>
               <!-- <div>
                 <i class="ni ni-single-02"></i>: {{ serviceData.quota }} people
@@ -90,14 +90,28 @@
                   <p>{{ serviceData.description }}</p>
                   <!-- <a href="#">Show more</a> -->
 
-                  <div
-                    v-for="(tag, index) in serviceData.serviceTags"
-                    :key="index"
-                  >
-                    <badge v-bind:type="GetClass(index)" rounded>{{
-                      tag.name
-                    }}</badge>
+                  <div>
+                    <badge
+                      v-for="(tag, index) in serviceData.serviceTags"
+                      :key="index"
+                      v-bind:type="GetClass(index)"
+                      rounded
+                      >{{ tag.name }}</badge
+                    >
                   </div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              v-if="userData.ownsService && serviceData.showServiceButton"
+              class="mt-2 py-5 border-top text-center"
+            >
+              <div class="row justify-content-center">
+                <div class="col-lg-9">
+                  <base-button @click="ConfirmServiceOver" type="success"
+                    >Service Is Over?</base-button
+                  >
                 </div>
               </div>
             </div>
@@ -108,16 +122,18 @@
   </div>
 </template>
 <script>
+import BaseButton from "../../assets/components/BaseButton.vue";
 import apiRegister from "../api/register";
 import modal from "../utils/modal";
 
 export default {
-  components: {},
+  components: { BaseButton },
   data() {
     return {
       serviceData: {
         location: "",
         time: "",
+        timeString: "",
         header: "",
         minutes: "",
         description: "",
@@ -126,6 +142,8 @@ export default {
         createdUserIdId: "",
         createdUserName: "",
         serviceTags: [],
+        status: "",
+        showServiceButton: false,
       },
       userData: {
         hasServiceRequest: "",
@@ -137,12 +155,14 @@ export default {
     this.GetService();
     this.GetUserDetails();
   },
+  computed: {},
   methods: {
     GetService() {
       var id = this.$route.params.service_id;
       apiRegister.GetService(id).then((r) => {
         this.serviceData.location = r.location;
         this.serviceData.time = r.time;
+        this.serviceData.timeString = r.timeString;
         this.serviceData.header = r.header;
         this.serviceData.minutes = r.minutes;
         this.serviceData.description = r.description;
@@ -151,6 +171,8 @@ export default {
         this.serviceData.createdUserName = r.createdUserName;
         this.serviceData.serviceTags = r.serviceTags;
         this.serviceData.attendingUserCount = r.attendingUserCount;
+        this.serviceData.status = r.status;
+        this.serviceData.showServiceButton = r.showServiceOverButton;
       });
     },
     GetUserDetails() {
@@ -170,17 +192,30 @@ export default {
         return "warning";
       }
     },
-    ConfirmApproval() {
+    ConfirmRequest() {
       modal.confirm(
         "Send Request to Join?",
         "You will be added to the pending request list",
-        this.SendApproval
+        this.SendRequest
       );
     },
-    SendApproval() {
+    SendRequest() {
       var serviceId = this.$route.params.service_id;
 
       apiRegister.SendUserServiceApproval(serviceId).then((r) => {
+        location.reload();
+      });
+    },
+    ConfirmServiceOver() {
+      modal.confirm(
+        "Do you accept that the service is over?",
+        "The participants' and your balance will be updated",
+        this.SendServiceOverApproval
+      );
+    },
+    SendServiceOverApproval() {
+      var serviceId = this.$route.params.service_id;
+      apiRegister.SendServiceOverApproval(serviceId).then((r) => {
         location.reload();
       });
     },

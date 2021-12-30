@@ -20,12 +20,13 @@ import App from "./App.vue";
 import router from "./router";
 import Argon from "./plugins/argon-kit";
 import axios from 'axios'
+import moment from 'vue-moment'
 import './registerServiceWorker'
 
 import 'vue-multiselect/dist/vue-multiselect.min.css'
 import "vue2-datepicker/index.css";
 Vue.config.productionTip = false;
-Vue.use(Argon, axios);
+Vue.use(Argon, axios, moment);
 new Vue({
   router,
   render: h => h(App)

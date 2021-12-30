@@ -1,5 +1,7 @@
 package com.swe573.socialhub.domain;
 
+import com.swe573.socialhub.enums.ServiceStatus;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -12,32 +14,35 @@ public class Service {
 
     }
 
-    public Service(Long id, String header, String description, String location, LocalDateTime time, int minutes, int quota,int attendingUserCount, User createdUser, Double latitude,Double longitude) {
+    public Service(Long id, String header, String description, String location, LocalDateTime time, int minutes, int quota, int attendingUserCount, User createdUser, Double latitude, Double longitude, Set<Tag> serviceTags) {
         this.id = id;
         Header = header;
         Description = description;
         Location = location;
         Time = time;
-        Minutes = minutes;
+        Credit = minutes;
         Quota = quota;
         this.createdUser = createdUser;
         Latitude = latitude;
         Longitude = longitude;
         AttendingUserCount = attendingUserCount;
+        ServiceTags = serviceTags;
+        this.Status = ServiceStatus.ONGOING;
     }
 
     private @Id
     @GeneratedValue
     Long id;
-    String Header;
-    String Description;
-    String Location;
-    LocalDateTime Time;
-    int Minutes;
-    int Quota;
-    int AttendingUserCount;
-    Double Latitude;
-    Double Longitude;
+    private String Header;
+    private String Description;
+    private String Location;
+    private LocalDateTime Time;
+    private int Credit;
+    private int Quota;
+    private int AttendingUserCount;
+    private Double Latitude;
+    private Double Longitude;
+    private ServiceStatus Status;
     @ManyToOne
     @JoinColumn(name = "createdUser")
     User createdUser;
@@ -50,6 +55,10 @@ public class Service {
     Set<Tag> ServiceTags;
     @OneToMany(mappedBy = "service")
     Set<UserServiceApproval> approvalSet;
+
+
+
+
     public User getCreatedUser() {
         return createdUser;
     }
@@ -94,12 +103,12 @@ public class Service {
         Time = time;
     }
 
-    public int getMinutes() {
-        return Minutes;
+    public int getCredit() {
+        return Credit;
     }
 
-    public void setMinutes(int minutes) {
-        Minutes = minutes;
+    public void setCredit(int credit) {
+        Credit = credit;
     }
 
     public void setCreatedUser(User createdUser) {
@@ -153,6 +162,15 @@ public class Service {
     public void setApprovalSet(Set<UserServiceApproval> approvalSet) {
         this.approvalSet = approvalSet;
     }
+
+    public ServiceStatus getStatus() {
+        return Status;
+    }
+
+    public void setStatus(ServiceStatus status) {
+        Status = status;
+    }
+
 
 
     @Override

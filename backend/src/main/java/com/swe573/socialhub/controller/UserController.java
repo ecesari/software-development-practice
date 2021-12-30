@@ -62,11 +62,7 @@ public class UserController {
     @GetMapping("/user/{userId}")
     public UserDto getUser(Principal principal, @PathVariable String userId) {
         try {
-            if (userId.length() == 36) {
-                return service.getUser(userId, principal);
-            } else {
-                return service.getUserByUsername(userId, principal);
-            }
+            return service.getUser(userId, principal);
         } catch (IllegalArgumentException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getLocalizedMessage());
         }
