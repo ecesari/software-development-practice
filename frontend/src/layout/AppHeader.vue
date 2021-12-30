@@ -2,7 +2,11 @@
   <header class="header-global">
     <base-nav class="navbar-main" transparent type="" effect="light" expand>
       <router-link slot="brand" class="navbar-brand mr-lg-5" to="/">
-        <img style="height='45px !important'" src="img/brand/foo.png" alt="logo" />
+        <img
+          style="height='45px !important'"
+          src="img/brand/foo.png"
+          alt="logo"
+        />
       </router-link>
 
       <div class="row" slot="content-header" slot-scope="{ closeMenu }">
@@ -111,6 +115,21 @@
           </a>
         </li>
 
+        <li v-if="userLoggedIn" class="nav-item">
+          <a
+            class="nav-link nav-link-icon"
+            href="https://github.com/ecesari/software-development-practice"
+            target="_blank"
+            rel="noopener"
+            data-toggle="tooltip"
+            title="You have new notifications"
+          >
+            <i class="fa fa-bell-o"></i>
+            <!-- <i class="fa fa-bell-o"></i> -->
+            <span class="nav-link-inner--text d-lg-none">Github</span>
+          </a>
+        </li>
+
         <li v-if="!userLoggedIn" class="nav-item d-none d-lg-block ml-lg-4">
           <a href="#/register" rel="noopener" class="btn btn-neutral btn-icon">
             <span class="btn-inner--icon">
@@ -140,7 +159,7 @@
             <router-link to="/profile" class="dropdown-item"
               >My Profile</router-link
             >
-            
+
             <div class="dropdown-divider"></div>
             <router-link to="/createService" class="dropdown-item"
               >Create Service</router-link
