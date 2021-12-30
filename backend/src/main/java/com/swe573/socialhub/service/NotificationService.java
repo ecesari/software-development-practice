@@ -14,7 +14,7 @@ public class NotificationService {
 //    private UserRepository userRepository;
 
 //
-//    public List<TagDto> findAllTags() {
+//    public NotificationDto create() {
 //        var entities = tagRepository.findAll();
 //        var list = entities.stream().map(tag -> mapToDto(tag)).collect(Collectors.toUnmodifiableList());
 //        return list;

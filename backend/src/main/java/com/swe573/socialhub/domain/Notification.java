@@ -1,9 +1,7 @@
 package com.swe573.socialhub.domain;
 
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Notification {
@@ -13,6 +11,10 @@ public class Notification {
     private String message;
     private Boolean readByUser;
     private String messageUrl;
+//    @ManyToOne
+//    @JoinColumn(name = "user")
+//    User user;
+
 
     public Notification(Long id, String message,  String messageUrl,Boolean read) {
         this.id = id;

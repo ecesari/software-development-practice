@@ -135,6 +135,9 @@ public class User {
     }
 
     public void setNotificationSet(Set<Notification> notificationSet) {
+        if (this.notificationSet == null) {
+            this.notificationSet = new HashSet<Notification>();
+        }
         this.notificationSet = notificationSet;
     }
 

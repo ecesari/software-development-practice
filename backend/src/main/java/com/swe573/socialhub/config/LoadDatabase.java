@@ -164,12 +164,12 @@ class LoadDatabase {
 
             //region notification
 
-            var notif1 = saveAndGetNotification(userRepository,notificationRepository, "Your Request for Service Film Analysis has been approved.", "/service/" + service.getId(), false, user1);
-            var notif2 = saveAndGetNotification(userRepository,notificationRepository, "Your Request for Service Film Analysis has been sent.", "/service/" + service.getId(), false, user1);
-            var notif3 = saveAndGetNotification(userRepository,notificationRepository, "Your Service Eminönü Tour's date has passed, don't forget to approve the service!", "/service/" + service3.getId(), false, user1);
-            var notif4 = saveAndGetNotification(userRepository,notificationRepository, "Hooray! There is a new request for Eminönü Tour by jane! You can approve or deny this request. ", "/service/" + service3.getId(), false, user1);
-            var notif6 = saveAndGetNotification(userRepository,notificationRepository, "Hooray! There is a new request for Football! by joshua! You can approve or deny this request.", "/service/" + service2.getId(), false, user1);
-            var notif5 = saveAndGetNotification(userRepository,notificationRepository, "Hooray! There is a new request for Eminönü Tour by joshua! You can approve or deny this request.", "/service/" + service3.getId(), false, user1);
+            var notif1 = saveAndGetNotification(userRepository, notificationRepository, "Your Request for Service Film Analysis has been approved.", "/service/" + service.getId(), false, user1);
+            var notif2 = saveAndGetNotification(userRepository, notificationRepository, "Your Request for Service Film Analysis has been sent.", "/service/" + service.getId(), true, user1);
+            var notif3 = saveAndGetNotification(userRepository, notificationRepository, "Your Service Eminönü Tour's date has passed, don't forget to approve the service!", "/service/" + service3.getId(), false, user1);
+            var notif4 = saveAndGetNotification(userRepository, notificationRepository, "Hooray! There is a new request for Eminönü Tour by jane! You can approve or deny this request. ", "/service/" + service3.getId(), false, user1);
+            var notif6 = saveAndGetNotification(userRepository, notificationRepository, "Hooray! There is a new request for Football! by joshua! You can approve or deny this request.", "/service/" + service2.getId(), true, user1);
+            var notif5 = saveAndGetNotification(userRepository, notificationRepository, "Hooray! There is a new request for Eminönü Tour by joshua! You can approve or deny this request.", "/service/" + service3.getId(), true, user1);
             notificationRepository.findAll().forEach(s -> {
                 log.info("Preloaded " + s);
             });

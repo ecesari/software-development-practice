@@ -1,17 +1,11 @@
 package com.swe573.socialhub.service;
 
-import com.swe573.socialhub.domain.Service;
-import com.swe573.socialhub.domain.Tag;
-import com.swe573.socialhub.domain.User;
-import com.swe573.socialhub.domain.UserServiceApproval;
+import com.swe573.socialhub.domain.*;
 import com.swe573.socialhub.dto.ServiceDto;
 import com.swe573.socialhub.dto.TagDto;
 import com.swe573.socialhub.enums.ApprovalStatus;
 import com.swe573.socialhub.enums.ServiceStatus;
-import com.swe573.socialhub.repository.ServiceRepository;
-import com.swe573.socialhub.repository.TagRepository;
-import com.swe573.socialhub.repository.UserRepository;
-import com.swe573.socialhub.repository.UserServiceApprovalRepository;
+import com.swe573.socialhub.repository.*;
 import org.hibernate.exception.DataException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,6 +30,10 @@ public class ServiceService {
 
     @Autowired
     private UserServiceApprovalRepository approvalRepository;
+
+    @Autowired
+    private NotificationService notificationService;
+
 
     public List<ServiceDto> findAllServices() {
         var entities = serviceRepository.findAll();
@@ -114,18 +112,18 @@ public class ServiceService {
         if (service.isPresent()) {
             var entity = service.get();
             entity.setStatus(ServiceStatus.APPROVED);
-            //TODO:balance
-            //TODO:send notif to approved and denied
+
+
             var pendingUserRequests = approvalRepository.findUserServiceApprovalByService_IdAndApprovalStatus(serviceId, ApprovalStatus.PENDING);
-            for(UserServiceApproval pendingUserRequest : pendingUserRequests)
-            {
+            for (UserServiceApproval pendingUserRequest : pendingUserRequests) {
                 pendingUserRequest.setApprovalStatus(ApprovalStatus.DENIED);
+                sendNotification(entity, pendingUserRequest, String.format("Your request for service ", entity.getHeader(), "has been denied."), String.format("/service/", entity.getId()), pendingUserRequest.getUser());
             }
             var approvedUserRequests = approvalRepository.findUserServiceApprovalByService_IdAndApprovalStatus(serviceId, ApprovalStatus.PENDING);
-            for(UserServiceApproval approvedUserRequest : approvedUserRequests)
-            {
+            for (UserServiceApproval approvedUserRequest : approvedUserRequests) {
                 var balance = approvedUserRequest.getUser().getBalance();
                 approvedUserRequest.getUser().setBalance(balance - approvedUserRequest.getService().getCredit());
+                sendNotification(entity, approvedUserRequest, String.format("Your request for service ", entity.getHeader(), "has been approved."), String.format("/service/", entity.getId()), approvedUserRequest.getUser());
             }
             var createdUser = service.get().getCreatedUser();
             var createdUserBalance = createdUser.getBalance();
@@ -136,6 +134,14 @@ public class ServiceService {
             throw new IllegalArgumentException("No services have been found");
         }
 
+    }
+
+    private void sendNotification(Service entity, UserServiceApproval pendingUserRequest, String message, String url, User user) {
+        var notification = new Notification(null, message, url, false);
+        var notifications = user.getNotificationSet();
+        notifications.add(notification);
+        user.setNotificationSet(notifications);
+        userRepository.save(user);
     }
 
     private ServiceDto mapToDto(Service service) {
