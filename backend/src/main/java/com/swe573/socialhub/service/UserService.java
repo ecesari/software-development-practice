@@ -137,9 +137,11 @@ public class UserService {
 
     public UserDto mapUserToDTO(User user) {
         var notificationList = new ArrayList<NotificationDto>();
-        for (var notification : user.getNotificationSet()) {
-            var dto = notificationService.mapNotificationToDTO(notification);
-            notificationList.add(dto);
+        if (user.getNotificationSet() != null) {
+            for (var notification : user.getNotificationSet()) {
+                var dto = notificationService.mapNotificationToDTO(notification);
+                notificationList.add(dto);
+            }
         }
 
         return new UserDto(
@@ -183,8 +185,6 @@ public class UserService {
         return dto;
 
     }
-
-
 
 
 }
