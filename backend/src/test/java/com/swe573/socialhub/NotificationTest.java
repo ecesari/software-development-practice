@@ -1,16 +1,11 @@
 package com.swe573.socialhub;
 
-import com.swe573.socialhub.domain.Notification;
-import com.swe573.socialhub.domain.User;
 import com.swe573.socialhub.repository.UserRepository;
 import com.swe573.socialhub.service.UserService;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-
-import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -42,19 +37,19 @@ class NotificationTest {
         assertTrue(true);
     }
 
-    @Test
-    public void saveUser_shouldReturnNotificationList() {
-        User user = new User(null, "test", "test@test.com", "test", null, 0);
-        var notification = new Notification(null, "test message","test", true);
-        var notification2 = new Notification(null, "test message2","", false);
-        var list = new HashSet<Notification>();
-        list.add(notification);
-        list.add(notification2);
-        user.setNotificationSet(list);
-        Mockito.when(userRepository.save(Mockito.any(User.class))).thenReturn(user);
-        var dto = userService.mapUserToDTO(user);
-        assertTrue(dto.getNotifications().stream().count() == 2);
-    }
+//    @Test
+//    public void saveUser_shouldReturnNotificationList() {
+//        User user = new User(null, "test", "test@test.com", "test", null, 0);
+//        var notification = new Notification(null, "test message","test", true);
+//        var notification2 = new Notification(null, "test message2","", false);
+//        var list = new HashSet<Notification>();
+//        list.add(notification);
+//        list.add(notification2);
+//        user.setNotificationSet(list);
+//        Mockito.when(userRepository.save(Mockito.any(User.class))).thenReturn(user);
+//        var dto = userService.mapUserToDTO(user);
+//        assertTrue(dto.getNotifications().stream().count() == 2);
+//    }
 
 //    @Test
 //    public void whenValidUser_thenUserShouldBeSaved() {

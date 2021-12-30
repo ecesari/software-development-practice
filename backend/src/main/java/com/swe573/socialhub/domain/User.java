@@ -7,7 +7,7 @@ import java.util.Set;
 @Entity
 public class User {
     private @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
     private String username;
     private String email;
@@ -24,8 +24,7 @@ public class User {
     @OneToMany(mappedBy = "user")
     Set<UserServiceApproval> approvalSet;
     private Integer balance;
-    @OneToMany(cascade = CascadeType.ALL,
-            orphanRemoval = true)
+    @OneToMany(mappedBy = "receiver")
     Set<Notification> notificationSet;
 
     public User(Long id, String username, String email, String bio, Set<Tag> userTags, Integer balance) {

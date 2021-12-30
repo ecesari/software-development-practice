@@ -113,7 +113,6 @@ public class ServiceService {
             var entity = service.get();
             entity.setStatus(ServiceStatus.APPROVED);
 
-
             var pendingUserRequests = approvalRepository.findUserServiceApprovalByService_IdAndApprovalStatus(serviceId, ApprovalStatus.PENDING);
             for (UserServiceApproval pendingUserRequest : pendingUserRequests) {
                 pendingUserRequest.setApprovalStatus(ApprovalStatus.DENIED);
@@ -137,7 +136,7 @@ public class ServiceService {
     }
 
     private void sendNotification(Service entity, UserServiceApproval pendingUserRequest, String message, String url, User user) {
-        var notification = new Notification(null, message, url, false);
+        var notification = new Notification(null, message, url, false, user);
         var notifications = user.getNotificationSet();
         notifications.add(notification);
         user.setNotificationSet(notifications);

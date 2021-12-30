@@ -11,16 +11,24 @@ public class Notification {
     private String message;
     private Boolean readByUser;
     private String messageUrl;
-//    @ManyToOne
-//    @JoinColumn(name = "user")
-//    User user;
+    @ManyToOne
+    @JoinColumn(name = "receiver")
+    User receiver;
 
+    public User getUser() {
+        return receiver;
+    }
 
-    public Notification(Long id, String message,  String messageUrl,Boolean read) {
+    public void setUser(User user) {
+        this.receiver = user;
+    }
+
+    public Notification(Long id, String message, String messageUrl, Boolean read, User user) {
         this.id = id;
         this.message = message;
         this.readByUser = read;
         this.messageUrl = messageUrl;
+        this.receiver = user;
     }
 
     public Notification() {
