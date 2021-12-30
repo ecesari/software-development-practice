@@ -181,14 +181,6 @@ class LoadDatabase {
     private Notification saveAndGetNotification(UserRepository userRepository, NotificationRepository notificationRepository, String message, String url, Boolean read, User user) {
         var notification = new Notification(null, message, url, read,user);
         notificationRepository.save(notification);
-//        var set = user.getNotificationSet();
-//        if (set == null) {
-//            user.setNotificationSet(new HashSet<>());
-//        }
-//        set = user.getNotificationSet();
-//        set.add(notification);
-//        user.setNotificationSet(set);
-//        userRepository.save(user);
         return notification;
     }
 

@@ -13,6 +13,7 @@ import com.swe573.socialhub.repository.UserServiceApprovalRepository;
 import org.hibernate.exception.DataException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -34,7 +35,11 @@ public class UserServiceApprovalService {
     @Autowired
     UserService userService;
 
+    @Autowired
+    NotificationService notificationService;
 
+
+    @Transactional
     public void RequestApproval(Principal principal, Long serviceId) {
         final User loggedInUser = userRepository.findUserByUsername(principal.getName()).get();
         if (loggedInUser == null)
@@ -44,6 +49,8 @@ public class UserServiceApprovalService {
         var entity = new UserServiceApproval(key, loggedInUser, service, ApprovalStatus.PENDING);
         try {
             final UserServiceApproval approval = repository.save(entity);
+            notificationService.sendNotification("Hooray! There is a new request for " + service.getHeader() + " by " + loggedInUser.getUsername(),
+                    "/service/" + entity.getId(), service.getCreatedUser());
         } catch (Exception e) {
             throw new IllegalArgumentException("There was an error trying to send the request");
         }
@@ -82,11 +89,10 @@ public class UserServiceApprovalService {
         var service = request.get().getService();
         var current = service.getAttendingUserCount();
         service.setAttendingUserCount(current + 1);
-//        var user = entity.getUser();
-//        var balance = user.getBalance();
-//        user.setBalance(balance+ entity.getService().getCredit());
+
         try {
             var returnData = repository.save(entity);
+            notificationService.sendNotification("Your request for service " + service.getHeader() + " has been " + status.name().toLowerCase(), "/service/" + entity.getId(), entity.getUser());
         } catch (DataException e) {
             throw new IllegalArgumentException(e.getMessage());
         }

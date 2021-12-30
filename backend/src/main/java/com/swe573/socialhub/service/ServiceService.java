@@ -115,13 +115,15 @@ public class ServiceService {
             var pendingUserRequests = approvalRepository.findUserServiceApprovalByService_IdAndApprovalStatus(serviceId, ApprovalStatus.PENDING);
             for (UserServiceApproval pendingUserRequest : pendingUserRequests) {
                 pendingUserRequest.setApprovalStatus(ApprovalStatus.DENIED);
-                notificationService.sendNotification(String.format("Your request for service ", entity.getHeader(), "has been denied."), String.format("/service/", entity.getId()), pendingUserRequest.getUser());
+                notificationService.sendNotification("Your request for service " + entity.getHeader() + " has been denied.",
+                        "/service/" + entity.getId(), pendingUserRequest.getUser());
             }
             var approvedUserRequests = approvalRepository.findUserServiceApprovalByService_IdAndApprovalStatus(serviceId, ApprovalStatus.PENDING);
             for (UserServiceApproval approvedUserRequest : approvedUserRequests) {
                 var balance = approvedUserRequest.getUser().getBalance();
                 approvedUserRequest.getUser().setBalance(balance - approvedUserRequest.getService().getCredit());
-                notificationService.sendNotification(String.format("Your request for service ", entity.getHeader(), "has been approved."), String.format("/service/", entity.getId()), approvedUserRequest.getUser());
+                notificationService.sendNotification(String.format("Your request for service " + entity.getHeader()+ " has been approved."),
+                        "/service/" + entity.getId(), approvedUserRequest.getUser());
             }
             var createdUser = service.get().getCreatedUser();
             var createdUserBalance = createdUser.getBalance();
