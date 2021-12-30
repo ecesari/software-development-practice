@@ -4,30 +4,17 @@ import statuses from '../utils/statuses'
 import modal from '../utils/modal'
 
 
-
-// const getHeaders = (headers) => {
-//     const defaultHeaders = {}
-//     return Object.assign(headers || {}, defaultHeaders)
-// }
-
-const handleError = (e, errorType) => {
+const handleError = (e, message) => {
     debugger;
     if (e && e.message) {
-        //     if (statuses.isWarning(e.response.data) || statuses.isError(e.response.data)) {
-        //         if (errorType === undefined || errorType === 'modal') {
-        //             modal.show(e.response.data)
-        //         } else {
-        //             modal.show(e.response.data)
-        //         }
-        //     }
-        modal.show(4,e.message)
+        modal.showError(e.message)
     } else if (e && e.message && e.message.indexOf('timeout') !== -1) {
         modal.show(e)
     }
 
 }
 
-const handleStatusCode = (e, type) => {
+const handleSuccess = (e, type) => {
     if (e && e.data) {
         if (type) {
             let message = type + ' successful'
@@ -58,76 +45,75 @@ const getHeaders = () => {
 
 export default {
 
-    delete(url, data, headers, rejectOnError, handleOnError, messageType) {
+    delete(url, data, handleOnError,errorMessage,successMessage) {
         return new Promise((resolve, reject) => {
             axios({
                 method: 'DELETE',
                 url: url,
                 data: data,
-                headers: getHeaders(headers),
+                headers: getHeaders(),
                 timeout: 300 * 240 * 1000
             }).then((r) => {
-                if (handleStatusCode(r, messageType)) {
+                if (handleSuccess(r, successMessage)) {
                     resolve(r.data)
                 }
             }).catch((e) => {
-                if (handleOnError === undefined || handleOnError === true) {
-                    handleError(e, messageType)
+                if (handleOnError === true) {
+                    handleError(e)
                 }
-                if (rejectOnError === undefined || rejectOnError === true) {
+                else {
                     reject(e)
                 }
             })
         })
     },
-    post(url, data, headers, rejectOnError, handleOnError, messageType) {
-        debugger;
+    post(url, data, handleOnError,errorMessage, successMessage) {
         return new Promise((resolve, reject) => {
             axios({
                 
                 method: 'POST',
                 url: url,
                 data: data,
-                headers: getHeaders(headers),
+                headers: getHeaders(),
                 timeout: 300 * 240 * 1000
             }).then((r) => {
-                if (handleStatusCode(r, messageType)) {
+                if (handleSuccess(r, successMessage)) {
                     resolve(r.data)
                 }
             }).catch((e) => {
                 debugger;
                 if (handleOnError === true) {
-                    handleError(e, messageType)
+                    handleError(e,errorMessage)
                 }
-                if (rejectOnError === undefined || rejectOnError === true) {
+                else {
                     reject(e)
                 }
             })
         })
     },
-    put(url, data, headers, rejectOnError, handleOnError, messageType) {
+    put(url, data, handleOnError, errorMessage,successMessage) {
         return new Promise((resolve, reject) => {
             axios({
                 method: 'PUT',
                 url: url,
                 data: data,
-                headers: getHeaders(headers),
+                headers: getHeaders(),
                 timeout: 300 * 240 * 1000
             }).then((r) => {
-                if (handleStatusCode(r, messageType)) {
+                if (handleSuccess(r, successMessage)) {
                     resolve(r.data)
                 }
             }).catch((e) => {
-                if (handleOnError === undefined || handleOnError === true) {
-                    handleError(e, messageType)
+                if (handleOnError === true) {
+                    handleError(e, errorMessage)
                 }
-                if (rejectOnError === undefined || rejectOnError === true) {
+                else {
                     reject(e)
                 }
             })
         })
     },
-    get(url, data, headers, rejectOnError, handleOnError, messageType) {
+    get(url, data, handleOnError, errorMessage, successMessage) {
         return new Promise((resolve, reject) => {
             let queryString = ''
             if (data) {
@@ -139,7 +125,6 @@ export default {
                     return [str, delimiter, key, '=', val].join('')
                 }, '')
             }
-            // var headers = getHeaders(headers) + this.authHeader();
             var headers = getHeaders(headers);
             axios({
                 method: 'GET',
@@ -147,15 +132,15 @@ export default {
                 headers: headers,
                 timeout: 300 * 240 * 1000
             }).then((r) => {
-                if (handleStatusCode(r, messageType)) {
+                if (handleSuccess(r, successMessage)) {
                     resolve(r.data)
                 }
             }).catch((e) => {
                 debugger;
-                if (handleOnError === undefined || handleOnError === true) {
-                    handleError(e, messageType)
+                if (handleOnError === true) {
+                    handleError(e,errorMessage)
                 }
-                if (rejectOnError === undefined || rejectOnError === true) {
+                else {
                     reject(e)
                 }
             })
