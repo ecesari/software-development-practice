@@ -14,6 +14,12 @@ services:
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+#      healthcheck:
+#        test: "curl --fail --silent localhost:8080/tags | grep UP || exit 1"
+#        interval: 2s
+#        timeout: 5s
+#        retries: 5
+#        start_period: 10s
     ports:
       - "8080:8080"
   db:
@@ -21,9 +27,22 @@ services:
     container_name: db
     environment:
       - MYSQL_ROOT_PASSWORD=root
-#    healthcheck:
-#      test: mysqladmin ping -h 127.0.0.1 -u $$MYSQL_USER --password=$$MYSQL_PASSWORD
     healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
       timeout: 20s
       retries: 10
+  ui:
+    image: 'socialhub_ui:latest'
+    build:
+      context: ../frontend
+    container_name: ui
+    depends_on:
+      app:
+        condition: service_started
+#    environment:
+#      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/socialhubdb?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false&allowPublicKeyRetrieval=true
+#      - SPRING_DATASOURCE_USERNAME=root
+#      - SPRING_DATASOURCE_PASSWORD=root
+#      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    ports:
+      - "8081:8081"
