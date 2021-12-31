@@ -14,8 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.HashSet;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ActiveProfiles("test")
@@ -49,17 +48,12 @@ static class NotificationTestContextConfiguration
 
 
     @Test
-    public void saveUser_shouldReturnNotificationList() {
-        User user = new User(null, "test", "test@test.com", "test", null, 0);
-        var notification = new Notification(null, "test message", "test", true, user);
-        var notification2 = new Notification(null, "test message2", "", false, user);
-        var list = new HashSet<Notification>();
-        list.add(notification);
-        list.add(notification2);
-        user.setNotificationSet(list);
-//        Mockito.when(userRepository.save(Mockito.any(User.class))).thenReturn(user);
-//        var dto = userService.mapUserToDTO(user);
-//        assertTrue(dto.getNotifications().stream().count() == 2);
+    public void mapToDto_ReturnsSameProperties() {
+        var notification = new Notification(null, "test message", "test", true, new User());
+        var dto = service.mapNotificationToDTO(notification);
+        assertEquals(notification.getMessage(),dto.getMessage());
+        assertEquals(notification.getMessageUrl(),dto.getMessageBody());
+        assertEquals(notification.getRead(),dto.getRead());
     }
 
 //    @Test
