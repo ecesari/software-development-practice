@@ -78,6 +78,7 @@
                     map-type-id="roadmap"
                     style="width: 500px; height: 300px"
                     ref="mapRef"
+                    v-if="registerInputs.formattedAddress != ''"
                   >
                     <GmapMarker :position="coordinates" />
                   </GmapMap>
