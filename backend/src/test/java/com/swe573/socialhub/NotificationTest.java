@@ -1,55 +1,60 @@
 package com.swe573.socialhub;
 
+import com.swe573.socialhub.domain.Notification;
+import com.swe573.socialhub.domain.User;
+import com.swe573.socialhub.repository.ServiceRepository;
 import com.swe573.socialhub.repository.UserRepository;
-import com.swe573.socialhub.service.UserService;
+import com.swe573.socialhub.service.NotificationService;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@SpringBootTest
+@ActiveProfiles("test")
+@ExtendWith(SpringExtension.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
+@TestPropertySource(locations = "classpath:application-test.properties")
 class NotificationTest {
 
-//    @TestConfiguration
-//    static class UserServiceIntegrationTestContextConfiguration {
-//        @Bean
-//        public UserService userService() {
-//            return new UserService();
-//        }
-//
-//    }
+    @TestConfiguration
+    static class NotificationTestContextConfiguration {
+        @Bean
+        public NotificationService service() {
+            return new NotificationService();
+        }
+    }
 
     @Autowired
-    private UserService userService;
+    private NotificationService service;
 
     @MockBean
     private UserRepository userRepository;
 
+    @MockBean
+    ServiceRepository serviceRepository;
 
     @Test
-    void contextLoads() {
+    public void contextLoads() throws Exception {
+        assertNotNull(service);
     }
 
     @Test
-    void demoTestMethod() {
-        assertTrue(true);
+    public void mapToDto_ReturnsSameProperties() {
+        var notification = new Notification(null, "test message", "test", true, new User());
+        var dto = service.mapNotificationToDTO(notification);
+        assertEquals(notification.getMessage(), dto.getMessage());
+        assertEquals(notification.getMessageUrl(), dto.getMessageBody());
+        assertEquals(notification.getRead(), dto.getRead());
     }
-
-//    @Test
-//    public void saveUser_shouldReturnNotificationList() {
-//        User user = new User(null, "test", "test@test.com", "test", null, 0);
-//        var notification = new Notification(null, "test message","test", true);
-//        var notification2 = new Notification(null, "test message2","", false);
-//        var list = new HashSet<Notification>();
-//        list.add(notification);
-//        list.add(notification2);
-//        user.setNotificationSet(list);
-//        Mockito.when(userRepository.save(Mockito.any(User.class))).thenReturn(user);
-//        var dto = userService.mapUserToDTO(user);
-//        assertTrue(dto.getNotifications().stream().count() == 2);
-//    }
 
 //    @Test
 //    public void whenValidUser_thenUserShouldBeSaved() {

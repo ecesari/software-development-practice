@@ -34,6 +34,9 @@ public class ServiceService {
     @Autowired
     private NotificationService notificationService;
 
+    @Autowired
+    private UserService userService;
+
     public List<ServiceDto> findAllServices() {
         var entities = serviceRepository.findAll();
 
@@ -57,6 +60,7 @@ public class ServiceService {
 
     @Transactional
     public Long save(Principal principal, ServiceDto dto) {
+        //check token => if username is null, throw an error
         final User loggedInUser = userRepository.findUserByUsername(principal.getName()).get();
         if (loggedInUser == null)
             throw new IllegalArgumentException("User doesn't exist.");
@@ -75,6 +79,12 @@ public class ServiceService {
                     entity.addTag(addedTag.get());
                 }
             }
+            //check pending credits and balance if the sum is above 20 => throw an error
+            var currentUserBalance = userService.getBalanceToBe(loggedInUser);
+            var balanceToBe = currentUserBalance + dto.getMinutes();
+            if (balanceToBe >= 20)
+                throw new IllegalArgumentException("You have reached the maximum limit of credits. You cannot create a service before spending your credits.");
+
 
             var savedEntity = serviceRepository.save(entity);
             return savedEntity.getId();

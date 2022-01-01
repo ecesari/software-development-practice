@@ -119,13 +119,6 @@
         </div>
       </div>
     </section>
-    <!-- <div>
-      <p>Click the button to get your coordinates.</p>
-
-      <button @click="GetGeoLocation()">Try It</button>
-
-      <p id="demo"></p>
-    </div> -->
     <section class="section pb-0 section-components">
       <div class="container mb-5 bg-secondary"></div>
     </section>
