@@ -45,13 +45,13 @@
                   ></textarea>
                   <br />
                 </div>
-                <div class="col-lg-12">
+                <!-- <div class="col-lg-12">
                   <base-input
                     placeholder="Location"
                     addon-left-icon="ni ni-pin-3"
                     v-model="serviceInputs.location"
                   ></base-input>
-                </div>
+                </div> -->
                 <div class="col-lg-12">
                   <date-picker
                     input-class="form-control"
@@ -78,7 +78,7 @@
                   />
                   <br />
                 </div>
-                <div class="col-lg-12">
+                <!-- <div class="col-lg-12">
                   <base-input
                     placeholder="Latitude"
                     addon-left-icon="ni ni-pin-3"
@@ -91,7 +91,7 @@
                     addon-left-icon="ni ni-pin-3"
                     v-model="serviceInputs.longitude"
                   ></base-input>
-                </div>
+                </div> -->
                 <div class="col-lg-12">
                   <multiselect
                     v-model="serviceInputs.serviceTags"
@@ -103,6 +103,26 @@
                     label="name"
                     track-by="id"
                   ></multiselect>
+                </div>
+                <br />
+                <div class="justify-content-center">
+                  <div class="form-group">
+                    <GmapAutocomplete
+                      class="form-control"
+                      addon-left-icon="ni ni-pin-3"
+                      @place_changed="setPlace"
+                    />
+                  </div>
+                  <GmapMap
+                    :center="coordinates"
+                    :zoom="13"
+                    map-type-id="roadmap"
+                    style="width: 500px; height: 300px"
+                    ref="mapRef"
+                    v-if="serviceInputs.location != ''"
+                  >
+                    <GmapMarker :position="coordinates" />
+                  </GmapMap>
                 </div>
 
                 <div class="text-center">
@@ -134,7 +154,7 @@ export default {
   components: {
     DatePicker,
     Multiselect,
-    MyMap
+    MyMap,
   },
   mounted() {
     this.GetGeoLocation();
@@ -154,7 +174,10 @@ export default {
         longitude: "",
         serviceTags: [],
       },
-
+      coordinates: {
+        lat: 0,
+        lng: 0,
+      },
       tags: [],
     };
   },
@@ -174,13 +197,24 @@ export default {
     ShowPosition(position) {
       this.serviceInputs.latitude = position.coords.latitude;
       this.serviceInputs.longitude = position.coords.longitude;
+      this.coordinates.lat = position.coords.latitude;
+      this.coordinates.lng = position.coords.longitude;
     },
     GetTags() {
-      console.log("Get Tags Started");
       apiRegister.GetTags().then((r) => {
-        console.log("Get Tags Finished");
         this.tags = r;
       });
+    },
+    setPlace(place) {
+      var lat = place.geometry.location.lat();
+      var lng = place.geometry.location.lng();
+      var name = place.name;
+      var formattedAddress = place.formatted_address;
+      this.serviceInputs.latitude = lat;
+      this.serviceInputs.longitude = lng;
+      this.serviceInputs.location = formattedAddress;
+      this.coordinates.lat = lat;
+      this.coordinates.lng = lng;
     },
   },
 };
