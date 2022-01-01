@@ -105,7 +105,7 @@
                   ></multiselect>
                 </div>
                 <br />
-                <div class="justify-content-center">
+                <div class="col-lg-12">
                   <div class="form-group">
                     <GmapAutocomplete
                       class="form-control"
@@ -113,18 +113,20 @@
                       @place_changed="setPlace"
                     />
                   </div>
-                  <GmapMap
-                    :center="coordinates"
-                    :zoom="13"
-                    map-type-id="roadmap"
-                    style="width: 500px; height: 300px"
-                    ref="mapRef"
-                    v-if="serviceInputs.location != ''"
-                  >
-                    <GmapMarker :position="coordinates" />
-                  </GmapMap>
+                  <div class="text-center">
+                    <base-button class="" v-if="serviceInputs.location != ''"
+                      ><GmapMap
+                        :center="coordinates"
+                        :zoom="13"
+                        map-type-id="roadmap"
+                        style="width: 500px; height: 300px"
+                        ref="mapRef"
+                        
+                      >
+                        <GmapMarker :position="coordinates" /> </GmapMap
+                    ></base-button>
+                  </div>
                 </div>
-
                 <div class="text-center">
                   <base-button
                     v-on:click="SendService"
