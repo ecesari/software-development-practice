@@ -2,6 +2,8 @@ package com.swe573.socialhub.service;
 
 import com.swe573.socialhub.domain.User;
 import com.swe573.socialhub.dto.*;
+import com.swe573.socialhub.enums.ApprovalStatus;
+import com.swe573.socialhub.enums.ServiceStatus;
 import com.swe573.socialhub.repository.ServiceRepository;
 import com.swe573.socialhub.repository.TagRepository;
 import com.swe573.socialhub.repository.UserRepository;
@@ -184,6 +186,17 @@ public class UserService {
         var dto = new UserServiceDto(userServiceApproval != null && !userServiceApproval.isEmpty(), ownsService);
         return dto;
 
+    }
+
+    public int getBalanceToBe(User user)
+    {
+        var currentUserCreditsInApprovalState = userServiceApprovalRepository.findUserServiceApprovalByService_CreatedUserAndApprovalStatus(user, ApprovalStatus.PENDING);
+        var creditsToRemove = currentUserCreditsInApprovalState.stream().mapToInt(o -> o.getService().getCredit()).sum();
+        var activeServices = serviceRepository.findServiceByCreatedUserAndStatus(user, ServiceStatus.ONGOING);
+        var creditsToAdd = activeServices.stream().mapToInt(x -> x.getCredit()).sum();
+        var currentUserBalance = user.getBalance();
+        var balanceToBe = currentUserBalance + creditsToAdd + creditsToRemove;
+        return balanceToBe;
     }
 
 

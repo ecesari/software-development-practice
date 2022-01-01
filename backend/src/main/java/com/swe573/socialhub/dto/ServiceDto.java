@@ -41,9 +41,6 @@ public class ServiceDto implements Serializable {
         Longitude = longitude;
         ServiceTags = serviceTags;
         Status = status;
-//        DateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm");
-//        String strDate = formatter.format(time);
-
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E, dd MMM yyyy HH:mm");
 
         String formattedDateTime = time.format(formatter); // "1986-04-08 12:30"

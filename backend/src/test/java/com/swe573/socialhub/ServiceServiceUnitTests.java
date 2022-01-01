@@ -1,13 +1,16 @@
 package com.swe573.socialhub;
 
 
-import com.swe573.socialhub.domain.Service;
 import com.swe573.socialhub.domain.User;
+import com.swe573.socialhub.dto.ServiceDto;
+import com.swe573.socialhub.enums.ServiceStatus;
 import com.swe573.socialhub.repository.ServiceRepository;
+import com.swe573.socialhub.repository.TagRepository;
 import com.swe573.socialhub.repository.UserRepository;
+import com.swe573.socialhub.repository.UserServiceApprovalRepository;
+import com.swe573.socialhub.service.NotificationService;
 import com.swe573.socialhub.service.ServiceService;
 import com.swe573.socialhub.service.UserService;
-import com.swe573.socialhub.service.UserServiceApprovalService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -22,38 +25,47 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.security.auth.Subject;
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ActiveProfiles("test")
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @TestPropertySource(locations = "classpath:application-test.properties")
-public class ApprovalServiceUnitTests {
+public class ServiceServiceUnitTests {
 
     @TestConfiguration
-    static class NotificationTestContextConfiguration {
+    static class ServiceServiceUnitTestsConfiguration {
         @Bean
-        UserServiceApprovalService service() {
-            return new UserServiceApprovalService();
+        ServiceService service()
+        {
+
+            return new ServiceService();
         }
     }
-
     @Autowired
-    UserServiceApprovalService service;
+    private ServiceService service;
+
 
     @MockBean
-    ServiceService serviceService;
+    private ServiceRepository serviceRepository;
 
+    @MockBean
+    private UserRepository userRepository;
+
+    @MockBean
+    private TagRepository tagRepository;
+
+    @MockBean
+    private UserServiceApprovalRepository approvalRepository;
+
+    @MockBean
+    private NotificationService notificationService;
     @MockBean
     UserService userService;
-
-    @MockBean
-    ServiceRepository serviceRepository;
-
-    @MockBean
-    UserRepository userRepository;
 
     class MockPrincipal implements Principal {
 
@@ -75,23 +87,25 @@ public class ApprovalServiceUnitTests {
     }
 
     @Test
-    public void UserServiceApproval_ShouldThrowError_IfCreditBelowThreshold() {
+    public void contextLoads() throws Exception {
+        assertNotNull(service);
+    }
+
+    @Test
+    public void Service_ShouldThrowError_IfCreditAboveThreshold() {
         var testUser = new User();
-        testUser.setBalance(-2);
+        testUser.setBalance(18);
         testUser.setId(1L);
         testUser.setUsername("test user");
 
-        var testService = new Service();
-        testService.setCredit(5);
-        testService.setId(1L);
-        testService.setHeader("test service");
+        var testService = new ServiceDto(1L, "Test Service", ",", "", LocalDateTime.of(2022, 02, 01, 10, 00), 3, 20, 0, 1L, "", 00.00, 00.00, null, ServiceStatus.ONGOING);
+
 
         var mockUser = new MockPrincipal(testUser.getUsername());
         Mockito.when(userRepository.findUserByUsername(testUser.getUsername())).thenReturn(Optional.of(testUser));
-        Mockito.when(serviceRepository.findById(testService.getId())).thenReturn(Optional.of(testService));
         Mockito.when(userService.getBalanceToBe(testUser)).thenReturn(testUser.getBalance());
 
-        assertThrows(IllegalArgumentException.class, () -> service.RequestApproval(mockUser, testService.getId()));
-    }
 
+        assertThrows(IllegalArgumentException.class, () -> service.save(mockUser, testService));
+    }
 }
