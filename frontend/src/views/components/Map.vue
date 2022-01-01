@@ -1,9 +1,7 @@
 <template>
   <div>
     <div>
-      <h2>Search and add a pin</h2>
       <GmapAutocomplete @place_changed="setPlace" />
-      <!-- <button @click="addMarker">Add</button> -->
     </div>
     <GmapMap
       :center="myCoordinates"
@@ -14,7 +12,6 @@
     >
       <GmapMarker :position="myCoordinates" />
     </GmapMap>
-    <span>foo</span>
   </div>
 </template>
 

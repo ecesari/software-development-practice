@@ -20,26 +20,7 @@
             body-classes="px-lg-5 py-lg-5"
             class="border-0"
           >
-            <!-- <template>
-                            <div class="text-muted text-center mb-3">
-                                <small>Sign in with</small>
-                            </div>
-                            <div class="btn-wrapper text-center">
-                                <base-button type="neutral">
-                                    <img slot="icon" src="img/icons/common/github.svg">
-                                    Github
-                                </base-button>
-
-                                <base-button type="neutral">
-                                    <img slot="icon" src="img/icons/common/google.svg">
-                                    Google
-                                </base-button>
-                            </div>
-                        </template> -->
             <template>
-              <!-- <div class="text-center text-muted mb-4">
-                                <small>Or sign up with credentials</small>
-                            </div> -->
               <form role="form">
                 <base-input
                   alternative
@@ -83,7 +64,24 @@
                   label="name"
                   track-by="id"
                 ></multiselect>
-                <my-map></my-map>
+                <br />
+                <div class="justify-content-center">
+                  <div class="form-group">
+                    <GmapAutocomplete
+                      class="form-control"
+                      @place_changed="setPlace"
+                    />
+                  </div>
+                  <GmapMap
+                    :center="coordinates"
+                    :zoom="13"
+                    map-type-id="roadmap"
+                    style="width: 500px; height: 300px"
+                    ref="mapRef"
+                  >
+                    <GmapMarker :position="coordinates" />
+                  </GmapMap>
+                </div>
                 <div class="text-center">
                   <base-button
                     v-on:click="SendRegister"
@@ -95,13 +93,7 @@
               </form>
             </template>
           </card>
-          <div class="row mt-3">
-            <!-- <div class="col-6 text-right">
-              <a v-on:click="SendTags" href="#/login" class="text-light">
-                <small>Test</small>
-              </a>
-            </div> -->
-          </div>
+          <div class="row mt-3"></div>
         </div>
       </div>
     </div>
@@ -115,7 +107,7 @@ import MyMap from "./components/Map.vue";
 export default {
   components: {
     Multiselect,
-    MyMap
+    MyMap,
   },
   data() {
     return {
@@ -125,13 +117,26 @@ export default {
         bio: "",
         password: "",
         userTags: [],
+        latitude: 0,
+        longitude: 0,
+        locationName: "",
+        formattedAddress: "",
       },
-
-      tags: []
+      tags: [],
+      coordinates: {
+        lat: 0,
+        lng: 0,
+      },
     };
   },
   mounted() {
     this.GetTags();
+  },
+  created() {
+    //get coordinate from browser
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(this.ShowPosition);
+    }
   },
   methods: {
     SendRegister() {
@@ -144,12 +149,27 @@ export default {
       });
     },
     GetTags() {
-      console.log("Get Tags Started");
       apiRegister.GetTags().then((r) => {
-        console.log("Get Tags Finished");
         this.tags = r;
-        console.log("ok.");
       });
+    },
+    setPlace(place) {
+      var lat = place.geometry.location.lat();
+      var lng = place.geometry.location.lng();
+      var name = place.name;
+      var formattedAddress = place.formatted_address;
+      this.registerInputs.latitude = lat;
+      this.registerInputs.longitude = lng;
+      this.registerInputs.locationName = name;
+      this.registerInputs.formattedAddress = formattedAddress;
+      this.coordinates.lat = lat;
+      this.coordinates.lng = lng;
+    },
+    ShowPosition(position) {
+      this.registerInputs.latitude = position.coords.latitude;
+      this.registerInputs.longitude = position.coords.longitude;
+      this.coordinates.lat = position.coords.latitude;
+      this.coordinates.lng = position.coords.longitude;
     },
   },
 };

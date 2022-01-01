@@ -65,6 +65,9 @@ public class UserService {
         userEntity.setPassword(passwordHash);
         userEntity.setUsername(dto.getUsername());
         userEntity.setBalance(5);
+        userEntity.setLongitude(dto.getLongitude());
+        userEntity.setLatitude(dto.getLatitude());
+        userEntity.setFormattedAddress(dto.getFormattedAddress());
         var tags = dto.getUserTags();
         if (tags != null) {
             for (TagDto tagDto : tags) {
@@ -161,8 +164,10 @@ public class UserService {
                 user.getBio(),
                 user.getBalance(),
                 notificationList,
-                balanceOnHold
-        );
+                balanceOnHold,
+                user.getLatitude(),
+                user.getLongitude(),
+                user.getFormattedAddress());
 
 
     }
