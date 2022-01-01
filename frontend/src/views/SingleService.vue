@@ -70,12 +70,24 @@
                   ></span
                 >
               </h3>
-              <!-- <div class="h6 font-weight-300"><i class="ni location_pin mr-2"></i>{{ serviceData.quota }}</div> -->
               <div></div>
               <br />
-              <div></div>
+              <div class="text-center">
+                <base-button v-if="serviceData.formattedAddress != ''" type="secondary">
+                  <GmapMap
+                    :center="coordinates"
+                    :zoom="13"
+                    map-type-id="roadmap"
+                    style="width: 500px; height: 300px"
+                    ref="mapRef"
+                  >
+                    <GmapMarker :position="coordinates" />
+                  </GmapMap>
+                </base-button>
+              </div>
+              <br>
               <div>
-                <i class="ni ni-square-pin"></i> : {{ serviceData.location }}
+                <!-- <i class="ni ni-square-pin"></i> : {{ serviceData.location }} -->
                 <i class="ni ni-time-alarm"></i>: {{ serviceData.timeString }}
                 <i class="ni ni-watch-time"></i>:
                 {{ serviceData.minutes }} credits
@@ -88,7 +100,6 @@
               <div class="row justify-content-center">
                 <div class="col-lg-9">
                   <p>{{ serviceData.description }}</p>
-                  <!-- <a href="#">Show more</a> -->
 
                   <div>
                     <badge
@@ -148,6 +159,10 @@ export default {
       userData: {
         hasServiceRequest: "",
         ownsService: "",
+      },      
+      coordinates: {
+        lat: 0,
+        lng: 0,
       },
     };
   },
@@ -173,6 +188,9 @@ export default {
         this.serviceData.attendingUserCount = r.attendingUserCount;
         this.serviceData.status = r.status;
         this.serviceData.showServiceButton = r.showServiceOverButton;
+
+        this.coordinates.lat = r.latitude;
+        this.coordinates.lng = r.longitude;
       });
     },
     GetUserDetails() {
