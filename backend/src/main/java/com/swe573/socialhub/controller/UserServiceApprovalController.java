@@ -21,10 +21,10 @@ public class UserServiceApprovalController {
     private UserServiceApprovalService service;
 
     @GetMapping("/request/{serviceId}")
-    public ResponseEntity<Boolean> App(Principal principal, @PathVariable Long serviceId) {
+    public ResponseEntity<UserServiceApprovalDto> App(Principal principal, @PathVariable Long serviceId) {
         try {
-            service.RequestApproval(principal,serviceId);
-            return ResponseEntity.ok().body(true);
+            var dto = service.RequestApproval(principal,serviceId);
+            return ResponseEntity.ok().body(dto);
         }
         catch (RuntimeException e)
         {

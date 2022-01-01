@@ -2,6 +2,7 @@ package com.swe573.socialhub;
 
 import com.swe573.socialhub.domain.Notification;
 import com.swe573.socialhub.domain.User;
+import com.swe573.socialhub.repository.ServiceRepository;
 import com.swe573.socialhub.repository.UserRepository;
 import com.swe573.socialhub.service.NotificationService;
 import org.junit.jupiter.api.Test;
@@ -22,38 +23,35 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class NotificationTest {
 
-@TestConfiguration
-static class NotificationTestContextConfiguration
-{
-    @Bean
-    public NotificationService service() {
-        return new NotificationService();
+    @TestConfiguration
+    static class NotificationTestContextConfiguration {
+        @Bean
+        public NotificationService service() {
+            return new NotificationService();
+        }
     }
-}
+
     @Autowired
     private NotificationService service;
 
     @MockBean
     private UserRepository userRepository;
 
-
+    @MockBean
+    ServiceRepository serviceRepository;
 
     @Test
     public void contextLoads() throws Exception {
         assertNotNull(service);
     }
 
-
-
-
-
     @Test
     public void mapToDto_ReturnsSameProperties() {
         var notification = new Notification(null, "test message", "test", true, new User());
         var dto = service.mapNotificationToDTO(notification);
-        assertEquals(notification.getMessage(),dto.getMessage());
-        assertEquals(notification.getMessageUrl(),dto.getMessageBody());
-        assertEquals(notification.getRead(),dto.getRead());
+        assertEquals(notification.getMessage(), dto.getMessage());
+        assertEquals(notification.getMessageUrl(), dto.getMessageBody());
+        assertEquals(notification.getRead(), dto.getRead());
     }
 
 //    @Test

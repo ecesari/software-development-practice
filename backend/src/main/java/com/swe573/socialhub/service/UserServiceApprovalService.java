@@ -41,7 +41,7 @@ public class UserServiceApprovalService {
 
 
     @Transactional
-    public void RequestApproval(Principal principal, Long serviceId) {
+    public UserServiceApprovalDto RequestApproval(Principal principal, Long serviceId) {
         //check token => if username is null, throw an error
         final User loggedInUser = userRepository.findUserByUsername(principal.getName()).get();
         if (loggedInUser == null)
@@ -60,16 +60,18 @@ public class UserServiceApprovalService {
         var currentUserCreditsInApprovalState = repository.findUserServiceApprovalByService_CreatedUserAndApprovalStatus(loggedInUser, ApprovalStatus.PENDING);
         var creditsToRemove = currentUserCreditsInApprovalState.stream().mapToInt(o -> o.getService().getCredit()).sum();
         var activeServices = serviceRepository.findServiceByCreatedUserAndStatus(loggedInUser, ServiceStatus.ONGOING);
-        var creditsToAdd = activeServices.stream().mapToInt(x-> x.getCredit()).sum();
+        var creditsToAdd = activeServices.stream().mapToInt(x -> x.getCredit()).sum();
         var currentUserBalance = loggedInUser.getBalance();
-        var balanceToBe = currentUserBalance + creditsToAdd + creditsToRemove;
-        if (balanceToBe <= -5 )
+        var balanceToBe = currentUserBalance + creditsToAdd + creditsToRemove - service.getCredit();
+        if (balanceToBe <= -5)
             throw new IllegalArgumentException("You have reached the minimum limit of credits. You cannot make a request to this service");
 
         try {
             final UserServiceApproval approval = repository.save(entity);
+            var dto = getApprovalDto(approval);
             notificationService.sendNotification("Hooray! There is a new request for " + service.getHeader() + " by " + loggedInUser.getUsername(),
                     "/service/" + entity.getId(), service.getCreatedUser());
+            return dto;
         } catch (Exception e) {
             throw new IllegalArgumentException("There was an error trying to send the request");
         }
@@ -115,5 +117,10 @@ public class UserServiceApprovalService {
         } catch (DataException e) {
             throw new IllegalArgumentException(e.getMessage());
         }
+    }
+
+    public String foo()
+    {
+        return "foo";
     }
 }
