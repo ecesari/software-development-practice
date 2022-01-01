@@ -146,14 +146,20 @@ public class UserService {
             }
         }
 
+        var approvalList = userServiceApprovalRepository.findUserServiceApprovalByUserAndApprovalStatus(user,ApprovalStatus.PENDING);
+        var balanceOnHold = approvalList.stream().mapToInt(o -> o.getService().getCredit()).sum();
+
         return new UserDto(
                 user.getId(),
                 user.getUsername(),
                 user.getEmail(),
                 user.getBio(),
                 user.getBalance(),
-                notificationList
+                notificationList,
+                balanceOnHold
         );
+
+
     }
 
     public UserDto getUserByUsername(String userName, Principal principal) {
@@ -190,7 +196,7 @@ public class UserService {
 
     public int getBalanceToBe(User user)
     {
-        var currentUserCreditsInApprovalState = userServiceApprovalRepository.findUserServiceApprovalByService_CreatedUserAndApprovalStatus(user, ApprovalStatus.PENDING);
+        var currentUserCreditsInApprovalState = userServiceApprovalRepository.findUserServiceApprovalByUserAndApprovalStatus(user, ApprovalStatus.PENDING);
         var creditsToRemove = currentUserCreditsInApprovalState.stream().mapToInt(o -> o.getService().getCredit()).sum();
         var activeServices = serviceRepository.findServiceByCreatedUserAndStatus(user, ServiceStatus.ONGOING);
         var creditsToAdd = activeServices.stream().mapToInt(x -> x.getCredit()).sum();

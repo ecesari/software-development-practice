@@ -141,7 +141,7 @@ public class UserServiceUnitTests {
         }};
 
 
-        Mockito.when(userServiceApprovalRepository.findUserServiceApprovalByService_CreatedUserAndApprovalStatus(testUser, ApprovalStatus.PENDING)).thenReturn(testApprovals);
+        Mockito.when(userServiceApprovalRepository.findUserServiceApprovalByUserAndApprovalStatus(testUser, ApprovalStatus.PENDING)).thenReturn(testApprovals);
         Mockito.when(serviceRepository.findServiceByCreatedUserAndStatus(testUser, ServiceStatus.ONGOING)).thenReturn(testServices);
 
         var expectedResult = testUser.getBalance() + testService2.getCredit() + testApproval.getService().getCredit();
