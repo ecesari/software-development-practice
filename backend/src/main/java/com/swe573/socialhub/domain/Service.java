@@ -16,33 +16,33 @@ public class Service {
 
     public Service(Long id, String header, String description, String location, LocalDateTime time, int minutes, int quota, int attendingUserCount, User createdUser, Double latitude, Double longitude, Set<Tag> serviceTags) {
         this.id = id;
-        Header = header;
-        Description = description;
-        Location = location;
-        Time = time;
-        Credit = minutes;
-        Quota = quota;
+        this.header = header;
+        this.description = description;
+        this.location = location;
+        this.time = time;
+        credit = minutes;
+        this.quota = quota;
         this.createdUser = createdUser;
-        Latitude = latitude;
-        Longitude = longitude;
-        AttendingUserCount = attendingUserCount;
-        ServiceTags = serviceTags;
-        this.Status = ServiceStatus.ONGOING;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.attendingUserCount = attendingUserCount;
+        this.serviceTags = serviceTags;
+        this.status = ServiceStatus.ONGOING;
     }
 
     private @Id
     @GeneratedValue
     Long id;
-    private String Header;
-    private String Description;
-    private String Location;
-    private LocalDateTime Time;
-    private int Credit;
-    private int Quota;
-    private int AttendingUserCount;
-    private Double Latitude;
-    private Double Longitude;
-    private ServiceStatus Status;
+    private String header;
+    private String description;
+    private String location;
+    private LocalDateTime time;
+    private int credit;
+    private int quota;
+    private int attendingUserCount;
+    private Double latitude;
+    private Double longitude;
+    private ServiceStatus status;
     @ManyToOne
     @JoinColumn(name = "createdUser")
     User createdUser;
@@ -52,7 +52,7 @@ public class Service {
             joinColumns = { @JoinColumn(name = "service_id") },
             inverseJoinColumns = { @JoinColumn(name = "tag_id") }
     )
-    Set<Tag> ServiceTags;
+    Set<Tag> serviceTags;
     @OneToMany(mappedBy = "service")
     Set<UserServiceApproval> approvalSet;
 
@@ -72,43 +72,43 @@ public class Service {
     }
 
     public String getHeader() {
-        return Header;
+        return header;
     }
 
     public void setHeader(String header) {
-        Header = header;
+        this.header = header;
     }
 
     public String getDescription() {
-        return Description;
+        return description;
     }
 
     public void setDescription(String description) {
-        Description = description;
+        this.description = description;
     }
 
     public String getLocation() {
-        return Location;
+        return location;
     }
 
     public void setLocation(String location) {
-        Location = location;
+        this.location = location;
     }
 
     public LocalDateTime getTime() {
-        return Time;
+        return time;
     }
 
     public void setTime(LocalDateTime time) {
-        Time = time;
+        this.time = time;
     }
 
     public int getCredit() {
-        return Credit;
+        return this.credit;
     }
 
     public void setCredit(int credit) {
-        Credit = credit;
+        this.credit = credit;
     }
 
     public void setCreatedUser(User createdUser) {
@@ -116,43 +116,43 @@ public class Service {
     }
 
     public int getQuota() {
-        return Quota;
+        return quota;
     }
 
     public void setQuota(int quota) {
-        Quota = quota;
+        this.quota = quota;
     }
 
     public Double getLatitude() {
-        return Latitude;
+        return latitude;
     }
 
     public void setLatitude(Double latitude) {
-        Latitude = latitude;
+        this.latitude = latitude;
     }
 
     public Double getLongitude() {
-        return Longitude;
+        return longitude;
     }
 
     public void setLongitude(Double longitude) {
-        Longitude = longitude;
+        this.longitude = longitude;
     }
 
     public Set<Tag> getServiceTags() {
-        return ServiceTags;
+        return serviceTags;
     }
 
     public void setServiceTags(Set<Tag> serviceTags) {
-        ServiceTags = serviceTags;
+        this.serviceTags = serviceTags;
     }
 
     public int getAttendingUserCount() {
-        return AttendingUserCount;
+        return attendingUserCount;
     }
 
     public void setAttendingUserCount(int attendingUserCount) {
-        AttendingUserCount = attendingUserCount;
+        this.attendingUserCount = attendingUserCount;
     }
 
     public Set<UserServiceApproval> getApprovalSet() {
@@ -164,25 +164,25 @@ public class Service {
     }
 
     public ServiceStatus getStatus() {
-        return Status;
+        return status;
     }
 
     public void setStatus(ServiceStatus status) {
-        Status = status;
+        this.status = status;
     }
 
 
 
     @Override
     public String toString() {
-        return "Service{" + "id=" + this.id + ", header='" + this.Header + '\'' + '}';
+        return "Service{" + "id=" + this.id + ", header='" + this.header + '\'' + '}';
     }
 
     public void addTag(Tag tag) {
-        if (this.ServiceTags == null)
+        if (this.serviceTags == null)
         {
-            this.ServiceTags =  new HashSet<Tag>();
+            this.serviceTags =  new HashSet<Tag>();
         }
-        this.ServiceTags.add(tag);
+        this.serviceTags.add(tag);
     }
 }
