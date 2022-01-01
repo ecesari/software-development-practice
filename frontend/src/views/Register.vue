@@ -12,7 +12,7 @@
     </div>
     <div class="container pt-lg-md">
       <div class="row justify-content-center">
-        <div class="col-lg-5">
+        <div class="col-lg-8">
           <card
             type="secondary"
             shadow
@@ -83,7 +83,7 @@
                   label="name"
                   track-by="id"
                 ></multiselect>
-                <Map/>
+                <my-map></my-map>
                 <div class="text-center">
                   <base-button
                     v-on:click="SendRegister"
@@ -110,12 +110,12 @@
 <script>
 import apiRegister from "@/api/register";
 import Multiselect from "vue-multiselect";
-import Map from "./components/Map.vue";
+import MyMap from "./components/Map.vue";
 
 export default {
   components: {
     Multiselect,
-    Map
+    MyMap
   },
   data() {
     return {

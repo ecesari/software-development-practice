@@ -11,9 +11,7 @@
     "axios": "^0.24.0",
     "bootstrap-vue": "^2.0.4",
     "flatpickr": "^4.5.1",
-    "install": "^0.13.0",
     "nouislider": "^11.1.0",
-    "npm": "^8.3.0",
     "register-service-worker": "^1.5.2",
     "sweetalert2": "^11.3.0",
     "vue": "^2.6.6",
@@ -31,7 +29,9 @@
     "@vue/cli-plugin-eslint": "^3.4.0",
     "@vue/cli-plugin-pwa": "^3.4.0",
     "@vue/cli-service": "^3.4.0",
+    "install": "^0.13.0",
     "node-sass": "^4.11.0",
+    "npm": "^8.3.0",
     "sass-loader": "^7.1.0",
     "vue-template-compiler": "^2.6.6"
   }

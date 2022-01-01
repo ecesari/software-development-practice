@@ -128,11 +128,13 @@
 import apiRegister from "../api/register";
 import DatePicker from "vue2-datepicker";
 import Multiselect from "vue-multiselect";
+import MyMap from "./components/Map.vue";
 
 export default {
   components: {
     DatePicker,
     Multiselect,
+    MyMap
   },
   mounted() {
     this.GetGeoLocation();
