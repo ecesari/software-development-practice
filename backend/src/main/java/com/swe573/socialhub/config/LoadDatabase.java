@@ -34,11 +34,13 @@ class LoadDatabase {
             var tag3 = new Tag("sports");
             var tag4 = new Tag("comedy");
             var tag5 = new Tag("misc");
+            var tag6 = new Tag("education");
             tagRepository.save(tag1);
             tagRepository.save(tag2);
             tagRepository.save(tag3);
             tagRepository.save(tag4);
             tagRepository.save(tag5);
+            tagRepository.save(tag6);
 
 
             tagRepository.findAll().forEach(tag -> {
@@ -138,10 +140,26 @@ class LoadDatabase {
                         add(tag5);
                     }});
 
+            var service5 = new Service(null,
+                    "Talk in spanish",
+                    "I'm a native spanish speaker and I would love to have  a chat with you and help you out if you are learning the language or want to improve yourselves.",
+                    "Maçka Park, Istanbul",
+                    LocalDateTime.of(2022, 2, 23, 13, 0),
+                    1,
+                    4,
+                    29,
+                    user3,
+                    41.045570653598446, 28.993261953340998,
+                    new HashSet<Tag>() {{
+                        add(tag5);
+                        add(tag6);
+                    }});
+
             serviceRepository.save(service);
             serviceRepository.save(service2);
             serviceRepository.save(service3);
             serviceRepository.save(service4);
+            serviceRepository.save(service5);
 
             serviceRepository.findAll().forEach(s -> {
                 log.info("Preloaded " + s);
@@ -157,6 +175,7 @@ class LoadDatabase {
             var approval6 = saveAndGetApproval(approvalRepository, user2, service3, ApprovalStatus.PENDING);
             var approval8 = saveAndGetApproval(approvalRepository, user2, service4, ApprovalStatus.APPROVED);
             var approval9 = saveAndGetApproval(approvalRepository, user1, service4, ApprovalStatus.DENIED);
+            var approval10 = saveAndGetApproval(approvalRepository, user1, service5, ApprovalStatus.PENDING);
 
             approvalRepository.findAll().forEach(s -> {
                 log.info("Preloaded " + s);

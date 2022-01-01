@@ -57,15 +57,15 @@ public class UserService {
 
 
     @Transactional
-    public UserDto register(UserDto params) {
-        final String passwordHash = passwordEncoder.encode(params.getPassword());
+    public UserDto register(UserDto dto) {
+        final String passwordHash = passwordEncoder.encode(dto.getPassword());
         final User userEntity = new User();
-        userEntity.setBio(params.getBio());
-        userEntity.setEmail(params.getPassword());
+        userEntity.setBio(dto.getBio());
+        userEntity.setEmail(dto.getPassword());
         userEntity.setPassword(passwordHash);
-        userEntity.setUsername(params.getUsername());
+        userEntity.setUsername(dto.getUsername());
         userEntity.setBalance(5);
-        var tags = params.getUserTags();
+        var tags = dto.getUserTags();
         if (tags != null) {
             for (TagDto tagDto : tags) {
                 var addedTag = tagRepository.findById(tagDto.getId());
@@ -85,19 +85,24 @@ public class UserService {
         }
     }
 
-    public UserDto login(UserDto params) {
+    public UserDto login(UserDto dto) {
         try {
-            final User user = repository.findUserByUsername(params.getUsername()).get();
-            var passwordMatch = passwordEncoder.matches(params.getPassword(), user.getPassword());
+            var userName = dto.getUsername();
+            var dbResult = repository.findUserByUsername(userName);
+            if (dbResult == null)
+                throw new IllegalArgumentException("Invalid username");
+
+            var user = dbResult.get();
+            var passwordMatch = passwordEncoder.matches(dto.getPassword(), user.getPassword());
 
             if (passwordMatch) {
                 return mapUserToDTO(user);
 
             } else {
-                throw new IllegalArgumentException("Invalid username or password");
+                throw new IllegalArgumentException("Invalid password");
 
             }
-        } catch (DataIntegrityViolationException e) {
+        } catch (Exception e) {
             throw new IllegalArgumentException("Username already taken.");
         }
     }
@@ -146,14 +151,20 @@ public class UserService {
             }
         }
 
+        var approvalList = userServiceApprovalRepository.findUserServiceApprovalByUserAndApprovalStatus(user,ApprovalStatus.PENDING);
+        var balanceOnHold = approvalList.stream().mapToInt(o -> o.getService().getCredit()).sum();
+
         return new UserDto(
                 user.getId(),
                 user.getUsername(),
                 user.getEmail(),
                 user.getBio(),
                 user.getBalance(),
-                notificationList
+                notificationList,
+                balanceOnHold
         );
+
+
     }
 
     public UserDto getUserByUsername(String userName, Principal principal) {
@@ -190,7 +201,7 @@ public class UserService {
 
     public int getBalanceToBe(User user)
     {
-        var currentUserCreditsInApprovalState = userServiceApprovalRepository.findUserServiceApprovalByService_CreatedUserAndApprovalStatus(user, ApprovalStatus.PENDING);
+        var currentUserCreditsInApprovalState = userServiceApprovalRepository.findUserServiceApprovalByUserAndApprovalStatus(user, ApprovalStatus.PENDING);
         var creditsToRemove = currentUserCreditsInApprovalState.stream().mapToInt(o -> o.getService().getCredit()).sum();
         var activeServices = serviceRepository.findServiceByCreatedUserAndStatus(user, ServiceStatus.ONGOING);
         var creditsToAdd = activeServices.stream().mapToInt(x -> x.getCredit()).sum();

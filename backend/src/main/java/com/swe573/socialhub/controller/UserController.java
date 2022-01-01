@@ -50,9 +50,9 @@ public class UserController {
     }
 
     @GetMapping("/user")
-    public UserDto getUser(Principal principal) {
+    public ResponseEntity<UserDto> getUser(Principal principal) {
         try {
-            return service.getUserByPrincipal(principal);
+            return ResponseEntity.ok().body(service.getUserByPrincipal(principal));
         } catch (IllegalArgumentException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getLocalizedMessage());
         }

@@ -48,13 +48,13 @@
                     <span class="heading">10</span>
                     <span class="description">Followers</span>
                   </div>
-                  <!-- <div>
-                    <span class="heading">10</span>
-                    <span class="description">Photos</span>
-                  </div> -->
                   <div v-if="isOwnProfile">
                     <span class="heading">{{userData.balance}}</span>
                     <span class="description">Credits</span>
+                  </div>
+                    <div v-if="isOwnProfile">
+                    <span class="heading">{{userData.balanceOnHold}}</span>
+                    <span class="description">Credits on Hold</span>
                   </div>
                 </div>
               </div>
@@ -100,7 +100,8 @@ export default {
         username: "",
         email: "",
         bio: "",
-        balance: 0
+        balance: 0,
+        balanceOnHold: 0,
       },
       isOwnProfile: this.$route.params.userId == null
     };
@@ -116,6 +117,7 @@ export default {
         this.userData.email = r.email;
         this.userData.bio = r.bio;
         this.userData.balance = r.balance;
+        this.userData.balanceOnHold = r.balanceOnHold;
         console.log("ok.");
       });
     },

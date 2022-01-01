@@ -15,6 +15,7 @@ public interface UserServiceApprovalRepository extends JpaRepository<UserService
     List<UserServiceApproval> findUserServiceApprovalByService_CreatedUserAndApprovalStatus(User user, ApprovalStatus status);
     Optional<UserServiceApproval> findUserServiceApprovalByService_IdAndUser_Id(Long serviceId, Long userId);
     List<UserServiceApproval> findUserServiceApprovalByService_IdAndApprovalStatus(Long serviceId, ApprovalStatus status);
+    List<UserServiceApproval> findUserServiceApprovalByUserAndApprovalStatus(User user, ApprovalStatus status);
 
 
 

@@ -11,16 +11,18 @@ public class UserDto {
     private List<TagDto> userTags;
     private Integer balance;
     private List<NotificationDto> notifications;
+    private int balanceOnHold;
 
 
 
-    public UserDto(Long id, String username, String email, String bio, Integer balance, List<NotificationDto> notifications) {
+    public UserDto(Long id, String username, String email, String bio, Integer balance, List<NotificationDto> notifications, int balanceOnHold) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.bio = bio;
         this.balance = balance;
         this.notifications = notifications;
+        this.balanceOnHold = balanceOnHold;
     }
     public String getEmail() {
         return email;
@@ -84,5 +86,13 @@ public class UserDto {
 
     public void setNotifications(List<NotificationDto> notifications) {
         this.notifications = notifications;
+    }
+
+    public int getBalanceOnHold() {
+        return balanceOnHold;
+    }
+
+    public void setBalanceOnHold(int balanceOnHold) {
+        this.balanceOnHold = balanceOnHold;
     }
 }
