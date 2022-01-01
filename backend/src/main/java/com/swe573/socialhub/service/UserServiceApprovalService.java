@@ -7,6 +7,7 @@ import com.swe573.socialhub.dto.ServiceDto;
 import com.swe573.socialhub.dto.SimpleApprovalDto;
 import com.swe573.socialhub.dto.UserServiceApprovalDto;
 import com.swe573.socialhub.enums.ApprovalStatus;
+import com.swe573.socialhub.enums.ServiceStatus;
 import com.swe573.socialhub.repository.ServiceRepository;
 import com.swe573.socialhub.repository.UserRepository;
 import com.swe573.socialhub.repository.UserServiceApprovalRepository;
@@ -41,12 +42,30 @@ public class UserServiceApprovalService {
 
     @Transactional
     public void RequestApproval(Principal principal, Long serviceId) {
+        //check token => if username is null, throw an error
         final User loggedInUser = userRepository.findUserByUsername(principal.getName()).get();
         if (loggedInUser == null)
             throw new IllegalArgumentException("User doesn't exist.");
+
+        //validate service
         var service = serviceRepository.findById(serviceId).get();
+        if (service == null)
+            throw new IllegalArgumentException("Service doesn't exist.");
+
+        //create new entity
         var key = new UserServiceApprovalKey(loggedInUser.getId(), serviceId);
         var entity = new UserServiceApproval(key, loggedInUser, service, ApprovalStatus.PENDING);
+
+        //check pending credits and balance if the sum is above 20 => throw an error
+        var currentUserCreditsInApprovalState = repository.findUserServiceApprovalByService_CreatedUserAndApprovalStatus(loggedInUser, ApprovalStatus.PENDING);
+        var creditsToRemove = currentUserCreditsInApprovalState.stream().mapToInt(o -> o.getService().getCredit()).sum();
+        var activeServices = serviceRepository.findServiceByCreatedUserAndStatus(loggedInUser, ServiceStatus.ONGOING);
+        var creditsToAdd = activeServices.stream().mapToInt(x-> x.getCredit()).sum();
+        var currentUserBalance = loggedInUser.getBalance();
+        var balanceToBe = currentUserBalance + creditsToAdd + creditsToRemove;
+        if (balanceToBe <= -5 )
+            throw new IllegalArgumentException("You have reached the minimum limit of credits. You cannot make a request to this service");
+
         try {
             final UserServiceApproval approval = repository.save(entity);
             notificationService.sendNotification("Hooray! There is a new request for " + service.getHeader() + " by " + loggedInUser.getUsername(),
