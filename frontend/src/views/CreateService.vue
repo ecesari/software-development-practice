@@ -114,7 +114,7 @@
                     />
                   </div>
                   <div class="text-center">
-                    <base-button class="" v-if="serviceInputs.location != ''"
+                    <base-button v-if="serviceInputs.location != ''"
                       ><GmapMap
                         :center="coordinates"
                         :zoom="13"

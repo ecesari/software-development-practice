@@ -72,16 +72,19 @@
                       @place_changed="setPlace"
                     />
                   </div>
-                  <GmapMap
-                    :center="coordinates"
-                    :zoom="13"
-                    map-type-id="roadmap"
-                    style="width: 500px; height: 300px"
-                    ref="mapRef"
-                    v-if="registerInputs.formattedAddress != ''"
-                  >
-                    <GmapMarker :position="coordinates" />
-                  </GmapMap>
+                  <div class="text-center">
+                    <base-button v-if="registerInputs.formattedAddress != ''">
+                      <GmapMap
+                        :center="coordinates"
+                        :zoom="13"
+                        map-type-id="roadmap"
+                        style="width: 500px; height: 300px"
+                        ref="mapRef"
+                      >
+                        <GmapMarker :position="coordinates" />
+                      </GmapMap>
+                    </base-button>
+                  </div>
                 </div>
                 <div class="text-center">
                   <base-button
