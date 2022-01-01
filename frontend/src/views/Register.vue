@@ -83,6 +83,7 @@
                   label="name"
                   track-by="id"
                 ></multiselect>
+                <Map/>
                 <div class="text-center">
                   <base-button
                     v-on:click="SendRegister"
@@ -109,10 +110,12 @@
 <script>
 import apiRegister from "@/api/register";
 import Multiselect from "vue-multiselect";
+import Map from "./components/Map.vue";
 
 export default {
   components: {
     Multiselect,
+    Map
   },
   data() {
     return {
