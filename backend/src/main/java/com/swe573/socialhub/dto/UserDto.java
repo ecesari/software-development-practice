@@ -12,10 +12,13 @@ public class UserDto {
     private Integer balance;
     private List<NotificationDto> notifications;
     private int balanceOnHold;
+    private  String latitude;
+    private  String longitude;
+    private String formattedAddress;
 
 
 
-    public UserDto(Long id, String username, String email, String bio, Integer balance, List<NotificationDto> notifications, int balanceOnHold) {
+    public UserDto(Long id, String username, String email, String bio, Integer balance, List<NotificationDto> notifications, int balanceOnHold, String latitude, String longitude, String formattedAddress) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -23,6 +26,9 @@ public class UserDto {
         this.balance = balance;
         this.notifications = notifications;
         this.balanceOnHold = balanceOnHold;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.formattedAddress = formattedAddress;
     }
     public String getEmail() {
         return email;
@@ -94,5 +100,29 @@ public class UserDto {
 
     public void setBalanceOnHold(int balanceOnHold) {
         this.balanceOnHold = balanceOnHold;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getFormattedAddress() {
+        return formattedAddress;
+    }
+
+    public void setFormattedAddress(String formattedAddress) {
+        this.formattedAddress = formattedAddress;
     }
 }

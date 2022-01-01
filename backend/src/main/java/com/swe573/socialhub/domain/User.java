@@ -12,6 +12,9 @@ public class User {
     private String username;
     private String email;
     private String bio;
+    private  String latitude;
+    private  String longitude;
+    private String formattedAddress;
     @ManyToMany(cascade = {CascadeType.MERGE})
     @JoinTable(
             name = "user_tags",
@@ -27,11 +30,14 @@ public class User {
     @OneToMany(mappedBy = "receiver")
     Set<Notification> notificationSet;
 
-    public User(Long id, String username, String email, String bio, Set<Tag> userTags, Integer balance) {
+    public User(Long id, String username, String email, String bio, Set<Tag> userTags, Integer balance, String latitude, String longitude, String formattedAddress) {
         this.id = id;
         this.bio = bio;
         this.username = username;
         this.email = email;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.formattedAddress = formattedAddress;
         this.userTags = userTags;
         this.balance = balance;
     }
@@ -138,6 +144,30 @@ public class User {
             this.notificationSet = new HashSet<Notification>();
         }
         this.notificationSet = notificationSet;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getFormattedAddress() {
+        return formattedAddress;
+    }
+
+    public void setFormattedAddress(String formattedAddress) {
+        this.formattedAddress = formattedAddress;
     }
 
     @Override

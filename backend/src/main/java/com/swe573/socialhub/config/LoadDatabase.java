@@ -54,21 +54,21 @@ class LoadDatabase {
             var user1 = new User(null, "miranda", "miranda.osborne@gmail.com", "A human. Being.", new HashSet<Tag>() {{
                 add(tag2);
                 add(tag5);
-            }}, 2);
+            }}, 2, "41.084148", "29.035460", "Etiler");
             user1.setPassword(passwordEncoder.encode("1"));
 
 
-            var user2 = new User(null, "joshua", "joshua.osborne@gmail.com", "Life's uncertain. Eat dessert first.", new HashSet<Tag>() {{
+            var user2 = new User(null, "joshua", "joshua.osborne@gmail.com", "Life's uncertain. Eat dessert first.",  new HashSet<Tag>() {{
                 add(tag4);
                 add(tag3);
                 add(tag1);
-            }}, 5);
+            }}, 5, "41.084148", "29.035460", "Etiler");
             user2.setPassword(passwordEncoder.encode("1"));
 
             var user3 = new User(null, "jane", "jane.austen@gmail.com", "Probably the best TV binge-watcher you’ll ever find.", new HashSet<Tag>() {{
                 add(tag4);
                 add(tag5);
-            }}, -1);
+            }}, -1, "41.084148", "29.035460", "Etiler");
             user3.setPassword(passwordEncoder.encode("3"));
 
             userRepository.save(user1);
