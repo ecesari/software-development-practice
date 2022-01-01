@@ -117,6 +117,7 @@ export default {
         this.userData.email = r.email;
         this.userData.bio = r.bio;
         this.userData.balance = r.balance;
+        this.userData.balanceOnHold = r.balanceOnHold;
         console.log("ok.");
       });
     },
