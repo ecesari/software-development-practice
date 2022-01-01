@@ -40,6 +40,7 @@ class LoadDatabase {
             tagRepository.save(tag3);
             tagRepository.save(tag4);
             tagRepository.save(tag5);
+            tagRepository.save(tag6);
 
 
             tagRepository.findAll().forEach(tag -> {
