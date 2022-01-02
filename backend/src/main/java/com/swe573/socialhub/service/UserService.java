@@ -216,13 +216,14 @@ public class UserService {
     }
 
 
-    public Long follow(Principal principal, Long userId) {
+    public UserFollowing follow(Principal principal, Long userId) {
         //get current user and user to follow
         final User loggedInUser = repository.findUserByUsername(principal.getName()).get();
         var userToFollow = repository.findUserByUsername(principal.getName()).get();
 
         //check if there is already a following entity to avoid duplicates
-        var entityExists = userFollowingRepository.findUserFollowingByFollowingUserAndFollowedUser(loggedInUser,userToFollow).isPresent();
+        var entityResult = userFollowingRepository.findUserFollowingByFollowingUserAndFollowedUser(loggedInUser,userToFollow);
+        var entityExists = entityResult.isPresent();
         if (entityExists)
             throw new IllegalArgumentException("You are already following user " + userToFollow.getUsername());
 
@@ -231,7 +232,7 @@ public class UserService {
             //create and save entity
             var entity = new UserFollowing(loggedInUser,userToFollow);
             var returnEntity = userFollowingRepository.save(entity);
-            return returnEntity.getId();
+            return returnEntity;
         }
         catch (Exception e)
         {

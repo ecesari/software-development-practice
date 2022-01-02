@@ -1,5 +1,6 @@
 package com.swe573.socialhub.controller;
 
+import com.swe573.socialhub.domain.UserFollowing;
 import com.swe573.socialhub.dto.*;
 import com.swe573.socialhub.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,7 +86,7 @@ public class UserController {
     }
 
     @PostMapping("/user/follow/{userId}")
-    public ResponseEntity<Long> followUser(Principal principal, @RequestBody Long userId) {
+    public ResponseEntity<UserFollowing> followUser(Principal principal, @RequestBody Long userId) {
         try {
             var response = service.follow(principal,userId);
             return ResponseEntity.ok(response);
