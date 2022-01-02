@@ -137,6 +137,7 @@ export default {
   },
   props: {
     getByUser: Boolean,
+    filter: String
   },
   components: {
     Hero,
