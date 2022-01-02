@@ -30,6 +30,7 @@ public class User {
     @OneToMany(mappedBy = "receiver")
     Set<Notification> notificationSet;
 
+
     public User(Long id, String username, String email, String bio, Set<Tag> userTags, Integer balance, String latitude, String longitude, String formattedAddress) {
         this.id = id;
         this.bio = bio;
