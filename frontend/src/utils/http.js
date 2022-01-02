@@ -17,7 +17,8 @@ const handleError = (e, message) => {
 const handleSuccess = (e, type) => {
     if (e && e.data) {
         if (type) {
-            let message = type + ' successful'
+            modal.showSuccess(type)
+
         }
 
         let message = ''
@@ -93,6 +94,7 @@ export default {
         })
     },
     put(url, data, handleOnError, errorMessage,successMessage) {
+        debugger;
         return new Promise((resolve, reject) => {
             axios({
                 method: 'PUT',

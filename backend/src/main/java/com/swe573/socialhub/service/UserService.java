@@ -1,13 +1,11 @@
 package com.swe573.socialhub.service;
 
 import com.swe573.socialhub.domain.User;
+import com.swe573.socialhub.domain.UserFollowing;
 import com.swe573.socialhub.dto.*;
 import com.swe573.socialhub.enums.ApprovalStatus;
 import com.swe573.socialhub.enums.ServiceStatus;
-import com.swe573.socialhub.repository.ServiceRepository;
-import com.swe573.socialhub.repository.TagRepository;
-import com.swe573.socialhub.repository.UserRepository;
-import com.swe573.socialhub.repository.UserServiceApprovalRepository;
+import com.swe573.socialhub.repository.*;
 import com.swe573.socialhub.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -25,6 +23,7 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -54,6 +53,9 @@ public class UserService {
     private UserDetailsService userDetailsService;
     @Autowired
     private NotificationService notificationService;
+
+    @Autowired
+    private UserFollowingRepository userFollowingRepository;
 
 
     @Transactional
@@ -88,7 +90,7 @@ public class UserService {
         }
     }
 
-    public UserDto login(UserDto dto) {
+    public UserDto login(LoginDto dto) {
         try {
             var userName = dto.getUsername();
             var dbResult = repository.findUserByUsername(userName);
@@ -154,8 +156,12 @@ public class UserService {
             }
         }
 
-        var approvalList = userServiceApprovalRepository.findUserServiceApprovalByUserAndApprovalStatus(user,ApprovalStatus.PENDING);
+        var approvalList = userServiceApprovalRepository.findUserServiceApprovalByUserAndApprovalStatus(user, ApprovalStatus.PENDING);
         var balanceOnHold = approvalList.stream().mapToInt(o -> o.getService().getCredit()).sum();
+
+        var followingSet = user.getFollowingUsers();
+        var following = followingSet.stream().filter(x-> x.getFollowingUser() == user).map(u -> u.getFollowedUser().getUsername() ).collect(Collectors.toUnmodifiableList());
+        var followedBy = followingSet.stream().filter(x-> x.getFollowedUser() == user).map(u -> u.getFollowingUser().getUsername() ).collect(Collectors.toUnmodifiableList());
 
         return new UserDto(
                 user.getId(),
@@ -167,7 +173,10 @@ public class UserService {
                 balanceOnHold,
                 user.getLatitude(),
                 user.getLongitude(),
-                user.getFormattedAddress());
+                user.getFormattedAddress(),
+                user.getFollowedBy().stream().map(u -> u.getFollowingUser().getUsername() ).collect(Collectors.toUnmodifiableList()),
+                user.getFollowingUsers().stream().map(u -> u.getFollowedUser().getUsername() ).collect(Collectors.toUnmodifiableList())
+                );
 
 
     }
@@ -204,8 +213,7 @@ public class UserService {
 
     }
 
-    public int getBalanceToBe(User user)
-    {
+    public int getBalanceToBe(User user) {
         var currentUserCreditsInApprovalState = userServiceApprovalRepository.findUserServiceApprovalByUserAndApprovalStatus(user, ApprovalStatus.PENDING);
         var creditsToRemove = currentUserCreditsInApprovalState.stream().mapToInt(o -> o.getService().getCredit()).sum();
         var activeServices = serviceRepository.findServiceByCreatedUserAndStatus(user, ServiceStatus.ONGOING);
@@ -216,4 +224,54 @@ public class UserService {
     }
 
 
+    public UserFollowing follow(Principal principal, Long userId) {
+        //get current user and user to follow
+        final User loggedInUser = repository.findUserByUsername(principal.getName()).get();
+        var userToFollow = repository.findById(userId).get();
+
+        //check if there is already a following entity to avoid duplicates
+        var entityResult = userFollowingRepository.findUserFollowingByFollowingUserAndFollowedUser(loggedInUser,userToFollow);
+        var entityExists = entityResult.isPresent();
+        if (entityExists)
+            throw new IllegalArgumentException("You are already following user " + userToFollow.getUsername());
+
+
+        try{
+            //create and save entity
+            var entity = new UserFollowing(loggedInUser,userToFollow);
+            var returnEntity = userFollowingRepository.save(entity);
+
+            //send notification
+            notificationService.sendNotification("You are being followed by " + loggedInUser.getUsername(), "/profile/" + loggedInUser.getUsername(),userToFollow);
+
+            return returnEntity;
+        }
+        catch (Exception e)
+        {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+
+
+    }
+
+    public Boolean followControl(Principal principal, Long userId) {
+        try{
+            //get current user and user to follow
+            final User loggedInUser = repository.findUserByUsername(principal.getName()).get();
+            var userToFollow = repository.findById(userId).get();
+
+            //check if there is already a following entity
+            var entityResult = userFollowingRepository.findUserFollowingByFollowingUserAndFollowedUser(loggedInUser,userToFollow);
+            var entityExists = entityResult.isPresent();
+
+
+            return entityExists;
+        }
+        catch (Exception e)
+        {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+
+
+    }
 }

@@ -29,6 +29,10 @@ public class User {
     private Integer balance;
     @OneToMany(mappedBy = "receiver")
     Set<Notification> notificationSet;
+    @OneToMany(mappedBy = "followingUser")
+    Set<UserFollowing> followingUsers;
+    @OneToMany(mappedBy = "followedUser")
+    Set<UserFollowing> followedBy;
 
     public User(Long id, String username, String email, String bio, Set<Tag> userTags, Integer balance, String latitude, String longitude, String formattedAddress) {
         this.id = id;
@@ -168,6 +172,23 @@ public class User {
 
     public void setFormattedAddress(String formattedAddress) {
         this.formattedAddress = formattedAddress;
+    }
+
+    public Set<UserFollowing> getFollowingUsers() {
+        return followingUsers;
+    }
+
+    public void setFollowingUsers(Set<UserFollowing> followingUsers) {
+        this.followingUsers = followingUsers;
+
+    }
+
+    public Set<UserFollowing> getFollowedBy() {
+        return followedBy;
+    }
+
+    public void setFollowedBy(Set<UserFollowing> followedBy) {
+        this.followedBy = followedBy;
     }
 
     @Override

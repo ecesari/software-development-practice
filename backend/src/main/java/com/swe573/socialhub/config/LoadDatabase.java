@@ -22,7 +22,7 @@ class LoadDatabase {
     private static final Logger log = LoggerFactory.getLogger(LoadDatabase.class);
 
     @Bean
-    CommandLineRunner initDatabase(TagRepository tagRepository, UserRepository userRepository, ServiceRepository serviceRepository, UserServiceApprovalRepository approvalRepository, NotificationRepository notificationRepository, PasswordEncoder passwordEncoder) {
+    CommandLineRunner initDatabase(TagRepository tagRepository, UserRepository userRepository, ServiceRepository serviceRepository, UserServiceApprovalRepository approvalRepository, NotificationRepository notificationRepository, PasswordEncoder passwordEncoder, UserFollowingRepository userFollowingRepository) {
 
         return args -> {
 
@@ -51,30 +51,31 @@ class LoadDatabase {
 
             //region User
 
-            var user1 = new User(null, "miranda", "miranda.osborne@gmail.com", "A human. Being.", new HashSet<Tag>() {{
+            var user1 = saveAndGetUser(userRepository, passwordEncoder, "miranda", "miranda.osborne@gmail.com", "Gamer. Award-winning music buff. Social media maven. Zombie fan. Student. Professional internet fanatic. Thinker. Freelance baconaholic.", new HashSet<Tag>() {{
                 add(tag2);
                 add(tag5);
             }}, 2, "41.084148", "29.035460", "Etiler");
-            user1.setPassword(passwordEncoder.encode("1"));
 
-
-            var user2 = new User(null, "joshua", "joshua.osborne@gmail.com", "Life's uncertain. Eat dessert first.",  new HashSet<Tag>() {{
+            var user2 = saveAndGetUser(userRepository, passwordEncoder, "joshua", "joshua.osborne@gmail.com", "Life's uncertain. Eat dessert first.", new HashSet<Tag>() {{
                 add(tag4);
                 add(tag3);
                 add(tag1);
             }}, 5, "41.084148", "29.035460", "Etiler");
-            user2.setPassword(passwordEncoder.encode("1"));
 
-            var user3 = new User(null, "jane", "jane.austen@gmail.com", "Probably the best TV binge-watcher you’ll ever find.", new HashSet<Tag>() {{
+            var user3 = saveAndGetUser(userRepository, passwordEncoder, "jane", "jane.austen@gmail.com", "Probably the best TV binge-watcher you’ll ever find.", new HashSet<Tag>() {{
                 add(tag4);
                 add(tag5);
-            }}, -1, "41.084148", "29.035460", "Etiler");
-            user3.setPassword(passwordEncoder.encode("3"));
+            }}, 2, "41.084148", "29.035460", "Etiler");
 
-            userRepository.save(user1);
-            userRepository.save(user2);
-            userRepository.save(user3);
-//
+            var user4 = saveAndGetUser(userRepository, passwordEncoder, "labelcaution", "labelcaution@gmail.com", "Incurable tv fan. Twitter junkie. Evil food fanatic. Certified travel maven. Social media advocate. Total thinker.", new HashSet<Tag>() {{
+                add(tag1);
+                add(tag6);
+            }}, 3, "41.084148", "29.035460", "Etiler");
+
+            var user5 = saveAndGetUser(userRepository, passwordEncoder, "orangejuicecucumber", "orangejuicecucumber@gmail.com", "A human. Being.", new HashSet<Tag>() {{
+                add(tag2);
+            }}, 2, "41.084148", "29.035460", "Etiler");
+
             userRepository.findAll().forEach(user -> {
                 log.info("Preloaded " + user);
             });
@@ -148,7 +149,7 @@ class LoadDatabase {
                     1,
                     4,
                     29,
-                    user3,
+                    user4,
                     41.045570653598446, 28.993261953340998,
                     new HashSet<Tag>() {{
                         add(tag5);
@@ -196,11 +197,41 @@ class LoadDatabase {
             });
             //endregion
 
+            //region Following
+            var following = saveAndGetUserFollowing(userFollowingRepository, user1, user2);
+            var following1 = saveAndGetUserFollowing(userFollowingRepository, user2, user1);
+            var following2 = saveAndGetUserFollowing(userFollowingRepository, user3, user1);
+            var following3 = saveAndGetUserFollowing(userFollowingRepository, user3, user2);
+            var following8 = saveAndGetUserFollowing(userFollowingRepository, user4, user1);
+            var following4 = saveAndGetUserFollowing(userFollowingRepository, user4, user2);
+            var following5 = saveAndGetUserFollowing(userFollowingRepository, user4, user3);
+            var following6 = saveAndGetUserFollowing(userFollowingRepository, user4, user5);
+            var following7 = saveAndGetUserFollowing(userFollowingRepository, user5, user1);
+            var following9 = saveAndGetUserFollowing(userFollowingRepository, user5, user3);
+
+            userFollowingRepository.findAll().forEach(s -> {
+                log.info("Preloaded " + s);
+            });
+            //endregion
+
         };
     }
 
+    private User saveAndGetUser(UserRepository userRepository, PasswordEncoder passwordEncoder, String username, String email, String bio, HashSet<Tag> tags, Integer balance, String latitude, String longitude, String formattedAddress) {
+        var user = new User(null, username, email, bio, tags, balance,latitude,longitude, formattedAddress);
+        user.setPassword(passwordEncoder.encode("1"));
+        userRepository.save(user);
+        return user;
+    }
+
+    private UserFollowing saveAndGetUserFollowing(UserFollowingRepository userFollowingRepository, User user1, User user2) {
+        var userFollowing = new UserFollowing(user1, user2);
+        userFollowingRepository.save(userFollowing);
+        return userFollowing;
+    }
+
     private Notification saveAndGetNotification(UserRepository userRepository, NotificationRepository notificationRepository, String message, String url, Boolean read, User user) {
-        var notification = new Notification(null, message, url, read,user);
+        var notification = new Notification(null, message, url, read, user);
         notificationRepository.save(notification);
         return notification;
     }

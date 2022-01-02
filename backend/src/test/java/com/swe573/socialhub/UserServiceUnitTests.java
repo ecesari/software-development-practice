@@ -2,14 +2,12 @@ package com.swe573.socialhub;
 
 import com.swe573.socialhub.domain.Service;
 import com.swe573.socialhub.domain.User;
+import com.swe573.socialhub.domain.UserFollowing;
 import com.swe573.socialhub.domain.UserServiceApproval;
 import com.swe573.socialhub.domain.key.UserServiceApprovalKey;
 import com.swe573.socialhub.enums.ApprovalStatus;
 import com.swe573.socialhub.enums.ServiceStatus;
-import com.swe573.socialhub.repository.ServiceRepository;
-import com.swe573.socialhub.repository.TagRepository;
-import com.swe573.socialhub.repository.UserRepository;
-import com.swe573.socialhub.repository.UserServiceApprovalRepository;
+import com.swe573.socialhub.repository.*;
 import com.swe573.socialhub.service.NotificationService;
 import com.swe573.socialhub.service.UserService;
 import com.swe573.socialhub.util.JwtUtil;
@@ -31,11 +29,12 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import javax.security.auth.Subject;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ActiveProfiles("test")
 @ExtendWith(SpringExtension.class)
@@ -46,8 +45,7 @@ public class UserServiceUnitTests {
     @TestConfiguration
     static class ServiceServiceUnitTestsConfiguration {
         @Bean
-        UserService service()
-        {
+        UserService service() {
             return new UserService();
         }
     }
@@ -78,8 +76,12 @@ public class UserServiceUnitTests {
 
     @MockBean
     private UserDetailsService userDetailsService;
+
     @MockBean
     private NotificationService notificationService;
+
+    @MockBean
+    private UserFollowingRepository userFollowingRepository;
 
     class MockPrincipal implements Principal {
 
@@ -113,8 +115,8 @@ public class UserServiceUnitTests {
         testUser.setUsername("test user");
 
         var testUser2 = new User();
-        testUser.setId(2L);
-        testUser.setUsername("test user 2");
+        testUser2.setId(2L);
+        testUser2.setUsername("test user 2");
 
 
         var testService1 = new Service();
@@ -125,18 +127,18 @@ public class UserServiceUnitTests {
         testService2.setCredit(ThreadLocalRandom.current().nextInt(1, 10));
         testService2.setId(new Random().nextLong());
 
-        var testApproval1Key = new UserServiceApprovalKey(testUser.getId(),testService2.getId());
+        var testApproval1Key = new UserServiceApprovalKey(testUser.getId(), testService2.getId());
         var testApproval = new UserServiceApproval();
         testApproval.setId(testApproval1Key);
         testApproval.setService(testService2);
         testApproval.setUser(testUser);
         testApproval.setApprovalStatus(ApprovalStatus.PENDING);
 
-        var testServices = new ArrayList<Service>(){{
+        var testServices = new ArrayList<Service>() {{
             add(testService2);
         }};
 
-        var testApprovals = new ArrayList<UserServiceApproval>(){{
+        var testApprovals = new ArrayList<UserServiceApproval>() {{
             add(testApproval);
         }};
 
@@ -147,7 +149,64 @@ public class UserServiceUnitTests {
         var expectedResult = testUser.getBalance() + testService2.getCredit() + testApproval.getService().getCredit();
 
         var result = service.getBalanceToBe(testUser);
-        assertEquals(expectedResult,result);
+        assertEquals(expectedResult, result);
+
+    }
+
+    @Test
+    public void FollowUser_ShouldThrowError_IfAlreadyFollowing() {
+        var testUser2 = new User();
+        testUser2.setId(2L);
+        testUser2.setUsername("test user 2");
+
+        var testUser = new User();
+        testUser.setId(1L);
+        testUser.setUsername("test user");
+        var following = new UserFollowing(testUser, testUser2);
+
+        testUser.setFollowingUsers(new HashSet<>() {{
+            add(following);
+        }});
+
+        var mockUser = new MockPrincipal(testUser.getUsername());
+
+        Mockito.when(repository.findUserByUsername(testUser.getUsername())).thenReturn(Optional.of(testUser));
+        Mockito.when(repository.findUserByUsername(testUser2.getUsername())).thenReturn(Optional.of(testUser2));
+        Mockito.when(repository.findUserByUsername(testUser2.getUsername())).thenReturn(Optional.of(testUser2));
+        Mockito.when(userFollowingRepository.findUserFollowingByFollowingUserAndFollowedUser(testUser,testUser2)).thenReturn(Optional.of(following));
+
+        assertThrows(IllegalArgumentException.class, () -> service.follow(mockUser, testUser2.getId()));
+
+    }
+
+    @Test
+    public void FollowUser_ShouldReturnEntity() {
+        var testUser2 = new User();
+        testUser2.setId(2L);
+        testUser2.setUsername("test user 2");
+
+        var testUser = new User();
+        testUser.setId(1L);
+        testUser.setUsername("test user");
+
+
+        var mockUser = new MockPrincipal(testUser.getUsername());
+
+        Mockito.when(repository.findUserByUsername(testUser.getUsername())).thenReturn(Optional.of(testUser));
+        Mockito.when(repository.findUserByUsername(testUser2.getUsername())).thenReturn(Optional.of(testUser2));
+        Mockito.when(repository.findUserByUsername(testUser2.getUsername())).thenReturn(Optional.of(testUser2));
+        Mockito.when(userFollowingRepository.findUserFollowingByFollowingUserAndFollowedUser(testUser,testUser2)).thenReturn(Optional.empty());
+
+        var userFollowing = new UserFollowing(testUser,testUser2);
+        userFollowing.setId(1L);
+        Mockito.when(userFollowingRepository.save(userFollowing)).thenReturn(userFollowing);
+
+//        Mockito.when(userFollowingRepository.save(userFollowing)).thenCallRealMethod();
+
+
+        var result = service.follow(mockUser,testUser2.getId());
+        assertEquals(testUser, result.getFollowingUser());
+        assertEquals(testUser, result.getFollowedUser());
 
     }
 

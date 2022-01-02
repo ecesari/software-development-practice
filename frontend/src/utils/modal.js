@@ -93,5 +93,18 @@ export default {
             title: 'Oops...',
             text: text
           })
+    },
+    showSuccess: function(message)
+    {
+        debugger;
+        var text;
+        if(message) text = message;
+        else text = ''
+
+        swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: text
+          })
     }
 }

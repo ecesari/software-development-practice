@@ -15,10 +15,12 @@ public class UserDto {
     private  String latitude;
     private  String longitude;
     private String formattedAddress;
+    private List<String> followedBy;
+    private List<String>  following;
 
 
 
-    public UserDto(Long id, String username, String email, String bio, Integer balance, List<NotificationDto> notifications, int balanceOnHold, String latitude, String longitude, String formattedAddress) {
+    public UserDto(Long id, String username, String email, String bio, Integer balance, List<NotificationDto> notifications, int balanceOnHold, String latitude, String longitude, String formattedAddress, List<String> followedBy, List<String> following) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -29,6 +31,8 @@ public class UserDto {
         this.latitude = latitude;
         this.longitude = longitude;
         this.formattedAddress = formattedAddress;
+        this.followedBy = followedBy;
+        this.following = following;
     }
     public String getEmail() {
         return email;
@@ -124,5 +128,21 @@ public class UserDto {
 
     public void setFormattedAddress(String formattedAddress) {
         this.formattedAddress = formattedAddress;
+    }
+
+    public List<String> getFollowedBy() {
+        return followedBy;
+    }
+
+    public void setFollowedBy(List<String> followedBy) {
+        this.followedBy = followedBy;
+    }
+
+    public List<String> getFollowing() {
+        return following;
+    }
+
+    public void setFollowing(List<String> following) {
+        this.following = following;
     }
 }
