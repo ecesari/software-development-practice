@@ -180,7 +180,7 @@ public class UserServiceUnitTests {
     }
 
     @Test
-    public void FollowUser_ShouldReturnEntityId() {
+    public void FollowUser_ShouldReturnEntity() {
         var testUser2 = new User();
         testUser2.setId(2L);
         testUser2.setUsername("test user 2");
@@ -198,7 +198,11 @@ public class UserServiceUnitTests {
         Mockito.when(userFollowingRepository.findUserFollowingByFollowingUserAndFollowedUser(testUser,testUser2)).thenReturn(Optional.empty());
 
         var userFollowing = new UserFollowing(testUser,testUser2);
+        userFollowing.setId(1L);
         Mockito.when(userFollowingRepository.save(userFollowing)).thenReturn(userFollowing);
+
+//        Mockito.when(userFollowingRepository.save(userFollowing)).thenCallRealMethod();
+
 
         var result = service.follow(mockUser,testUser2.getId());
         assertEquals(testUser, result.getFollowingUser());
