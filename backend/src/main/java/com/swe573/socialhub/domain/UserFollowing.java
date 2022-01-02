@@ -1,26 +1,24 @@
 package com.swe573.socialhub.domain;
 
-import com.swe573.socialhub.domain.key.UserFollowingKey;
-
 import javax.persistence.*;
 
 @Entity
 public class UserFollowing {
-    @EmbeddedId
-    UserFollowingKey id;
+    private @Id
+    @GeneratedValue
+    Long id;
 
     @ManyToOne
-    @MapsId("followingUserId")
-    @JoinColumn(name = "following_user_id")
+//    @MapsId("followingUserId")
+    @JoinColumn(name = "followingUser")
     User followingUser;
 
     @ManyToOne
-    @MapsId("followedUserId")
-    @JoinColumn(name = "followed_user_id")
+//    @MapsId("followedUserId")
+    @JoinColumn(name = "followedUser")
     User followedUser;
 
-    public UserFollowing(UserFollowingKey id, User followingUser, User followedUser) {
-        this.id = id;
+    public UserFollowing( User followingUser, User followedUser) {
         this.followingUser = followingUser;
         this.followedUser = followedUser;
     }
@@ -32,11 +30,11 @@ public class UserFollowing {
     // standard constructors, getters, and setters
 
 
-    public UserFollowingKey getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UserFollowingKey id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -54,7 +54,7 @@ class LoadDatabase {
             var user1 = new User(null, "miranda", "miranda.osborne@gmail.com", "A human. Being.", new HashSet<Tag>() {{
                 add(tag2);
                 add(tag5);
-            }}, 2, "41.084148", "29.035460", "Etiler");
+            }}, 2, "41.084148", "29.035460", "Etiler", null);
             user1.setPassword(passwordEncoder.encode("1"));
 
 
@@ -62,13 +62,13 @@ class LoadDatabase {
                 add(tag4);
                 add(tag3);
                 add(tag1);
-            }}, 5, "41.084148", "29.035460", "Etiler");
+            }}, 5, "41.084148", "29.035460", "Etiler", null);
             user2.setPassword(passwordEncoder.encode("1"));
 
             var user3 = new User(null, "jane", "jane.austen@gmail.com", "Probably the best TV binge-watcher you’ll ever find.", new HashSet<Tag>() {{
                 add(tag4);
                 add(tag5);
-            }}, -1, "41.084148", "29.035460", "Etiler");
+            }}, -1, "41.084148", "29.035460", "Etiler", null);
             user3.setPassword(passwordEncoder.encode("3"));
 
             userRepository.save(user1);
@@ -194,6 +194,10 @@ class LoadDatabase {
             notificationRepository.findAll().forEach(s -> {
                 log.info("Preloaded " + s);
             });
+            //endregion
+
+            //region Following
+            
             //endregion
 
         };
