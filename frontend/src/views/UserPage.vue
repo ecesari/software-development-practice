@@ -49,11 +49,11 @@
               <div class="col-lg-4 order-lg-1">
                 <div class="card-profile-stats d-flex justify-content-center">
                   <div>
-                    <span class="heading">22</span>
+                    <span class="heading">{{userData.following.length}}</span>
                     <span class="description">Following</span>
                   </div>
                     <div>
-                    <span class="heading">10</span>
+                    <span class="heading">{{userData.followedBy.length}}</span>
                     <span class="description">Followers</span>
                   </div>
                   <div v-if="isOwnProfile">
@@ -110,6 +110,8 @@ export default {
         bio: "",
         balance: 0,
         balanceOnHold: 0,
+        following: [],
+        followedBy: []
       },
       isOwnProfile: this.$route.params.userId == null,
       alreadyFollowing: false
@@ -123,18 +125,20 @@ export default {
     GetProfile() {
       var id = this.$route.params.userId;
       apiRegister.GetProfile(id).then((r) => {
+        debugger;
         this.userData.username = r.username;
         this.userData.email = r.email;
         this.userData.bio = r.bio;
         this.userData.balance = r.balance;
         this.userData.balanceOnHold = r.balanceOnHold;
+        this.userData.following = r.following;
+        this.userData.followedBy = r.followedBy;
         console.log("ok.");
       });
     },
     FollowUser() {
       var id = this.$route.params.userId;
       apiRegister.FollowUser(id).then((r) => {   
-        debugger;
         this.AlreadyFollowing();
         console.log("ok.");
       });
@@ -142,7 +146,6 @@ export default {
     AlreadyFollowing() {
       var id = this.$route.params.userId;
       apiRegister.CheckIfFollowExists(id).then((r) => {
-        debugger;
         this.alreadyFollowing = r;
         console.log("ok.");
       });

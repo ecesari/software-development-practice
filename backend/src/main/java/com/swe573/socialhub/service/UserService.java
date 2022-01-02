@@ -23,6 +23,7 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -158,6 +159,10 @@ public class UserService {
         var approvalList = userServiceApprovalRepository.findUserServiceApprovalByUserAndApprovalStatus(user, ApprovalStatus.PENDING);
         var balanceOnHold = approvalList.stream().mapToInt(o -> o.getService().getCredit()).sum();
 
+        var followingSet = user.getFollowingUsers();
+        var following = followingSet.stream().filter(x-> x.getFollowingUser() == user).map(u -> u.getFollowedUser().getUsername() ).collect(Collectors.toUnmodifiableList());
+        var followedBy = followingSet.stream().filter(x-> x.getFollowedUser() == user).map(u -> u.getFollowingUser().getUsername() ).collect(Collectors.toUnmodifiableList());
+
         return new UserDto(
                 user.getId(),
                 user.getUsername(),
@@ -168,7 +173,10 @@ public class UserService {
                 balanceOnHold,
                 user.getLatitude(),
                 user.getLongitude(),
-                user.getFormattedAddress());
+                user.getFormattedAddress(),
+                user.getFollowedBy().stream().map(u -> u.getFollowingUser().getUsername() ).collect(Collectors.toUnmodifiableList()),
+                user.getFollowingUsers().stream().map(u -> u.getFollowedUser().getUsername() ).collect(Collectors.toUnmodifiableList())
+                );
 
 
     }

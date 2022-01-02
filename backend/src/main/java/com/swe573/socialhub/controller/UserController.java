@@ -20,7 +20,6 @@ public class UserController {
     @Autowired
     private UserService service;
 
-
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> signUp(@RequestBody UserDto params) {
         try {
@@ -53,12 +52,12 @@ public class UserController {
     @GetMapping("/user")
     public ResponseEntity<UserDto> getUser(Principal principal) {
         try {
-            return ResponseEntity.ok().body(service.getUserByPrincipal(principal));
+            var response = service.getUserByPrincipal(principal);
+            return ResponseEntity.ok().body(response);
         } catch (IllegalArgumentException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getLocalizedMessage());
         }
     }
-
 
     @GetMapping("/user/{userId}")
     public UserDto getUser(Principal principal, @PathVariable String userId) {
@@ -79,7 +78,6 @@ public class UserController {
         }
     }
 
-
     @GetMapping("/user/getAll")
     public List<UserDto> getAllUsers(Principal principal) {
         return service.getAllUsers();
@@ -94,6 +92,7 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getLocalizedMessage());
         }
     }
+
     @GetMapping("/user/follow/control/{userId}")
     public ResponseEntity<Boolean> controlUserFollow(Principal principal, @PathVariable Long userId) {
         try {

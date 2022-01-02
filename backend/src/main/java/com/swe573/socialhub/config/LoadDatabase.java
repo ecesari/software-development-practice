@@ -218,7 +218,7 @@ class LoadDatabase {
     }
 
     private User saveAndGetUser(UserRepository userRepository, PasswordEncoder passwordEncoder, String username, String email, String bio, HashSet<Tag> tags, Integer balance, String latitude, String longitude, String formattedAddress) {
-        var user = new User(null, username, email, bio, tags, balance,latitude,longitude, formattedAddress , null);
+        var user = new User(null, username, email, bio, tags, balance,latitude,longitude, formattedAddress);
         user.setPassword(passwordEncoder.encode("1"));
         userRepository.save(user);
         return user;
