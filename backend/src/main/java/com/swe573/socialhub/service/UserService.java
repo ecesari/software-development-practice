@@ -1,13 +1,11 @@
 package com.swe573.socialhub.service;
 
 import com.swe573.socialhub.domain.User;
+import com.swe573.socialhub.domain.UserFollowing;
 import com.swe573.socialhub.dto.*;
 import com.swe573.socialhub.enums.ApprovalStatus;
 import com.swe573.socialhub.enums.ServiceStatus;
-import com.swe573.socialhub.repository.ServiceRepository;
-import com.swe573.socialhub.repository.TagRepository;
-import com.swe573.socialhub.repository.UserRepository;
-import com.swe573.socialhub.repository.UserServiceApprovalRepository;
+import com.swe573.socialhub.repository.*;
 import com.swe573.socialhub.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -54,6 +52,9 @@ public class UserService {
     private UserDetailsService userDetailsService;
     @Autowired
     private NotificationService notificationService;
+
+    @Autowired
+    private UserFollowingRepository userFollowingRepository;
 
 
     @Transactional
@@ -154,7 +155,7 @@ public class UserService {
             }
         }
 
-        var approvalList = userServiceApprovalRepository.findUserServiceApprovalByUserAndApprovalStatus(user,ApprovalStatus.PENDING);
+        var approvalList = userServiceApprovalRepository.findUserServiceApprovalByUserAndApprovalStatus(user, ApprovalStatus.PENDING);
         var balanceOnHold = approvalList.stream().mapToInt(o -> o.getService().getCredit()).sum();
 
         return new UserDto(
@@ -204,8 +205,7 @@ public class UserService {
 
     }
 
-    public int getBalanceToBe(User user)
-    {
+    public int getBalanceToBe(User user) {
         var currentUserCreditsInApprovalState = userServiceApprovalRepository.findUserServiceApprovalByUserAndApprovalStatus(user, ApprovalStatus.PENDING);
         var creditsToRemove = currentUserCreditsInApprovalState.stream().mapToInt(o -> o.getService().getCredit()).sum();
         var activeServices = serviceRepository.findServiceByCreatedUserAndStatus(user, ServiceStatus.ONGOING);
@@ -216,4 +216,28 @@ public class UserService {
     }
 
 
+    public Long follow(Principal principal, Long userId) {
+        //get current user and user to follow
+        final User loggedInUser = repository.findUserByUsername(principal.getName()).get();
+        var userToFollow = repository.findUserByUsername(principal.getName()).get();
+
+        //check if there is already a following entity to avoid duplicates
+        var entityExists = userFollowingRepository.findUserFollowingByFollowingUserAndFollowedUser(loggedInUser,userToFollow).isPresent();
+        if (entityExists)
+            throw new IllegalArgumentException("You are already following user " + userToFollow.getUsername());
+
+
+        try{
+            //create and save entity
+            var entity = new UserFollowing(loggedInUser,userToFollow);
+            var returnEntity = userFollowingRepository.save(entity);
+            return returnEntity.getId();
+        }
+        catch (Exception e)
+        {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+
+
+    }
 }

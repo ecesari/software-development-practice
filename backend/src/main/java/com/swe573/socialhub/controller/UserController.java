@@ -83,4 +83,16 @@ public class UserController {
     public List<UserDto> getAllUsers(Principal principal) {
         return service.getAllUsers();
     }
+
+    @PostMapping("/user/follow/{userId}")
+    public ResponseEntity<Long> followUser(Principal principal, @RequestBody Long userId) {
+        try {
+            var response = service.follow(principal,userId);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getLocalizedMessage());
+        }
+    }
+
+
 }
