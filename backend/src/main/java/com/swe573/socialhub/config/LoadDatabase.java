@@ -22,7 +22,7 @@ class LoadDatabase {
     private static final Logger log = LoggerFactory.getLogger(LoadDatabase.class);
 
     @Bean
-    CommandLineRunner initDatabase(TagRepository tagRepository, UserRepository userRepository, ServiceRepository serviceRepository, UserServiceApprovalRepository approvalRepository, NotificationRepository notificationRepository, PasswordEncoder passwordEncoder) {
+    CommandLineRunner initDatabase(TagRepository tagRepository, UserRepository userRepository, ServiceRepository serviceRepository, UserServiceApprovalRepository approvalRepository, NotificationRepository notificationRepository, PasswordEncoder passwordEncoder, UserFollowingRepository userFollowingRepository) {
 
         return args -> {
 
@@ -51,27 +51,22 @@ class LoadDatabase {
 
             //region User
 
-            var user1 = new User(null, "miranda", "miranda.osborne@gmail.com", "A human. Being.", new HashSet<Tag>() {{
+            var user1 = saveAndGetUser(userRepository, passwordEncoder, "miranda", "miranda.osborne@gmail.com", "A human. Being.", new HashSet<Tag>() {{
                 add(tag2);
                 add(tag5);
-            }}, 2, "41.084148", "29.035460", "Etiler", null);
-            user1.setPassword(passwordEncoder.encode("1"));
+            }}, 2, "41.084148", "29.035460", "Etiler");
 
-
-            var user2 = new User(null, "joshua", "joshua.osborne@gmail.com", "Life's uncertain. Eat dessert first.",  new HashSet<Tag>() {{
+            var user2 = saveAndGetUser(userRepository, passwordEncoder, "joshua", "joshua.osborne@gmail.com", "Life's uncertain. Eat dessert first.", new HashSet<Tag>() {{
                 add(tag4);
                 add(tag3);
                 add(tag1);
-            }}, 5, "41.084148", "29.035460", "Etiler", null);
-            user2.setPassword(passwordEncoder.encode("1"));
+            }}, 5, "41.084148", "29.035460", "Etiler");
 
-            var user3 = new User(null, "jane", "jane.austen@gmail.com", "Probably the best TV binge-watcher you’ll ever find.", new HashSet<Tag>() {{
+            var user3 = saveAndGetUser(userRepository, passwordEncoder, "jane", "jane.austen@gmail.com", "Probably the best TV binge-watcher you’ll ever find.", new HashSet<Tag>() {{
                 add(tag4);
                 add(tag5);
-            }}, -1, "41.084148", "29.035460", "Etiler", null);
-            user3.setPassword(passwordEncoder.encode("3"));
+            }}, 2, "41.084148", "29.035460", "Etiler");
 
-            userRepository.save(user1);
             userRepository.save(user2);
             userRepository.save(user3);
 //
@@ -197,14 +192,30 @@ class LoadDatabase {
             //endregion
 
             //region Following
-            
+            var following = saveAndGetUserFollowing(userFollowingRepository, user1, user2);
+            var following1 = saveAndGetUserFollowing(userFollowingRepository, user2, user1);
+            var following2 = saveAndGetUserFollowing(userFollowingRepository, user3, user1);
+            var following3 = saveAndGetUserFollowing(userFollowingRepository, user3, user2);
             //endregion
 
         };
     }
 
+    private User saveAndGetUser(UserRepository userRepository, PasswordEncoder passwordEncoder, String username, String email, String bio, HashSet<Tag> tags, Integer balance, String latitude, String longitude, String formattedAddress) {
+        var user1 = new User(null, username, email, bio, tags, balance,latitude,longitude, formattedAddress , null);
+        user1.setPassword(passwordEncoder.encode("1"));
+        userRepository.save(user1);
+        return user1;
+    }
+
+    private UserFollowing saveAndGetUserFollowing(UserFollowingRepository userFollowingRepository, User user1, User user2) {
+        var userFollowing = new UserFollowing(user1, user2);
+        userFollowingRepository.save(userFollowing);
+        return userFollowing;
+    }
+
     private Notification saveAndGetNotification(UserRepository userRepository, NotificationRepository notificationRepository, String message, String url, Boolean read, User user) {
-        var notification = new Notification(null, message, url, read,user);
+        var notification = new Notification(null, message, url, read, user);
         notificationRepository.save(notification);
         return notification;
     }
