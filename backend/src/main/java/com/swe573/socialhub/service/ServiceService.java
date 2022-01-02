@@ -154,7 +154,10 @@ public class ServiceService {
                 list.add(dto);
             }
         }
-        return new ServiceDto(service.getId(), service.getHeader(), service.getDescription(), service.getLocation(), service.getTime(), service.getCredit(), service.getQuota(), service.getAttendingUserCount(), service.getCreatedUser().getId(), service.getCreatedUser().getUsername(), service.getLatitude(), service.getLongitude(), list, service.getStatus());
+        var approvals = service.getApprovalSet();
+        var attending = approvals.stream().filter(x-> x.getApprovalStatus() == ApprovalStatus.APPROVED).count();
+        var pending = approvals.stream().filter(x-> x.getApprovalStatus() == ApprovalStatus.PENDING).count();
+        return new ServiceDto(service.getId(), service.getHeader(), service.getDescription(), service.getLocation(), service.getTime(), service.getCredit(), service.getQuota(), attending, service.getCreatedUser().getId(), service.getCreatedUser().getUsername(), service.getLatitude(), service.getLongitude(), list, service.getStatus(), pending);
     }
 
 
