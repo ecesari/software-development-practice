@@ -89,7 +89,7 @@ public class UserService {
         }
     }
 
-    public UserDto login(UserDto dto) {
+    public UserDto login(LoginDto dto) {
         try {
             var userName = dto.getUsername();
             var dbResult = repository.findUserByUsername(userName);
@@ -219,7 +219,7 @@ public class UserService {
     public UserFollowing follow(Principal principal, Long userId) {
         //get current user and user to follow
         final User loggedInUser = repository.findUserByUsername(principal.getName()).get();
-        var userToFollow = repository.findUserByUsername(principal.getName()).get();
+        var userToFollow = repository.findById(userId).get();
 
         //check if there is already a following entity to avoid duplicates
         var entityResult = userFollowingRepository.findUserFollowingByFollowingUserAndFollowedUser(loggedInUser,userToFollow);
@@ -232,7 +232,32 @@ public class UserService {
             //create and save entity
             var entity = new UserFollowing(loggedInUser,userToFollow);
             var returnEntity = userFollowingRepository.save(entity);
+
+            //send notification
+            notificationService.sendNotification("You are being followed by " + loggedInUser.getUsername(), "/profile/" + loggedInUser.getUsername(),userToFollow);
+
             return returnEntity;
+        }
+        catch (Exception e)
+        {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+
+
+    }
+
+    public Boolean followControl(Principal principal, Long userId) {
+        try{
+            //get current user and user to follow
+            final User loggedInUser = repository.findUserByUsername(principal.getName()).get();
+            var userToFollow = repository.findById(userId).get();
+
+            //check if there is already a following entity
+            var entityResult = userFollowingRepository.findUserFollowingByFollowingUserAndFollowedUser(loggedInUser,userToFollow);
+            var entityExists = entityResult.isPresent();
+
+
+            return entityExists;
         }
         catch (Exception e)
         {

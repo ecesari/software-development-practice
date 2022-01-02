@@ -59,6 +59,11 @@ export default {
         return http.get(process.env.VUE_APP_API + 'notification/readAllByUser')
     },
     
-
+    FollowUser(data) {
+        return http.get(process.env.VUE_APP_API + 'user/follow/' + data , null,true,null,"Successfully followed user.")
+    },
+    CheckIfFollowExists(data) {
+        return http.get(process.env.VUE_APP_API + 'user/follow/control/' + data)
+    },
 
 }

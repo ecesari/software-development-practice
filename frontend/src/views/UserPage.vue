@@ -29,13 +29,21 @@
               <div
                 class="col-lg-4 order-lg-3 text-lg-right align-self-lg-center"
               >
-                <div v-if="!isOwnProfile" class="card-profile-actions py-4 mt-lg-0">
-                  <base-button type="info" size="sm" class="mr-4"
-                    >Connect</base-button
+                <div v-if="!isOwnProfile && !alreadyFollowing" class="card-profile-actions py-4 mt-lg-0">
+                  <base-button v-on:click="FollowUser()" type="info" size="sm" class="mr-4"
+                    >Follow</base-button
                   >
-                  <base-button type="default" size="sm" class="float-right"
+                  <!-- <base-button type="default" size="sm" class="float-right"
                     >Message</base-button
+                  > -->
+                </div>
+                <div v-if="!isOwnProfile && alreadyFollowing" class="card-profile-actions py-4 mt-lg-0">
+                  <base-button type="success" size="sm" class="mr-4"
+                    >Already Following</base-button
                   >
+                  <!-- <base-button type="default" size="sm" class="float-right"
+                    >Message</base-button
+                  > -->
                 </div>
               </div>
               <div class="col-lg-4 order-lg-1">
@@ -103,11 +111,13 @@ export default {
         balance: 0,
         balanceOnHold: 0,
       },
-      isOwnProfile: this.$route.params.userId == null
+      isOwnProfile: this.$route.params.userId == null,
+      alreadyFollowing: false
     };
   },
   mounted() {
     this.GetProfile();
+    this.AlreadyFollowing();
   },
   methods: {
     GetProfile() {
@@ -118,6 +128,22 @@ export default {
         this.userData.bio = r.bio;
         this.userData.balance = r.balance;
         this.userData.balanceOnHold = r.balanceOnHold;
+        console.log("ok.");
+      });
+    },
+    FollowUser() {
+      var id = this.$route.params.userId;
+      apiRegister.FollowUser(id).then((r) => {   
+        debugger;
+        this.AlreadyFollowing();
+        console.log("ok.");
+      });
+    },
+    AlreadyFollowing() {
+      var id = this.$route.params.userId;
+      apiRegister.CheckIfFollowExists(id).then((r) => {
+        debugger;
+        this.alreadyFollowing = r;
         console.log("ok.");
       });
     },
