@@ -21,9 +21,9 @@ Vue.use(Router);
 const ifNotAuthenticated = (to, from, next) => {
   let token = JSON.parse(localStorage.getItem("token"));
   debugger;
-  if (!token) {
-   
-    return
+  if (!token) {   
+    next()
+
   }
   next('/')
 }

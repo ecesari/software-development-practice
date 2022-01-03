@@ -23,7 +23,11 @@
       </div>
 
       <ul class="navbar-nav navbar-nav-hover align-items-lg-center">
-         <base-dropdown v-if="userLoggedIn" class="nav-item" menu-classes="dropdown-menu-xl">
+        <base-dropdown
+          v-if="userLoggedIn"
+          class="nav-item"
+          menu-classes="dropdown-menu-xl"
+        >
           <a
             slot="title"
             href="#"
@@ -35,10 +39,7 @@
             <span class="nav-link-inner--text">Services</span>
           </a>
           <div class="dropdown-menu-inner">
-            <a
-              href="#/allServices"
-              class="media d-flex align-items-center"
-            >
+            <a href="#/allServices" class="media d-flex align-items-center">
               <div
                 class="
                   icon icon-shape
@@ -56,10 +57,7 @@
                 </p>
               </div>
             </a>
-            <a
-              href="#/myServices"
-              class="media d-flex align-items-center"
-            >
+            <a href="#/myServices" class="media d-flex align-items-center">
               <div
                 class="
                   icon icon-shape
@@ -73,11 +71,11 @@
               <div class="media-body ml-3">
                 <h5 class="heading text-success mb-md-1">My Services</h5>
                 <p class="description d-none d-md-inline-block mb-0">
-                 List all the services that you have created so far
+                  List all the services that you have created so far
                 </p>
               </div>
             </a>
-              <a
+            <a
               href="#/attendingServices"
               class="media d-flex align-items-center"
             >
@@ -92,9 +90,12 @@
                 <i class="ni ni-badge"></i>
               </div>
               <div class="media-body ml-3">
-                <h5 class="heading text-default mb-md-1">Following User Services</h5>
+                <h5 class="heading text-default mb-md-1">
+                  Following User Services
+                </h5>
                 <p class="description d-none d-md-inline-block mb-0">
-                  List of the services that the people you are following have created
+                  List of the services that the people you are following have
+                  created
                 </p>
               </div>
             </a>
@@ -112,9 +113,12 @@
             <span class="nav-link-inner--text">Users</span>
           </a>
           <router-link to="/users" class="dropdown-item">All</router-link>
-          <router-link to="/users/following" class="dropdown-item">Following</router-link>
-          <router-link to="/users/followedBy" class="dropdown-item">Followed By</router-link>
-          
+          <router-link to="/users/following" class="dropdown-item"
+            >Following</router-link
+          >
+          <router-link to="/users/followedBy" class="dropdown-item"
+            >Followed By</router-link
+          >
         </base-dropdown>
       </ul>
       <ul class="navbar-nav align-items-lg-center ml-lg-auto">
@@ -223,14 +227,15 @@ export default {
 
     if (token) {
       this.userLoggedIn = true;
-      debugger;
-      apiRegister.GetNotificationDetails().then((r) => {
-          this.unreadCount = notificationList.filter(
+      apiRegister.GetNotificationDetails().then((notificationList) => {
+        debugger;
+        var unreadCount = notificationList.filter(
           (notificationList) => notificationList.read === false
         ).length;
         if (unreadCount > 0) {
           this.hasNewNotification = true;
-          this.notificationMessage = "You have " + unreadCount + " new messages";
+          this.notificationMessage =
+            "You have " + unreadCount + " new messages";
         }
       });
     } else {
