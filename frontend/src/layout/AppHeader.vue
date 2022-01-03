@@ -101,7 +101,7 @@
             </a>
           </div>
         </base-dropdown>
-        <base-dropdown v-if="userLoggedIn" tag="li" class="nav-item">
+        <!-- <base-dropdown v-if="userLoggedIn" tag="li" class="nav-item">
           <a
             slot="title"
             href="#"
@@ -119,7 +119,7 @@
           <router-link to="/users/followedBy" class="dropdown-item"
             >Followed By</router-link
           >
-        </base-dropdown>
+        </base-dropdown> -->
       </ul>
       <ul class="navbar-nav align-items-lg-center ml-lg-auto">
         <li class="nav-item">
