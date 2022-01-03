@@ -21,7 +21,7 @@
               <div class="col-lg-6">
                 <h1 class="display-3 text-white">
                   Welcome!
-                  <span>Everyting is fine.</span>
+                  <span>Everything is fine.</span>
                 </h1>
                 <p class="lead text-white">
                   Welcome to social hub where you can offer your services, join
@@ -191,7 +191,7 @@
         </div>
       </div>
     </section> -->
-    <section class="section section section-shaped my-0 overflow-hidden">
+    <!-- <section class="section section section-shaped my-0 overflow-hidden">
       <div class="shape shape-style-1 bg-gradient-warning shape-skew">
         <span></span>
         <span></span>
@@ -610,7 +610,7 @@
           </div>
         </div>
       </div>
-    </section>
+    </section> -->
     <!-- <section class="section section-lg">
       <div class="container">
         <div class="row row-grid justify-content-center">

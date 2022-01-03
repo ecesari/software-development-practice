@@ -122,7 +122,7 @@
         </base-dropdown> -->
       </ul>
       <ul class="navbar-nav align-items-lg-center ml-lg-auto">
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <a
             class="nav-link nav-link-icon"
             href="https://github.com/ecesari/software-development-practice"
@@ -134,7 +134,7 @@
             <i class="fa fa-github"></i>
             <span class="nav-link-inner--text d-lg-none">Github</span>
           </a>
-        </li>
+        </li> -->
 
         <li v-if="userLoggedIn" class="nav-item">
           <a
