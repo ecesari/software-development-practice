@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -46,7 +47,7 @@ public class ServiceService {
 
     public List<ServiceDto> findAllServices() {
         var entities = serviceRepository.findAll();
-        entities = entities.stream().limit(3).collect(Collectors.toUnmodifiableList());
+        entities = entities.stream().filter(x-> x.getTime().isAfter(LocalDateTime.now())).limit(3).collect(Collectors.toUnmodifiableList());
 
         var list = entities.stream().map(service -> mapToDto(service)).collect(Collectors.toUnmodifiableList());
 
@@ -60,7 +61,7 @@ public class ServiceService {
 
         if (getOngoingOnly)
         {
-            entities = entities.stream().filter(x-> x.getStatus() == ServiceStatus.ONGOING).collect(Collectors.toUnmodifiableList());
+            entities = entities.stream().filter(x-> x.getTime().isAfter(LocalDateTime.now())).collect(Collectors.toUnmodifiableList());
         }
         switch(filter) {
             case createdByUser:

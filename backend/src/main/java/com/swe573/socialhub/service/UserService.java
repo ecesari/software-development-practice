@@ -168,9 +168,9 @@ public class UserService {
         var approvalList = userServiceApprovalRepository.findUserServiceApprovalByUserAndApprovalStatus(user, ApprovalStatus.PENDING);
         var balanceOnHold = approvalList.stream().mapToInt(o -> o.getService().getCredit()).sum();
 
-        var followingSet = user.getFollowingUsers();
-        var following = followingSet.stream().filter(x -> x.getFollowingUser() == user).map(u -> u.getFollowedUser().getUsername()).collect(Collectors.toUnmodifiableList());
-        var followedBy = followingSet.stream().filter(x -> x.getFollowedUser() == user).map(u -> u.getFollowingUser().getUsername()).collect(Collectors.toUnmodifiableList());
+//        var followingSet = user.getFollowingUsers();
+//        var following = followingSet.stream().filter(x -> x.getFollowingUser() == user).map(u -> u.getFollowedUser().getUsername()).collect(Collectors.toUnmodifiableList());
+//        var followedBy = followingSet.stream().filter(x -> x.getFollowedUser() == user).map(u -> u.getFollowingUser().getUsername()).collect(Collectors.toUnmodifiableList());
 
         return new UserDto(
                 user.getId(),
