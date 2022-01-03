@@ -12,6 +12,8 @@ import UserPage from "./views/UserPage.vue";
 import CreateService from "./views/CreateService.vue";
 import SingleService from "./views/SingleService.vue";
 import MyServices from "./views/MyServices.vue";
+import AllServices from "./views/AllServices.vue";
+import AttendingServices from "./views/AttendingServices.vue";
 import PendingRequests from "./views/PendingRequests.vue";
 import Notifications from "./views/Notifications.vue";
 Vue.use(Router);
@@ -130,8 +132,8 @@ export default new Router({
       }
     },
     {
-      path: "/services",
-      name: "services",
+      path: "/myServices",
+      name: "myServices",
       components: {
         header: AppHeader,
         default: MyServices,
@@ -157,7 +159,27 @@ export default new Router({
         default: Notifications,
         footer: AppFooter,
       }
-    }
+    },    
+    {
+      path: "/allServices",
+      name: "allServices",
+      components: {
+        header: AppHeader,
+        default: AllServices,
+        footer: AppFooter,
+
+      }
+    },
+    {
+      path: "/attendingServices",
+      name: "attendingServices",
+      components: {
+        header: AppHeader,
+        default: AttendingServices,
+        footer: AppFooter,
+
+      }
+    },
   ],
   scrollBehavior: to => {
     if (to.hash) {

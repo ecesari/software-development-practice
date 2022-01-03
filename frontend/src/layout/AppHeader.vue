@@ -57,7 +57,7 @@
               </div>
             </a>
             <a
-              href="#/services"
+              href="#/myServices"
               class="media d-flex align-items-center"
             >
               <div
