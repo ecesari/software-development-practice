@@ -6,6 +6,9 @@ import modal from '../utils/modal'
 
 const handleError = (e, message) => {
     debugger;
+    var foo = e;
+    var foo2 = e.headers;
+    var foo3 = e.headers.text;
     if (e && e.message) {
         modal.showError(e.message)
     } else if (e && e.message && e.message.indexOf('timeout') !== -1) {
@@ -81,9 +84,8 @@ export default {
                 if (handleSuccess(r, successMessage)) {
                     resolve(r.data)
                 }
-            }).catch((e) => {
+            }).catch(function(e)  {
                 debugger;
-                var foo = e.response;
                 if (handleOnError === true) {
                     handleError(e,errorMessage)
                 }
@@ -138,7 +140,7 @@ export default {
                 if (handleSuccess(r, successMessage)) {
                     resolve(r.data)
                 }
-            }).catch((e) => {
+            }).catch(function(e) {
                 debugger;
                 if (handleOnError === true) {
                     handleError(e,errorMessage)

@@ -5,6 +5,7 @@ import com.swe573.socialhub.domain.User;
 import com.swe573.socialhub.domain.UserFollowing;
 import com.swe573.socialhub.domain.UserServiceApproval;
 import com.swe573.socialhub.domain.key.UserServiceApprovalKey;
+import com.swe573.socialhub.dto.UserDto;
 import com.swe573.socialhub.enums.ApprovalStatus;
 import com.swe573.socialhub.enums.ServiceStatus;
 import com.swe573.socialhub.repository.*;
@@ -171,9 +172,9 @@ public class UserServiceUnitTests {
         var mockUser = new MockPrincipal(testUser.getUsername());
 
         Mockito.when(repository.findUserByUsername(testUser.getUsername())).thenReturn(Optional.of(testUser));
+        Mockito.when(repository.findById(testUser2.getId())).thenReturn(Optional.of(testUser2));
         Mockito.when(repository.findUserByUsername(testUser2.getUsername())).thenReturn(Optional.of(testUser2));
-        Mockito.when(repository.findUserByUsername(testUser2.getUsername())).thenReturn(Optional.of(testUser2));
-        Mockito.when(userFollowingRepository.findUserFollowingByFollowingUserAndFollowedUser(testUser,testUser2)).thenReturn(Optional.of(following));
+        Mockito.when(userFollowingRepository.findUserFollowingByFollowingUserAndFollowedUser(Mockito.any(User.class), Mockito.any(User.class))).thenReturn(Optional.of(following));
 
         assertThrows(IllegalArgumentException.class, () -> service.follow(mockUser, testUser2.getId()));
 
@@ -193,21 +194,66 @@ public class UserServiceUnitTests {
         var mockUser = new MockPrincipal(testUser.getUsername());
 
         Mockito.when(repository.findUserByUsername(testUser.getUsername())).thenReturn(Optional.of(testUser));
+        Mockito.when(repository.findById(testUser2.getId())).thenReturn(Optional.of(testUser2));
         Mockito.when(repository.findUserByUsername(testUser2.getUsername())).thenReturn(Optional.of(testUser2));
-        Mockito.when(repository.findUserByUsername(testUser2.getUsername())).thenReturn(Optional.of(testUser2));
-        Mockito.when(userFollowingRepository.findUserFollowingByFollowingUserAndFollowedUser(testUser,testUser2)).thenReturn(Optional.empty());
+        Mockito.when(userFollowingRepository.findUserFollowingByFollowingUserAndFollowedUser(testUser, testUser2)).thenReturn(Optional.empty());
 
-        var userFollowing = new UserFollowing(testUser,testUser2);
+        var userFollowing = new UserFollowing(testUser, testUser2);
         userFollowing.setId(1L);
-        Mockito.when(userFollowingRepository.save(userFollowing)).thenReturn(userFollowing);
-
-//        Mockito.when(userFollowingRepository.save(userFollowing)).thenCallRealMethod();
+        Mockito.when(userFollowingRepository.save(Mockito.any(UserFollowing.class))).thenReturn(userFollowing);
 
 
-        var result = service.follow(mockUser,testUser2.getId());
+        var result = service.follow(mockUser, testUser2.getId());
         assertEquals(testUser, result.getFollowingUser());
-        assertEquals(testUser, result.getFollowedUser());
+        assertEquals(testUser2, result.getFollowedUser());
 
     }
 
+    @Test
+    public void Register_ShouldThrowError_WhenDataIsInvalid() {
+        var testUser = new UserDto(null, "test", "test", "test", 0, null, 0, "", "", "", null, null);
+        assertThrows(IllegalArgumentException.class, () -> service.register(testUser));
+        testUser.setPassword("123456");
+        testUser.setUsername("");
+        assertThrows(IllegalArgumentException.class, () -> service.register(testUser));
+        testUser.setUsername("test");
+        testUser.setEmail("");
+        assertThrows(IllegalArgumentException.class, () -> service.register(testUser));
+        testUser.setEmail("test");
+        testUser.setBio("");
+        assertThrows(IllegalArgumentException.class, () -> service.register(testUser));
+    }
+
+    @Test
+    public void Register_ShouldReturnEntity() {
+        var testUser = new UserDto(null, "test", "test", "test", 0, null, 0, "", "", "", null, null);
+        testUser.setPassword("123456");
+        Mockito.when(passwordEncoder.encode(testUser.getPassword())).thenReturn("testHash");
+        var user = new User(null,testUser.getUsername(),testUser.getEmail(),testUser.getBio(),null,0,"","","");
+        Mockito.when(repository.save(Mockito.any(User.class))).thenReturn(user);
+        assertEquals(testUser.getUsername(), user.getUsername());
+        assertEquals(testUser.getBio(), user.getBio());
+        assertEquals(testUser.getEmail(), user.getEmail());
+    }
+
+    @Test
+    public void MapToDto_ShouldReturnSameFields()
+    {
+        var user = new User(new Random().nextLong(),"testUsername","testMail","testBio",null,new Random().nextInt(15),"testLatitude","tetstLongitude","testAddress");
+        user.setFollowingUsers(new HashSet<>());
+        user.setFollowedBy(new HashSet<>());
+
+
+        Mockito.when(userServiceApprovalRepository.findUserServiceApprovalByUserAndApprovalStatus(user, ApprovalStatus.PENDING)).thenReturn(new ArrayList<>());
+        var dto = service.mapUserToDTO(user);
+
+        assertEquals(user.getUsername(),dto.getUsername());
+        assertEquals(user.getId(),dto.getId());
+        assertEquals(user.getEmail(),dto.getEmail());
+        assertEquals(user.getBio(),dto.getBio());
+        assertEquals(user.getBalance(),dto.getBalance());
+        assertEquals(user.getLatitude(),dto.getLatitude());
+        assertEquals(user.getLongitude(),dto.getLongitude());
+        assertEquals(user.getFormattedAddress(),dto.getFormattedAddress());
+    }
 }
