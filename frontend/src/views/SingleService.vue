@@ -62,10 +62,10 @@
                     <span class="heading">{{ serviceData.quota }}</span>
                     <span class="description">Quota</span>
                   </div>
-                  <!-- <div>
-                    <span class="heading">89</span>
-                    <span class="description">Comments</span>
-                  </div> -->
+                  <div>
+                    <span class="heading">{{serviceData.minutes}}</span>
+                    <span class="description">Credits</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -97,8 +97,7 @@
               <div>
                 <!-- <i class="ni ni-square-pin"></i> : {{ serviceData.location }} -->
                 <i class="ni ni-time-alarm"></i>: {{ serviceData.timeString }}
-                <i class="ni ni-watch-time"></i>:
-                {{ serviceData.minutes }} credits
+             
               </div>
               <!-- <div>
                 <i class="ni ni-single-02"></i>: {{ serviceData.quota }} people
