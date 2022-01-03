@@ -35,12 +35,14 @@ class LoadDatabase {
             var tag4 = new Tag("comedy");
             var tag5 = new Tag("misc");
             var tag6 = new Tag("education");
+            var tag7 = new Tag("nature");
             tagRepository.save(tag1);
             tagRepository.save(tag2);
             tagRepository.save(tag3);
             tagRepository.save(tag4);
             tagRepository.save(tag5);
             tagRepository.save(tag6);
+            tagRepository.save(tag7);
 
 
             tagRepository.findAll().forEach(tag -> {
@@ -156,11 +158,44 @@ class LoadDatabase {
                         add(tag6);
                     }});
 
+
+            var service6 = new Service(null,
+                    "Camping 101",
+                    "Going camping for the first time can be a challenge. Let's all go camping and I will teach you the basics like making a fire, tent making and cooking. You can go enjoy the nature afterwards",
+                    "Yedigöller, Bolu",
+                    LocalDateTime.of(2022, 4, 23, 13, 0),
+                    6,
+                    5,
+                    2,
+                    user5,
+                    40.943974536882706, 31.75010211097686,
+                    new HashSet<Tag>() {{
+                        add(tag7);
+                    }});
+
+
+
+            var service7 = new Service(null,
+                    "How to cook a lasagna",
+                    "I'll be teaching how to cook lasagna, everyone is welcome.",
+                    "Maçka Park, Istanbul",
+                    LocalDateTime.of(2022, 5, 15, 16, 0),
+                    2,
+                    10,
+                    1,
+                    user1,
+                    41.045570653598446, 28.993261953340998,
+                    new HashSet<Tag>() {{
+                        add(tag5);
+                    }});
+
             serviceRepository.save(service);
             serviceRepository.save(service2);
             serviceRepository.save(service3);
             serviceRepository.save(service4);
             serviceRepository.save(service5);
+            serviceRepository.save(service6);
+            serviceRepository.save(service7);
 
             serviceRepository.findAll().forEach(s -> {
                 log.info("Preloaded " + s);
@@ -170,13 +205,26 @@ class LoadDatabase {
             //region Approval
             var approval = saveAndGetApproval(approvalRepository, user1, service, ApprovalStatus.APPROVED);
             var approval2 = saveAndGetApproval(approvalRepository, user3, service, ApprovalStatus.APPROVED);
+            var approval22 = saveAndGetApproval(approvalRepository, user4, service, ApprovalStatus.APPROVED);
+            var approval21 = saveAndGetApproval(approvalRepository, user5, service, ApprovalStatus.APPROVED);
             var approval3 = saveAndGetApproval(approvalRepository, user2, service2, ApprovalStatus.DENIED);
             var approval4 = saveAndGetApproval(approvalRepository, user3, service2, ApprovalStatus.APPROVED);
+            var approval41 = saveAndGetApproval(approvalRepository, user4, service2, ApprovalStatus.APPROVED);
+            var approval42 = saveAndGetApproval(approvalRepository, user5, service2, ApprovalStatus.APPROVED);
             var approval5 = saveAndGetApproval(approvalRepository, user3, service3, ApprovalStatus.APPROVED);
             var approval6 = saveAndGetApproval(approvalRepository, user2, service3, ApprovalStatus.PENDING);
             var approval8 = saveAndGetApproval(approvalRepository, user2, service4, ApprovalStatus.APPROVED);
+            var approval81 = saveAndGetApproval(approvalRepository, user1, service4, ApprovalStatus.APPROVED);
+            var approval82 = saveAndGetApproval(approvalRepository, user3, service4, ApprovalStatus.APPROVED);
             var approval9 = saveAndGetApproval(approvalRepository, user1, service4, ApprovalStatus.DENIED);
             var approval10 = saveAndGetApproval(approvalRepository, user1, service5, ApprovalStatus.PENDING);
+            var approval102 = saveAndGetApproval(approvalRepository, user1, service6, ApprovalStatus.APPROVED);
+            var approval103 = saveAndGetApproval(approvalRepository, user2, service6, ApprovalStatus.APPROVED);
+            var approval104 = saveAndGetApproval(approvalRepository, user3, service6, ApprovalStatus.APPROVED);
+            var approval105 = saveAndGetApproval(approvalRepository, user2, service7, ApprovalStatus.PENDING);
+            var approval106 = saveAndGetApproval(approvalRepository, user3, service7, ApprovalStatus.APPROVED);
+            var approval107 = saveAndGetApproval(approvalRepository, user4, service7, ApprovalStatus.APPROVED);
+            var approval108 = saveAndGetApproval(approvalRepository, user5, service7, ApprovalStatus.APPROVED);
 
             approvalRepository.findAll().forEach(s -> {
                 log.info("Preloaded " + s);
