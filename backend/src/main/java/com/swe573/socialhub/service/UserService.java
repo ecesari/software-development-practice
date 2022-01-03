@@ -60,7 +60,7 @@ public class UserService {
     @Transactional
     public UserDto register(UserDto dto) {
         //validate model
-        if (dto.getPassword() == null || dto.getUsername() == null || dto.getEmail() == null || dto.getBio() == null)
+        if (dto.getPassword() == "" || dto.getUsername() == "" || dto.getEmail() == "" || dto.getBio() == "")
             throw new IllegalArgumentException("Please fill all the required fields.");
 
         //hash password

@@ -4,10 +4,10 @@ import http from '../utils/http'
 // url, data, handleOnError,successMessage
 export default {
     Register(data) {
-        return http.post(process.env.VUE_APP_API + 'register', data,true)
+        return http.post(process.env.VUE_APP_API + 'register', data,true, "Please enter valid data!")
     },
     Login(data) {
-        return http.post(process.env.VUE_APP_API + 'login', data,true)
+        return http.post(process.env.VUE_APP_API + 'login', data,true,"Please enter valid data!")
     },
     GetTags() {
         return http.get(process.env.VUE_APP_API + 'tags')
@@ -20,7 +20,7 @@ export default {
 
     },
     CreateService(data) {
-        return http.post(process.env.VUE_APP_API + 'service', data, true, "Create Service Successful")
+        return http.post(process.env.VUE_APP_API + 'service', data, true, null,"Create Service Successful")
     },
     GetService(id) {
         return http.get(process.env.VUE_APP_API + 'service/' + id,null,true)
@@ -38,13 +38,13 @@ export default {
         return http.get(process.env.VUE_APP_API + 'user/getServiceDetails/' + serviceId)
     },
     SendUserServiceApproval(serviceId) {
-        return http.get(process.env.VUE_APP_API + 'approval/request/' + serviceId,null,true,"Request Sent")
+        return http.get(process.env.VUE_APP_API + 'approval/request/' + serviceId,null,true,null,"Request Sent")
     },
     GetApprovalListByUser() {
         return http.get(process.env.VUE_APP_API + 'approval/userRequests',null,true)
     },
     ApproveRequest(data) {
-        return http.post(process.env.VUE_APP_API + 'approval/approve', data, true, 'Request Approved Successfully')
+        return http.post(process.env.VUE_APP_API + 'approval/approve', data, true,null, 'Request Approved Successfully')
     },
     DenyRequest(data) {
         return http.post(process.env.VUE_APP_API + 'approval/deny', data, true, 'Request Denied Successfully')

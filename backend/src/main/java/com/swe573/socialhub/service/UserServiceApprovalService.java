@@ -58,7 +58,7 @@ public class UserServiceApprovalService {
         //check pending credits and balance if the sum is above 20 => throw an error
         var currentUserBalance = userService.getBalanceToBe(loggedInUser);
         var balanceToBe = currentUserBalance - service.getCredit();
-        if (balanceToBe <= -5)
+        if (balanceToBe <= 0)
             throw new IllegalArgumentException("You have reached the minimum limit of credits. You cannot make a request to this service");
 
         try {
