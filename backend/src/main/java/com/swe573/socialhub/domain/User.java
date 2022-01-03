@@ -93,6 +93,9 @@ public class User {
     }
 
     public Set<Tag> getTags() {
+        if (this.userTags == null) {
+            this.userTags = new HashSet<Tag>();
+        }
         return userTags;
     }
 

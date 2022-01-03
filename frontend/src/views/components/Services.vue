@@ -24,11 +24,11 @@
               <p class="description mt-3">
                 {{ service.description }}
               </p>
-              <div>
+              <!-- <div>
                 <badge v-bind:type="GetClass(index)" rounded>{{
                   service.status
                 }}</badge>
-              </div>
+              </div> -->
               <base-button
                 tag="a"
                 :href="'#/service/' + service.id"

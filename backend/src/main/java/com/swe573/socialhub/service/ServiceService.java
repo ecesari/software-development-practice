@@ -56,6 +56,7 @@ public class ServiceService {
     }
 
     public List<ServiceDto> findAllServices(Principal principal,Boolean getOngoingOnly, ServiceFilter filter) {
+        if (filter == ServiceFilter.all) getOngoingOnly = true;
         var entities = serviceRepository.findAll();
         final User loggedInUser = userRepository.findUserByUsername(principal.getName()).get();
 
