@@ -130,8 +130,8 @@ export default new Router({
       }
     },
     {
-      path: "/myServices",
-      name: "myServices",
+      path: "/services",
+      name: "services",
       components: {
         header: AppHeader,
         default: MyServices,
