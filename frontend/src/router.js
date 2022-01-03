@@ -12,9 +12,32 @@ import UserPage from "./views/UserPage.vue";
 import CreateService from "./views/CreateService.vue";
 import SingleService from "./views/SingleService.vue";
 import MyServices from "./views/MyServices.vue";
+import AllServices from "./views/AllServices.vue";
+import AttendingServices from "./views/AttendingServices.vue";
 import PendingRequests from "./views/PendingRequests.vue";
 import Notifications from "./views/Notifications.vue";
 Vue.use(Router);
+
+const ifNotAuthenticated = (to, from, next) => {
+  let token = JSON.parse(localStorage.getItem("token"));
+  debugger;
+  if (!token) {   
+    next()
+
+  }
+  next('/')
+}
+
+const ifAuthenticated = (to, from, next) => {
+  debugger;
+
+  let token = JSON.parse(localStorage.getItem("token"));
+  if (token) {
+    next()
+    return
+  }
+  next('/login')
+}
 
 export default new Router({
   linkExactActiveClass: "active",
@@ -33,7 +56,8 @@ export default new Router({
       components: {
         header: AppHeader,
         default: Components,
-        footer: AppFooter
+        footer: AppFooter,
+
       }
     },
     {
@@ -60,7 +84,8 @@ export default new Router({
       components: {
         header: AppHeader,
         default: Register,
-        footer: AppFooter
+        footer: AppFooter,
+        // beforeEnter: ifNotAuthenticated,
       }
     },
     {
@@ -69,7 +94,9 @@ export default new Router({
       components: {
         header: AppHeader,
         default: Profile,
-        footer: AppFooter
+        footer: AppFooter,
+        // beforeEnter: ifAuthenticated,
+
       }
     },
     {
@@ -78,7 +105,9 @@ export default new Router({
       components: {
         header: AppHeader,
         default: UserPage,
-        footer: AppFooter
+        footer: AppFooter,
+        
+
       }
     },
     {
@@ -87,7 +116,9 @@ export default new Router({
       components: {
         header: AppHeader,
         default: CreateService,
-        footer: AppFooter
+        footer: AppFooter,
+        
+
       }
     },
     {
@@ -96,7 +127,8 @@ export default new Router({
       components: {
         header: AppHeader,
         default: SingleService,
-        footer: AppFooter
+        footer: AppFooter,
+
       }
     },
     {
@@ -105,7 +137,8 @@ export default new Router({
       components: {
         header: AppHeader,
         default: MyServices,
-        footer: AppFooter
+        footer: AppFooter,
+
       }
     },
     {
@@ -114,7 +147,7 @@ export default new Router({
       components: {
         header: AppHeader,
         default: PendingRequests,
-        footer: AppFooter
+        footer: AppFooter,
       }
     },
     ,
@@ -124,9 +157,29 @@ export default new Router({
       components: {
         header: AppHeader,
         default: Notifications,
-        footer: AppFooter
+        footer: AppFooter,
       }
-    }
+    },    
+    {
+      path: "/allServices",
+      name: "allServices",
+      components: {
+        header: AppHeader,
+        default: AllServices,
+        footer: AppFooter,
+
+      }
+    },
+    {
+      path: "/attendingServices",
+      name: "attendingServices",
+      components: {
+        header: AppHeader,
+        default: AttendingServices,
+        footer: AppFooter,
+
+      }
+    },
   ],
   scrollBehavior: to => {
     if (to.hash) {

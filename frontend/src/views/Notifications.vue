@@ -99,6 +99,10 @@ export default {
       });
     },
   },
+  destroyed() {
+          window.location.reload();
+
+  },
   props: {
     userId: String,
   },

@@ -8,7 +8,6 @@ import com.swe573.socialhub.enums.ServiceStatus;
 import com.swe573.socialhub.repository.*;
 import com.swe573.socialhub.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -60,7 +59,14 @@ public class UserService {
 
     @Transactional
     public UserDto register(UserDto dto) {
+        //validate model
+        if (dto.getPassword() == "" || dto.getUsername() == "" || dto.getEmail() == "" || dto.getBio() == "")
+            throw new IllegalArgumentException("Please fill all the required fields.");
+
+        //hash password
         final String passwordHash = passwordEncoder.encode(dto.getPassword());
+
+        //create entity and set fields
         final User userEntity = new User();
         userEntity.setBio(dto.getBio());
         userEntity.setEmail(dto.getPassword());
@@ -70,6 +76,8 @@ public class UserService {
         userEntity.setLongitude(dto.getLongitude());
         userEntity.setLatitude(dto.getLatitude());
         userEntity.setFormattedAddress(dto.getFormattedAddress());
+
+        //set tags
         var tags = dto.getUserTags();
         if (tags != null) {
             for (TagDto tagDto : tags) {
@@ -83,10 +91,11 @@ public class UserService {
 
 
         try {
+            //save entity
             final User createdUser = repository.save(userEntity);
             return mapUserToDTO(createdUser);
-        } catch (DataIntegrityViolationException e) {
-            throw new IllegalArgumentException("Username already taken.");
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e);
         }
     }
 
@@ -94,7 +103,7 @@ public class UserService {
         try {
             var userName = dto.getUsername();
             var dbResult = repository.findUserByUsername(userName);
-            if (dbResult == null)
+            if (!dbResult.isPresent())
                 throw new IllegalArgumentException("Invalid username");
 
             var user = dbResult.get();
@@ -108,7 +117,7 @@ public class UserService {
 
             }
         } catch (Exception e) {
-            throw new IllegalArgumentException("Username already taken.");
+            throw new IllegalArgumentException(e);
         }
     }
 
@@ -159,9 +168,7 @@ public class UserService {
         var approvalList = userServiceApprovalRepository.findUserServiceApprovalByUserAndApprovalStatus(user, ApprovalStatus.PENDING);
         var balanceOnHold = approvalList.stream().mapToInt(o -> o.getService().getCredit()).sum();
 
-        var followingSet = user.getFollowingUsers();
-        var following = followingSet.stream().filter(x-> x.getFollowingUser() == user).map(u -> u.getFollowedUser().getUsername() ).collect(Collectors.toUnmodifiableList());
-        var followedBy = followingSet.stream().filter(x-> x.getFollowedUser() == user).map(u -> u.getFollowingUser().getUsername() ).collect(Collectors.toUnmodifiableList());
+
 
         return new UserDto(
                 user.getId(),
@@ -174,9 +181,10 @@ public class UserService {
                 user.getLatitude(),
                 user.getLongitude(),
                 user.getFormattedAddress(),
-                user.getFollowedBy().stream().map(u -> u.getFollowingUser().getUsername() ).collect(Collectors.toUnmodifiableList()),
-                user.getFollowingUsers().stream().map(u -> u.getFollowedUser().getUsername() ).collect(Collectors.toUnmodifiableList())
-                );
+                user.getFollowedBy().stream().map(u -> u.getFollowingUser().getUsername()).collect(Collectors.toUnmodifiableList()),
+                user.getFollowingUsers().stream().map(u -> u.getFollowedUser().getUsername()).collect(Collectors.toUnmodifiableList()),
+                user.getTags().stream().map(x-> new TagDto(x.getId(), x.getName())).collect(Collectors.toUnmodifiableList())
+        );
 
 
     }
@@ -230,24 +238,22 @@ public class UserService {
         var userToFollow = repository.findById(userId).get();
 
         //check if there is already a following entity to avoid duplicates
-        var entityResult = userFollowingRepository.findUserFollowingByFollowingUserAndFollowedUser(loggedInUser,userToFollow);
+        var entityResult = userFollowingRepository.findUserFollowingByFollowingUserAndFollowedUser(loggedInUser, userToFollow);
         var entityExists = entityResult.isPresent();
         if (entityExists)
             throw new IllegalArgumentException("You are already following user " + userToFollow.getUsername());
 
 
-        try{
+        try {
             //create and save entity
-            var entity = new UserFollowing(loggedInUser,userToFollow);
+            var entity = new UserFollowing(loggedInUser, userToFollow);
             var returnEntity = userFollowingRepository.save(entity);
 
             //send notification
-            notificationService.sendNotification("You are being followed by " + loggedInUser.getUsername(), "/profile/" + loggedInUser.getUsername(),userToFollow);
+            notificationService.sendNotification("You are being followed by " + loggedInUser.getUsername(), "/profile/" + loggedInUser.getUsername(), userToFollow);
 
             return returnEntity;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             throw new IllegalArgumentException(e.getMessage());
         }
 
@@ -255,20 +261,18 @@ public class UserService {
     }
 
     public Boolean followControl(Principal principal, Long userId) {
-        try{
+        try {
             //get current user and user to follow
             final User loggedInUser = repository.findUserByUsername(principal.getName()).get();
             var userToFollow = repository.findById(userId).get();
 
             //check if there is already a following entity
-            var entityResult = userFollowingRepository.findUserFollowingByFollowingUserAndFollowedUser(loggedInUser,userToFollow);
+            var entityResult = userFollowingRepository.findUserFollowingByFollowingUserAndFollowedUser(loggedInUser, userToFollow);
             var entityExists = entityResult.isPresent();
 
 
             return entityExists;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             throw new IllegalArgumentException(e.getMessage());
         }
 

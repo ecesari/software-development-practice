@@ -100,10 +100,8 @@ export default {
   },
   methods: {
     Login() {
-      debugger;
 
       api.Login(this.registerInputs).then((r) => {
-        debugger;
         if (r.jwt) {
           localStorage.setItem("token", JSON.stringify(r.jwt));
           document.location.href = "../";

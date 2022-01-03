@@ -22,7 +22,7 @@
               >
                 <div class="card-profile-actions py-4 mt-lg-0">
                   <base-button
-                    v-if="!userData.hasServiceRequest && !userData.ownsService"
+                    v-if="!userData.hasServiceRequest && !userData.ownsService && !serviceData.showServiceButton"
                     @click="ConfirmRequest"
                     type="info"
                     size="sm"
@@ -31,11 +31,19 @@
                   >
                   <base-button
                     disabled
-                    v-if="userData.hasServiceRequest"
+                    v-if="userData.hasServiceRequest "
                     type="info"
                     size="sm"
                     class="mr-4"
                     >Already requested to join</base-button
+                  >
+                     <base-button
+                    disabled
+                    v-if="serviceData.showServiceButton && !userData.ownsService"
+                    type="warning"
+                    size="sm"
+                    class="mr-4"
+                    >This service has passed</base-button
                   >
                   <!-- <base-button type="default" size="sm" class="float-right"
                     >Message</base-button

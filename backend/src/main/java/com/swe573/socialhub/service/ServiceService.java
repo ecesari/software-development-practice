@@ -1,16 +1,24 @@
 package com.swe573.socialhub.service;
 
-import com.swe573.socialhub.domain.*;
+import com.swe573.socialhub.domain.Service;
+import com.swe573.socialhub.domain.Tag;
+import com.swe573.socialhub.domain.User;
+import com.swe573.socialhub.domain.UserServiceApproval;
 import com.swe573.socialhub.dto.ServiceDto;
 import com.swe573.socialhub.dto.TagDto;
 import com.swe573.socialhub.enums.ApprovalStatus;
+import com.swe573.socialhub.enums.ServiceFilter;
 import com.swe573.socialhub.enums.ServiceStatus;
-import com.swe573.socialhub.repository.*;
+import com.swe573.socialhub.repository.ServiceRepository;
+import com.swe573.socialhub.repository.TagRepository;
+import com.swe573.socialhub.repository.UserRepository;
+import com.swe573.socialhub.repository.UserServiceApprovalRepository;
 import org.hibernate.exception.DataException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -39,6 +47,37 @@ public class ServiceService {
 
     public List<ServiceDto> findAllServices() {
         var entities = serviceRepository.findAll();
+        entities = entities.stream().filter(x-> x.getTime().isAfter(LocalDateTime.now())).limit(3).collect(Collectors.toUnmodifiableList());
+
+        var list = entities.stream().map(service -> mapToDto(service)).collect(Collectors.toUnmodifiableList());
+
+
+        return list;
+    }
+
+    public List<ServiceDto> findAllServices(Principal principal,Boolean getOngoingOnly, ServiceFilter filter) {
+        if (filter == ServiceFilter.all) getOngoingOnly = true;
+        var entities = serviceRepository.findAll();
+        final User loggedInUser = userRepository.findUserByUsername(principal.getName()).get();
+
+        if (getOngoingOnly)
+        {
+            entities = entities.stream().filter(x-> x.getTime().isAfter(LocalDateTime.now())).collect(Collectors.toUnmodifiableList());
+        }
+        switch(filter) {
+            case createdByUser:
+                entities = entities.stream().filter(x->x.getCreatedUser() == loggedInUser).collect(Collectors.toUnmodifiableList());
+                break;
+            case first3:
+                entities = entities.stream().limit(3).collect(Collectors.toUnmodifiableList());
+                break;
+            case attending:
+                entities = entities.stream().filter(x->x.getApprovalSet().stream().anyMatch(y->y.getUser() == loggedInUser && y.getApprovalStatus() == ApprovalStatus.APPROVED)).collect(Collectors.toUnmodifiableList());
+
+                break;
+            default:
+                // code block
+        }
 
         var list = entities.stream().map(service -> mapToDto(service)).collect(Collectors.toUnmodifiableList());
 
@@ -154,12 +193,16 @@ public class ServiceService {
                 list.add(dto);
             }
         }
-        return new ServiceDto(service.getId(), service.getHeader(), service.getDescription(), service.getLocation(), service.getTime(), service.getCredit(), service.getQuota(), service.getAttendingUserCount(), service.getCreatedUser().getId(), service.getCreatedUser().getUsername(), service.getLatitude(), service.getLongitude(), list, service.getStatus());
+        var approvals = service.getApprovalSet();
+        var attending = approvals.stream().filter(x-> x.getApprovalStatus() == ApprovalStatus.APPROVED).count();
+        var pending = approvals.stream().filter(x-> x.getApprovalStatus() == ApprovalStatus.PENDING).count();
+        return new ServiceDto(service.getId(), service.getHeader(), service.getDescription(), service.getLocation(), service.getTime(), service.getCredit(), service.getQuota(), attending, service.getCreatedUser().getId(), service.getCreatedUser().getUsername(), service.getLatitude(), service.getLongitude(), list, service.getStatus(), pending);
     }
 
 
     private Service mapToEntity(ServiceDto dto) {
         return new Service(null, dto.getHeader(), dto.getDescription(), dto.getLocation(), dto.getTime(), dto.getMinutes(), dto.getQuota(), 0, null, dto.getLatitude(), dto.getLongitude(), null);
     }
+
 
 }

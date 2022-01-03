@@ -16,7 +16,7 @@ public class ServiceDto implements Serializable {
     private final LocalDateTime Time;
     private final int Minutes;
     private final int Quota;
-    private final int AttendingUserCount;
+    private final Long AttendingUserCount;
     private final Long CreatedUserIdId;
     private final String CreatedUserName;
     private final Double Latitude;
@@ -25,8 +25,9 @@ public class ServiceDto implements Serializable {
     private final ServiceStatus Status;
     private final String TimeString;
     private final Boolean ShowServiceOverButton;
+    private final Long PendingUserCount;
 
-    public ServiceDto(Long id, String header, String description, String location, LocalDateTime time, int minutes, int quota, int attendingUserCount, Long createdUserIdId, String createdUserName, Double latitude, Double longitude, List<TagDto> serviceTags, ServiceStatus status) {
+    public ServiceDto(Long id, String header, String description, String location, LocalDateTime time, int minutes, int quota, long attendingUserCount, Long createdUserIdId, String createdUserName, Double latitude, Double longitude, List<TagDto> serviceTags, ServiceStatus status, Long pendingUserCount) {
         this.id = id;
         Header = header;
         Description = description;
@@ -41,6 +42,7 @@ public class ServiceDto implements Serializable {
         Longitude = longitude;
         ServiceTags = serviceTags;
         Status = status;
+        PendingUserCount = pendingUserCount;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E, dd MMM yyyy HH:mm");
 
         String formattedDateTime = time.format(formatter); // "1986-04-08 12:30"
@@ -96,6 +98,10 @@ public class ServiceDto implements Serializable {
         return ShowServiceOverButton;
     }
 
+    public Long getPendingUserCount() {
+        return PendingUserCount;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -142,7 +148,7 @@ public class ServiceDto implements Serializable {
         return ServiceTags;
     }
 
-    public int getAttendingUserCount() {
+    public Long getAttendingUserCount() {
         return AttendingUserCount;
     }
 

@@ -21,12 +21,12 @@
               <div class="col-lg-6">
                 <h1 class="display-3 text-white">
                   Welcome!
-                  <span>Everyting is fine.</span>
+                  <span>Everything is fine.</span>
                 </h1>
                 <p class="lead text-white">
                   Welcome to social hub where you can offer your services, join
                   other services and be part of a growing community where time
-                  is the only currency. Here are a few popular services.
+                  is the only currency. Here are a few services.
                 </p>
                 <div class="btn-wrapper">
                   <router-link
@@ -52,7 +52,8 @@
       <!-- 1st Hero Variation -->
     </div>
     <section class="section section-lg pt-lg-0 mt--200">
-      <services :getByUser="false" :filter="getTop3"></services>
+      <!-- <services :getByUser="false" :filter="getTop3"></services> -->
+      <services  :filter="'first3'"></services>
 
    
     </section>
@@ -190,7 +191,7 @@
         </div>
       </div>
     </section> -->
-    <section class="section section section-shaped my-0 overflow-hidden">
+    <!-- <section class="section section section-shaped my-0 overflow-hidden">
       <div class="shape shape-style-1 bg-gradient-warning shape-skew">
         <span></span>
         <span></span>
@@ -609,7 +610,7 @@
           </div>
         </div>
       </div>
-    </section>
+    </section> -->
     <!-- <section class="section section-lg">
       <div class="container">
         <div class="row row-grid justify-content-center">

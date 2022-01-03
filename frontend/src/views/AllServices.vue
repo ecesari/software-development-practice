@@ -34,10 +34,9 @@
                   ></icon>
                 </div>
                 <div class="pl-4">
-                  <h4 class="display-3 text-white">Your Services</h4>
+                  <h4 class="display-3 text-white">All Services</h4>
                   <p class="text-white">
-                    Here you can find the services that you have created so far,
-                    you can also list the services of others.
+                    Here you can find all the active services. Go explore!
                   </p>
                 </div>
               </div>
@@ -49,7 +48,7 @@
     
     <section class="section section-lg pt-lg-0 mt--400 ">
         <!-- <services :getByUser=true></services> -->
-        <services :filter="'createdByUser'"></services>
+        <services :filter="'all'"></services>
 
     </section>
 
@@ -60,21 +59,21 @@
             <div class="row align-items-center">
               <div class="col-lg-8">
                 <h3 class="text-white">
-                  Want to take a look at others' services?
+                  Want to create a service
                 </h3>
                 <p class="lead text-white mt-3">
-                  Socialhub is a fair community. You can always take part in other services.
+                  Socialhub is a fair community. You can always create services.
                 </p>
               </div>
               <div class="col-lg-3 ml-lg-auto">
                 <base-button
                   tag="a"
-                  href="#/services"
+                  href="#/createService"
                   type="white"
                   block
                   size="lg"
                 >
-                  Click to Browse
+                  Click to Create
                 </base-button>
               </div>
             </div>

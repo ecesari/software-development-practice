@@ -93,7 +93,6 @@ export default {
     },
     methods: {        
         Login () {
-            debugger;
             api.Login(this.registerInputs).then(r => {
                 console.log('ok.')
             })

@@ -93,6 +93,9 @@ public class User {
     }
 
     public Set<Tag> getTags() {
+        if (this.userTags == null) {
+            this.userTags = new HashSet<Tag>();
+        }
         return userTags;
     }
 
@@ -175,6 +178,8 @@ public class User {
     }
 
     public Set<UserFollowing> getFollowingUsers() {
+        if (followingUsers == null)
+            setFollowingUsers(new HashSet<>());
         return followingUsers;
     }
 
@@ -184,6 +189,8 @@ public class User {
     }
 
     public Set<UserFollowing> getFollowedBy() {
+        if (followedBy == null)
+            setFollowedBy(new HashSet<>());
         return followedBy;
     }
 

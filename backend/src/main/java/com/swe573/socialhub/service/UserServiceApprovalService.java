@@ -58,7 +58,7 @@ public class UserServiceApprovalService {
         //check pending credits and balance if the sum is above 20 => throw an error
         var currentUserBalance = userService.getBalanceToBe(loggedInUser);
         var balanceToBe = currentUserBalance - service.getCredit();
-        if (balanceToBe <= -5)
+        if (balanceToBe <= 0)
             throw new IllegalArgumentException("You have reached the minimum limit of credits. You cannot make a request to this service");
 
         try {
@@ -89,7 +89,7 @@ public class UserServiceApprovalService {
     private UserServiceApprovalDto getApprovalDto(UserServiceApproval entity) {
         var service = entity.getService();
         var userDto = userService.mapUserToDTO(entity.getUser());
-        var serviceDto = new ServiceDto(service.getId(), service.getHeader(), "", service.getLocation(), service.getTime(), 0, service.getQuota(), service.getAttendingUserCount(), 0L, "", 0.0, 0.0, Collections.emptyList(), service.getStatus());
+        var serviceDto = new ServiceDto(service.getId(), service.getHeader(), "", service.getLocation(), service.getTime(), 0, service.getQuota(), service.getAttendingUserCount(), 0L, "", 0.0, 0.0, Collections.emptyList(), service.getStatus(), 0L);
         var dto = new UserServiceApprovalDto(userDto, serviceDto, entity.getApprovalStatus());
         return dto;
     }

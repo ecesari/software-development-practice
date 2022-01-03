@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-lg-12">
-         <div
+        <div
           v-for="(serviceArray, index) in nestedServiceArray"
           :key="index"
           class="row row-grid"
@@ -24,11 +24,11 @@
               <p class="description mt-3">
                 {{ service.description }}
               </p>
-              <div>
+              <!-- <div>
                 <badge v-bind:type="GetClass(index)" rounded>{{
                   service.status
                 }}</badge>
-              </div>
+              </div> -->
               <base-button
                 tag="a"
                 :href="'#/service/' + service.id"
@@ -39,7 +39,7 @@
               </base-button>
             </card>
           </div>
-        </div> 
+        </div>
       </div>
     </div>
   </div>
@@ -53,18 +53,9 @@ export default {
   name: "services",
   data() {
     return {
-      serviceResult: [
-        // location: "",
-        // time: "",
-        // header: "",
-        // minutes: "",
-        // description: "",
-        // quota: "",
-        // createdUserIdId: "",
-        // selectedTags: [],
-        // id:""
-      ],
+      serviceResult: [],
       nestedServiceArray: [],
+      getOngoingOnly: false,
     };
   },
   mounted() {
@@ -72,22 +63,19 @@ export default {
   },
   methods: {
     GetServices() {
-      if (this.getByUser) {
-        console.log("Get Services by User Started");
-        apiRegister.GetServicesByUser().then((response) => {
+      if (this.filter == "first3") {
+        apiRegister.GetAllServicesForHome().then((response) => {
           this.serviceResult = response;
           this.nestedServiceArray = this.SplitList();
         });
       } else {
-
-        console.log("Get All Services Started");
-        apiRegister.GetAllServices().then((response) => {
-          this.serviceResult = response;
-          this.nestedServiceArray = this.SplitList();
-        });
+        apiRegister
+          .GetAllServices(this.getOngoingOnly, this.filter)
+          .then((response) => {
+            this.serviceResult = response;
+            this.nestedServiceArray = this.SplitList();
+          });
       }
-
-      console.log("Get Services Finished");
     },
     SplitList() {
       var array = this.serviceResult;
@@ -124,7 +112,6 @@ export default {
       }
     },
     GetTextClass(index) {
-
       var i = index + (1 % 3);
       if (i == 1) {
         return "text-primary text-uppercase";
@@ -137,7 +124,7 @@ export default {
   },
   props: {
     getByUser: Boolean,
-    filter: String
+    filter: String,
   },
   components: {
     Hero,
