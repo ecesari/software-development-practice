@@ -46,6 +46,7 @@ public class ServiceService {
 
     public List<ServiceDto> findAllServices() {
         var entities = serviceRepository.findAll();
+        entities = entities.stream().limit(3).collect(Collectors.toUnmodifiableList());
 
         var list = entities.stream().map(service -> mapToDto(service)).collect(Collectors.toUnmodifiableList());
 

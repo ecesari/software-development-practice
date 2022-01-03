@@ -65,5 +65,8 @@ export default {
     CheckIfFollowExists(data) {
         return http.get(process.env.VUE_APP_API + 'user/follow/control/' + data)
     },
+    GetAllServicesForHome() {
+        return http.get(process.env.VUE_APP_API + 'service')
+    },
 
 }

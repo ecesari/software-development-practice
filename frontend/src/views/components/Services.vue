@@ -55,7 +55,7 @@ export default {
     return {
       serviceResult: [],
       nestedServiceArray: [],
-      getOngoingOnly: false
+      getOngoingOnly: false,
     };
   },
   mounted() {
@@ -63,27 +63,19 @@ export default {
   },
   methods: {
     GetServices() {
-      debugger;
-      // if (this.filter == "getByUser") {
-      // } 
-      // else if (this.filter == "first3") {
-      //   apiRegister.GetAllServices().then((response) => {
-      //     this.serviceResult = response;
-      //     this.nestedServiceArray = this.SplitList();
-      //   });
-      // } else {
-      //   console.log("Get All Services Started");
-      //   apiRegister.GetAllServices().then((response) => {
-      //     this.serviceResult = response;
-      //     this.nestedServiceArray = this.SplitList();
-      //   });
-      // }
-      apiRegister.GetAllServices(this.getOngoingOnly,this.filter).then((response) => {
-        this.serviceResult = response;
-        this.nestedServiceArray = this.SplitList();
-      });
-
-      console.log("Get Services Finished");
+      if (this.filter == "first3") {
+        apiRegister.GetAllServicesForHome().then((response) => {
+          this.serviceResult = response;
+          this.nestedServiceArray = this.SplitList();
+        });
+      } else {
+        apiRegister
+          .GetAllServices(this.getOngoingOnly, this.filter)
+          .then((response) => {
+            this.serviceResult = response;
+            this.nestedServiceArray = this.SplitList();
+          });
+      }
     },
     SplitList() {
       var array = this.serviceResult;

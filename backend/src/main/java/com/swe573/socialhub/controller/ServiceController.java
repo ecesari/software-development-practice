@@ -31,6 +31,15 @@ public class ServiceController {
         }
     }
 
+    @GetMapping
+    public List<ServiceDto> findAllServices()  {
+        try {
+            return serviceService.findAllServices();
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getLocalizedMessage());
+        }
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<ServiceDto> findServiceById(@PathVariable(value = "id") long id) {
         try {
@@ -68,7 +77,6 @@ public class ServiceController {
 
     @GetMapping("/complete/{serviceId}")
     public void App(Principal principal, @PathVariable Long serviceId) {
-        //TODO:change to responseentity
         try {
             serviceService.complete(principal,serviceId);
         }
