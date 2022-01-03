@@ -23,7 +23,7 @@
       </div>
 
       <ul class="navbar-nav navbar-nav-hover align-items-lg-center">
-        <base-dropdown class="nav-item" menu-classes="dropdown-menu-xl">
+         <base-dropdown v-if="userLoggedIn" class="nav-item" menu-classes="dropdown-menu-xl">
           <a
             slot="title"
             href="#"
@@ -32,11 +32,11 @@
             role="button"
           >
             <i class="ni ni-ui-04 d-lg-none"></i>
-            <span class="nav-link-inner--text">Components</span>
+            <span class="nav-link-inner--text">Services</span>
           </a>
           <div class="dropdown-menu-inner">
             <a
-              href="https://demos.creative-tim.com/vue-argon-design-system/documentation/"
+              href="#/allServices"
               class="media d-flex align-items-center"
             >
               <div
@@ -50,38 +50,57 @@
                 <i class="ni ni-spaceship"></i>
               </div>
               <div class="media-body ml-3">
-                <h6 class="heading text-primary mb-md-1">Getting started</h6>
+                <h6 class="heading text-primary mb-md-1">All Services</h6>
                 <p class="description d-none d-md-inline-block mb-0">
-                  Get started with Bootstrap, the world's most popular framework
-                  for building responsive sites.
+                  Browse all the services on the socialhub
                 </p>
               </div>
             </a>
             <a
-              href="https://demos.creative-tim.com/vue-argon-design-system/documentation/"
+              href="#/myServices"
               class="media d-flex align-items-center"
             >
               <div
                 class="
                   icon icon-shape
-                  bg-gradient-warning
+                  bg-gradient-success
                   rounded-circle
                   text-white
                 "
               >
-                <i class="ni ni-ui-04"></i>
+                <i class="ni ni-badge"></i>
               </div>
               <div class="media-body ml-3">
-                <h5 class="heading text-warning mb-md-1">Components</h5>
+                <h5 class="heading text-success mb-md-1">My Services</h5>
                 <p class="description d-none d-md-inline-block mb-0">
-                  Learn how to use Argon compiling Scss, change brand colors and
-                  more.
+                 List all the services that you have created so far
+                </p>
+              </div>
+            </a>
+              <a
+              href="#/attendingServices"
+              class="media d-flex align-items-center"
+            >
+              <div
+                class="
+                  icon icon-shape
+                  bg-gradient-default
+                  rounded-circle
+                  text-white
+                "
+              >
+                <i class="ni ni-badge"></i>
+              </div>
+              <div class="media-body ml-3">
+                <h5 class="heading text-default mb-md-1">Following User Services</h5>
+                <p class="description d-none d-md-inline-block mb-0">
+                  List of the services that the people you are following have created
                 </p>
               </div>
             </a>
           </div>
         </base-dropdown>
-        <base-dropdown tag="li" class="nav-item">
+        <base-dropdown v-if="userLoggedIn" tag="li" class="nav-item">
           <a
             slot="title"
             href="#"
@@ -90,14 +109,12 @@
             role="button"
           >
             <i class="ni ni-collection d-lg-none"></i>
-            <span class="nav-link-inner--text">Examples</span>
+            <span class="nav-link-inner--text">Users</span>
           </a>
-          <router-link to="/landing" class="dropdown-item">Landing</router-link>
-          <router-link to="/profile" class="dropdown-item">Profile</router-link>
-          <router-link to="/login" class="dropdown-item">Login</router-link>
-          <router-link to="/register" class="dropdown-item"
-            >Register</router-link
-          >
+          <router-link to="/users" class="dropdown-item">All</router-link>
+          <router-link to="/users/following" class="dropdown-item">Following</router-link>
+          <router-link to="/users/followedBy" class="dropdown-item">Followed By</router-link>
+          
         </base-dropdown>
       </ul>
       <ul class="navbar-nav align-items-lg-center ml-lg-auto">
@@ -162,9 +179,9 @@
             <router-link to="/createService" class="dropdown-item"
               >Create Service</router-link
             >
-            <router-link to="/myServices" class="dropdown-item"
+            <!-- <router-link to="/myServices" class="dropdown-item"
               >My Services</router-link
-            >
+            > -->
             <router-link to="/pendingRequests" class="dropdown-item"
               >Pending Requests</router-link
             >

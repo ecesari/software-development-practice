@@ -26,7 +26,7 @@
                 <p class="lead text-white">
                   Welcome to social hub where you can offer your services, join
                   other services and be part of a growing community where time
-                  is the only currency. Here are a few popular services.
+                  is the only currency. Here are a few services.
                 </p>
                 <div class="btn-wrapper">
                   <router-link

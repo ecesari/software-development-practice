@@ -16,6 +16,27 @@ import PendingRequests from "./views/PendingRequests.vue";
 import Notifications from "./views/Notifications.vue";
 Vue.use(Router);
 
+const ifNotAuthenticated = (to, from, next) => {
+  let token = JSON.parse(localStorage.getItem("token"));
+  debugger;
+  if (!token) {
+   
+    return
+  }
+  next('/')
+}
+
+const ifAuthenticated = (to, from, next) => {
+  debugger;
+
+  let token = JSON.parse(localStorage.getItem("token"));
+  if (token) {
+    next()
+    return
+  }
+  next('/login')
+}
+
 export default new Router({
   linkExactActiveClass: "active",
   routes: [
@@ -33,7 +54,8 @@ export default new Router({
       components: {
         header: AppHeader,
         default: Components,
-        footer: AppFooter
+        footer: AppFooter,
+
       }
     },
     {
@@ -60,7 +82,8 @@ export default new Router({
       components: {
         header: AppHeader,
         default: Register,
-        footer: AppFooter
+        footer: AppFooter,
+        // beforeEnter: ifNotAuthenticated,
       }
     },
     {
@@ -69,7 +92,9 @@ export default new Router({
       components: {
         header: AppHeader,
         default: Profile,
-        footer: AppFooter
+        footer: AppFooter,
+        // beforeEnter: ifAuthenticated,
+
       }
     },
     {
@@ -78,7 +103,9 @@ export default new Router({
       components: {
         header: AppHeader,
         default: UserPage,
-        footer: AppFooter
+        footer: AppFooter,
+        
+
       }
     },
     {
@@ -87,7 +114,9 @@ export default new Router({
       components: {
         header: AppHeader,
         default: CreateService,
-        footer: AppFooter
+        footer: AppFooter,
+        
+
       }
     },
     {
@@ -96,7 +125,8 @@ export default new Router({
       components: {
         header: AppHeader,
         default: SingleService,
-        footer: AppFooter
+        footer: AppFooter,
+
       }
     },
     {
@@ -105,7 +135,8 @@ export default new Router({
       components: {
         header: AppHeader,
         default: MyServices,
-        footer: AppFooter
+        footer: AppFooter,
+
       }
     },
     {
@@ -114,7 +145,7 @@ export default new Router({
       components: {
         header: AppHeader,
         default: PendingRequests,
-        footer: AppFooter
+        footer: AppFooter,
       }
     },
     ,
@@ -124,7 +155,7 @@ export default new Router({
       components: {
         header: AppHeader,
         default: Notifications,
-        footer: AppFooter
+        footer: AppFooter,
       }
     }
   ],
