@@ -1,11 +1,18 @@
 package com.swe573.socialhub.service;
 
-import com.swe573.socialhub.domain.*;
+import com.swe573.socialhub.domain.Service;
+import com.swe573.socialhub.domain.Tag;
+import com.swe573.socialhub.domain.User;
+import com.swe573.socialhub.domain.UserServiceApproval;
 import com.swe573.socialhub.dto.ServiceDto;
 import com.swe573.socialhub.dto.TagDto;
 import com.swe573.socialhub.enums.ApprovalStatus;
+import com.swe573.socialhub.enums.ServiceFilter;
 import com.swe573.socialhub.enums.ServiceStatus;
-import com.swe573.socialhub.repository.*;
+import com.swe573.socialhub.repository.ServiceRepository;
+import com.swe573.socialhub.repository.TagRepository;
+import com.swe573.socialhub.repository.UserRepository;
+import com.swe573.socialhub.repository.UserServiceApprovalRepository;
 import org.hibernate.exception.DataException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +46,35 @@ public class ServiceService {
 
     public List<ServiceDto> findAllServices() {
         var entities = serviceRepository.findAll();
+
+        var list = entities.stream().map(service -> mapToDto(service)).collect(Collectors.toUnmodifiableList());
+
+
+        return list;
+    }
+
+    public List<ServiceDto> findAllServices(Principal principal,Boolean getOngoingOnly, ServiceFilter filter) {
+        var entities = serviceRepository.findAll();
+        final User loggedInUser = userRepository.findUserByUsername(principal.getName()).get();
+
+        if (getOngoingOnly)
+        {
+            entities = entities.stream().filter(x-> x.getStatus() == ServiceStatus.ONGOING).collect(Collectors.toUnmodifiableList());
+        }
+        switch(filter) {
+            case createdByUser:
+                entities = entities.stream().filter(x->x.getCreatedUser() == loggedInUser).collect(Collectors.toUnmodifiableList());
+                break;
+            case first3:
+                entities = entities.stream().limit(3).collect(Collectors.toUnmodifiableList());
+                break;
+            case attending:
+                entities = entities.stream().filter(x->x.getApprovalSet().stream().anyMatch(y->y.getUser() == loggedInUser && y.getApprovalStatus() == ApprovalStatus.APPROVED)).collect(Collectors.toUnmodifiableList());
+
+                break;
+            default:
+                // code block
+        }
 
         var list = entities.stream().map(service -> mapToDto(service)).collect(Collectors.toUnmodifiableList());
 
@@ -164,5 +200,6 @@ public class ServiceService {
     private Service mapToEntity(ServiceDto dto) {
         return new Service(null, dto.getHeader(), dto.getDescription(), dto.getLocation(), dto.getTime(), dto.getMinutes(), dto.getQuota(), 0, null, dto.getLatitude(), dto.getLongitude(), null);
     }
+
 
 }

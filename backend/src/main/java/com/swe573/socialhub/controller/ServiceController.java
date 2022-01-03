@@ -1,6 +1,7 @@
 package com.swe573.socialhub.controller;
 
 import com.swe573.socialhub.dto.ServiceDto;
+import com.swe573.socialhub.enums.ServiceFilter;
 import com.swe573.socialhub.service.ServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,10 +22,10 @@ public class ServiceController {
     @Autowired
     private ServiceService serviceService;
 
-    @GetMapping
-    public List<ServiceDto> findAllServices() {
+    @GetMapping("/{getOngoingOnly}/{filter}")
+    public List<ServiceDto> findAllServices(Principal principal,@PathVariable Boolean getOngoingOnly,@PathVariable(value = "filter") ServiceFilter filter) {
         try {
-            return serviceService.findAllServices();
+            return serviceService.findAllServices(principal,getOngoingOnly,filter);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getLocalizedMessage());
         }

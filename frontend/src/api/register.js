@@ -28,8 +28,8 @@ export default {
     GetServicesByUser() {
         return http.get(process.env.VUE_APP_API + 'service/userService')
     },
-    GetAllServices() {
-        return http.get(process.env.VUE_APP_API + 'service')
+    GetAllServices(getOngoingOnly,filter) {
+        return http.get(process.env.VUE_APP_API + 'service/'+ getOngoingOnly + '/'+filter)
     },
     SetTags(data) {
         return http.post(process.env.VUE_APP_API + 'user/setTags', data)

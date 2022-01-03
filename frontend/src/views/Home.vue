@@ -52,7 +52,8 @@
       <!-- 1st Hero Variation -->
     </div>
     <section class="section section-lg pt-lg-0 mt--200">
-      <services :getByUser="false" :filter="getTop3"></services>
+      <!-- <services :getByUser="false" :filter="getTop3"></services> -->
+      <services  :filter="'first3'"></services>
 
    
     </section>

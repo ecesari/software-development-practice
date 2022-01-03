@@ -48,7 +48,8 @@
     </div>
     
     <section class="section section-lg pt-lg-0 mt--400 ">
-        <services :getByUser=true></services>
+        <!-- <services :getByUser=true></services> -->
+        <services :filter="'createdByUser'"></services>
 
     </section>
 
