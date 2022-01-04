@@ -24,18 +24,28 @@
               <p class="description mt-3">
                 {{ service.description }}
               </p>
-              <!-- <div>
+              <div>
                 <badge v-bind:type="GetClass(index)" rounded>{{
-                  service.status
-                }}</badge>
-              </div> -->
+                  service.minutes
+                }} credits</badge>
+              </div>
               <base-button
                 tag="a"
+                v-if="isLoggedIn"
                 :href="'#/service/' + service.id"
                 v-bind:type="GetClass(index)"
                 class="mt-4"
               >
                 Learn more
+              </base-button>
+                     <base-button
+                tag="a"
+                v-if="!isLoggedIn"
+                :href="'#/register/'"
+                v-bind:type="GetClass(index)"
+                class="mt-4"
+              >
+                Register to Learn More
               </base-button>
             </card>
           </div>
@@ -56,10 +66,15 @@ export default {
       serviceResult: [],
       nestedServiceArray: [],
       getOngoingOnly: false,
+      isLoggedIn: false
     };
   },
   mounted() {
     this.GetServices();
+        let token = JSON.parse(localStorage.getItem("token"));
+
+    if (token) {this.isLoggedIn = true}
+    else {this.isLoggedIn = false;}
   },
   methods: {
     GetServices() {

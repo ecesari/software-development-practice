@@ -57,6 +57,36 @@
 
    
     </section>
+    
+    <section class="section section-lg pt-0">
+      <div class="container">
+        <card gradient="primary" no-body shadow-size="lg" class="border-0">
+          <div class="p-5">
+            <div class="row align-items-center">
+              <div class="col-lg-8">
+                <h3 class="text-white">
+                  Want to take a look at all services?
+                </h3>
+                <p class="lead text-white mt-3">
+                  Explore all sevices offered by the socialhub community!
+                </p>
+              </div>
+              <div class="col-lg-3 ml-lg-auto">
+                <base-button
+                  tag="a"
+                  href="#/allServices"
+                  type="white"
+                  block
+                  size="lg"
+                >
+                  Click to Browse
+                </base-button>
+              </div>
+            </div>
+          </div>
+        </card>
+      </div>
+    </section>
     <!-- <section class="section section-lg">
       <div class="container">
         <div class="row row-grid align-items-center">

@@ -87,10 +87,10 @@
               <!-- <div class="h6 font-weight-300">
                 <i class="ni location_pin mr-2"></i>Bucharesst, Romania
               </div> -->
-              <div class="h6 mt-4">
+              <!-- <div class="h6 mt-4">
                 <i class="ni business_briefcase-24 mr-2"></i
                 >{{ userData.email }}
-              </div>
+              </div> -->
               <!-- <div>
                 <i class="ni education_hat mr-2"></i>University of Computer
                 Science
