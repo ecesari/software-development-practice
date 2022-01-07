@@ -19,5 +19,7 @@ COPY . .
 # build app for production with minification
 # RUN npm run build
 
-EXPOSE 8081
+EXPOSE 8080
+# RUN npm run serve
+# CMD [ "node", "server.js" ]
 CMD [ "npm", "run" , "serve" ]
