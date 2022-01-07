@@ -1,11 +1,11 @@
 version: '2'
 
 services:
-  api:
-    image: 'backend:latest'
+  app:
+    image: 'docker-spring-boot-mysql:latest'
     build:
       context: .
-    container_name: api
+    container_name: app
     depends_on:
       db:
         condition: service_healthy
@@ -14,6 +14,12 @@ services:
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+#      healthcheck:
+#        test: "curl --fail --silent localhost:8080/tags | grep UP || exit 1"
+#        interval: 2s
+#        timeout: 5s
+#        retries: 5
+#        start_period: 10s
     ports:
       - "8081:8081"
   db:
@@ -25,15 +31,18 @@ services:
       test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
       timeout: 20s
       retries: 10
-  ui:
-    image: 'frontend:latest'
-    build:
-      context: ../frontend
-    container_name: ui
-    depends_on:
-      - api
-    environment:
-      - VUE_APP_API=http://localhost:8081/
-      - VUE_APP_GOOGLE_MAP_KEY = 'AIzaSyCPe9MVNFIUhRwnQExIPZoIuA02a-o9gkU'
-    ports:
-      - "8080:8080"
+#  ui:
+#    image: 'socialhub_ui:latest'
+#    build:
+#      context: ../frontend
+#    container_name: ui
+#    depends_on:
+#      app:
+#        condition: service_started
+##    environment:
+##      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/socialhubdb?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false&allowPublicKeyRetrieval=true
+##      - SPRING_DATASOURCE_USERNAME=root
+##      - SPRING_DATASOURCE_PASSWORD=root
+##      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+#    ports:
+#      - "8081:8081"
