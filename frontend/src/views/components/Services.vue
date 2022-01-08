@@ -12,9 +12,9 @@
         >
           Sort By
         </base-button>
-        <a class="dropdown-item" href="#">Distance</a>
-        <a class="dropdown-item" href="#">Service Date</a>
-        <a class="dropdown-item" href="#">Created Date</a>
+        <a class="dropdown-item" href="#" v-on:click="SortByDistance()">Distance</a>
+        <a class="dropdown-item" href="#" v-on:click="SortByServiceDate()">Service Date</a>
+        <a class="dropdown-item" href="#" v-on:click="SortByCreatedDate()">Created Date</a>
       </base-dropdown>
     </div>
 
