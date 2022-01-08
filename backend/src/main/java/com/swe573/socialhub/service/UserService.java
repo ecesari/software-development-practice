@@ -121,7 +121,24 @@ public class UserService {
         }
     }
 
-    public AuthResponse createAuthenticationToken(AuthRequest authenticationRequest) throws AuthenticationException {
+    public JwtDto createAuthenticationToken(LoginDto authenticationRequest) throws AuthenticationException {
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())
+            );
+        } catch (BadCredentialsException e) {
+            throw new AuthenticationException();
+        }
+
+
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+
+        final String jwt = jwtTokenUtil.generateToken(userDetails);
+
+        return new JwtDto(jwt);
+    }
+
+    public JwtDto createAuthenticationToken2(AuthRequest authenticationRequest) throws AuthenticationException {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authenticationRequest.getUserName(), authenticationRequest.getPassword())
@@ -135,7 +152,7 @@ public class UserService {
 
         final String jwt = jwtTokenUtil.generateToken(userDetails);
 
-        return new AuthResponse(jwt);
+        return new JwtDto(jwt);
     }
 
     public UserDto getUser(String id, Principal principal) {

@@ -1,21 +1,12 @@
 package com.swe573.socialhub.dto;
 
 public class LoginDto {
-    Long id;
     private String password;
     private String username;
 
-    public LoginDto() {
-    }
-
-    public LoginDto(Long id, String password, String username) {
-        this.id = id;
+    public LoginDto(String password, String username) {
         this.password = password;
         this.username = username;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getPassword() {

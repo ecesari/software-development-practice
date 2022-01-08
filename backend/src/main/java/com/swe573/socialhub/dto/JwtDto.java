@@ -1,11 +1,10 @@
 package com.swe573.socialhub.dto;
 
-public class AuthResponse {
-    private String jwt;
-
-    public AuthResponse(String jwt) {
+public class JwtDto {
+    public JwtDto(String jwt) {
         this.jwt = jwt;
     }
+    private String jwt;
 
     public String getJwt() {
         return jwt;

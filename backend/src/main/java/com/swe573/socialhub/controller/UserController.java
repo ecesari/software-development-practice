@@ -21,31 +21,26 @@ public class UserController {
     private UserService service;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> signUp(@RequestBody UserDto params) {
+    public ResponseEntity<JwtDto> signUp(@RequestBody UserDto dto) {
         try {
-            service.register(params);
-            return ResponseEntity.ok(service.createAuthenticationToken(new AuthRequest(params.getUsername(), params.getPassword())));
-        } catch (IllegalArgumentException | DuplicateKeyException e) {
+            service.register(dto);
+            return ResponseEntity.ok(service.createAuthenticationToken(new LoginDto(dto.getPassword(),dto.getUsername())));
+        } catch (IllegalArgumentException | DuplicateKeyException | AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getLocalizedMessage());
-        } catch (AuthenticationException e) {
-            throw new IllegalStateException();
         }
     }
 
     @PostMapping("/user/setTags")
-    public ResponseEntity<AuthResponse> setTags(@RequestBody List<TagDto> params) {
+    public ResponseEntity<JwtDto> setTags(@RequestBody List<TagDto> tags) {
         return null;
     }
-
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody LoginDto dto) {
+    public ResponseEntity<JwtDto> login(@RequestBody LoginDto dto) {
         try {
             service.login(dto);
-            return ResponseEntity.ok(service.createAuthenticationToken(new AuthRequest(dto.getUsername(), dto.getPassword())));
-        } catch (IllegalArgumentException | DuplicateKeyException e) {
+            return ResponseEntity.ok(service.createAuthenticationToken(dto));
+        } catch (IllegalArgumentException | DuplicateKeyException | AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getLocalizedMessage());
-        } catch (AuthenticationException e) {
-            throw new IllegalStateException();
         }
     }
 
