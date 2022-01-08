@@ -90,7 +90,7 @@ class LoadDatabase {
                     "Film Analysis",
                     "I will be teaching film analysis. This is a service that is open to people who do not have any experience in film analysis",
                     "SineBU, Boğaziçi University, Istanbul",
-                    LocalDateTime.of(2022, 1, 10, 18, 0),
+                    LocalDateTime.of(2022, 1, 19, 18, 0),
                     2,
                     20,
                     8, user2,
