@@ -1,4 +1,4 @@
-package com.swe573.socialhub.util;
+package com.swe573.socialhub.config;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -11,10 +11,9 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Component
-public class JwtUtil {
+public class JwtTokenUtil {
 
-    // TODO: use a safe key
-    private String SECRET_KEY = "slpXgkhlslpXgkhlslpXgkhlslpXgkhlslpXgkhlslpXgkadddsaasd";
+    private String SECRET_KEY = "5zrddv5LqDa3LYDKdHyAlBUSHCucFdSqhaaccdjvmiOSJhwpZ9ONqxPFBZqOwsp";
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);

@@ -1,4 +1,4 @@
-package com.swe573.socialhub.util;
+package com.swe573.socialhub.enums;
 
 public enum NotificationMessage {
     ServiceCompleted,

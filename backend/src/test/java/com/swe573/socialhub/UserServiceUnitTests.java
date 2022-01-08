@@ -11,7 +11,7 @@ import com.swe573.socialhub.enums.ServiceStatus;
 import com.swe573.socialhub.repository.*;
 import com.swe573.socialhub.service.NotificationService;
 import com.swe573.socialhub.service.UserService;
-import com.swe573.socialhub.util.JwtUtil;
+import com.swe573.socialhub.config.JwtTokenUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -73,7 +73,7 @@ public class UserServiceUnitTests {
     private AuthenticationManager authenticationManager;
 
     @MockBean
-    private JwtUtil jwtTokenUtil;
+    private JwtTokenUtil jwtTokenUtil;
 
     @MockBean
     private UserDetailsService userDetailsService;

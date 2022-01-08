@@ -6,7 +6,7 @@ import com.swe573.socialhub.dto.*;
 import com.swe573.socialhub.enums.ApprovalStatus;
 import com.swe573.socialhub.enums.ServiceStatus;
 import com.swe573.socialhub.repository.*;
-import com.swe573.socialhub.util.JwtUtil;
+import com.swe573.socialhub.config.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -46,7 +46,7 @@ public class UserService {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private JwtUtil jwtTokenUtil;
+    private JwtTokenUtil jwtTokenUtil;
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -132,23 +132,6 @@ public class UserService {
 
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
-
-        final String jwt = jwtTokenUtil.generateToken(userDetails);
-
-        return new JwtDto(jwt);
-    }
-
-    public JwtDto createAuthenticationToken2(AuthRequest authenticationRequest) throws AuthenticationException {
-        try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(authenticationRequest.getUserName(), authenticationRequest.getPassword())
-            );
-        } catch (BadCredentialsException e) {
-            throw new AuthenticationException();
-        }
-
-
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUserName());
 
         final String jwt = jwtTokenUtil.generateToken(userDetails);
 
