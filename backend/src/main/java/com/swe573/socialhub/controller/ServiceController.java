@@ -2,6 +2,7 @@ package com.swe573.socialhub.controller;
 
 import com.swe573.socialhub.dto.ServiceDto;
 import com.swe573.socialhub.enums.ServiceFilter;
+import com.swe573.socialhub.enums.ServiceSortBy;
 import com.swe573.socialhub.service.ServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,7 +24,10 @@ public class ServiceController {
     private ServiceService serviceService;
 
     @GetMapping("/{getOngoingOnly}/{filter}")
-    public List<ServiceDto> findAllServices(Principal principal,@PathVariable Boolean getOngoingOnly,@PathVariable(value = "filter") ServiceFilter filter) {
+    @ResponseBody
+    public List<ServiceDto> findAllServices(@RequestParam (required = false) ServiceSortBy sortBy, Principal principal, @PathVariable Boolean getOngoingOnly, @PathVariable(value = "filter") ServiceFilter filter) {
+        var foo = sortBy;
+
         try {
             return serviceService.findAllServices(principal,getOngoingOnly,filter);
         } catch (Exception e) {
