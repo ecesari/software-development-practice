@@ -8,6 +8,7 @@ import com.swe573.socialhub.dto.ServiceDto;
 import com.swe573.socialhub.dto.TagDto;
 import com.swe573.socialhub.enums.ApprovalStatus;
 import com.swe573.socialhub.enums.ServiceFilter;
+import com.swe573.socialhub.enums.ServiceSortBy;
 import com.swe573.socialhub.enums.ServiceStatus;
 import com.swe573.socialhub.repository.ServiceRepository;
 import com.swe573.socialhub.repository.TagRepository;
@@ -18,8 +19,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -49,21 +52,25 @@ public class ServiceService {
         var entities = serviceRepository.findAll();
         entities = entities.stream().filter(x-> x.getTime().isAfter(LocalDateTime.now())).limit(3).collect(Collectors.toUnmodifiableList());
 
-        var list = entities.stream().map(service -> mapToDto(service)).collect(Collectors.toUnmodifiableList());
+        var list = entities.stream().map(service -> mapToDto(service,Optional.empty())).collect(Collectors.toUnmodifiableList());
 
 
         return list;
     }
 
-    public List<ServiceDto> findAllServices(Principal principal,Boolean getOngoingOnly, ServiceFilter filter) {
+    public List<ServiceDto> findAllServices(Principal principal, Boolean getOngoingOnly, ServiceFilter filter, ServiceSortBy sortBy) {
+        //set getongoinonly and get all service entities
         if (filter == ServiceFilter.all) getOngoingOnly = true;
         var entities = serviceRepository.findAll();
+        //get logged in user
         final User loggedInUser = userRepository.findUserByUsername(principal.getName()).get();
 
+        //filter if getongoingonly
         if (getOngoingOnly)
         {
             entities = entities.stream().filter(x-> x.getTime().isAfter(LocalDateTime.now())).collect(Collectors.toUnmodifiableList());
         }
+        //filter by filter
         switch(filter) {
             case createdByUser:
                 entities = entities.stream().filter(x->x.getCreatedUser() == loggedInUser).collect(Collectors.toUnmodifiableList());
@@ -79,9 +86,33 @@ public class ServiceService {
                 // code block
         }
 
-        var list = entities.stream().map(service -> mapToDto(service)).collect(Collectors.toUnmodifiableList());
+
+        //map to dto and return list
+        var list = entities.stream().map(service -> mapToDto(service, Optional.of(loggedInUser))).collect(Collectors.toUnmodifiableList());
 
 
+        //if sortBy is not null, sort
+        switch (sortBy)
+        {
+            case distanceAsc:
+                list.sort(Comparator.comparing(ServiceDto::getDistanceToUser));
+                break;
+            case distanceDesc:
+                list.sort(Comparator.comparing(ServiceDto::getDistanceToUser).reversed());
+                break;
+            case createdDateDesc:
+                list.sort(Comparator.comparing(ServiceDto::getId).reversed());
+                break;
+            case createdDateAsc:
+                list.sort(Comparator.comparing(ServiceDto::getId));
+                break;
+            case serviceDateDesc:
+                list.sort(Comparator.comparing(ServiceDto::getTime).reversed());
+                break;
+            case serviceDateAsc:
+                list.sort(Comparator.comparing(ServiceDto::getTime));
+                break;
+        }
         return list;
     }
 
@@ -90,7 +121,7 @@ public class ServiceService {
         Optional<Service> service = serviceRepository.findById(id);
 
         if (service.isPresent()) {
-            var dto = mapToDto(service.get());
+            var dto = mapToDto(service.get(), Optional.empty());
             return Optional.ofNullable(dto);
         } else {
             throw new IllegalArgumentException("No services have been found");
@@ -141,7 +172,7 @@ public class ServiceService {
             throw new IllegalArgumentException("User doesn't exist.");
         try {
             var entities = serviceRepository.findServiceByCreatedUser(loggedInUser);
-            var dtoList = entities.stream().map(service -> mapToDto(service)).collect(Collectors.toUnmodifiableList());
+            var dtoList = entities.stream().map(service -> mapToDto(service,Optional.empty())).collect(Collectors.toUnmodifiableList());
             return dtoList;
         } catch (DataException e) {
             throw new IllegalArgumentException("There was a problem trying to save service to db");
@@ -185,7 +216,7 @@ public class ServiceService {
 
     }
 
-    private ServiceDto mapToDto(Service service) {
+    private ServiceDto mapToDto(Service service, Optional<User> loggedInUser) {
         var list = new ArrayList<TagDto>();
         if (service.getServiceTags() != null) {
             for (Tag tag : service.getServiceTags()) {
@@ -193,15 +224,42 @@ public class ServiceService {
                 list.add(dto);
             }
         }
+
+        String distanceToUser;
+
+        if (loggedInUser.isPresent())
+        {
+            DecimalFormat df = new DecimalFormat("0.00");
+            var distance = getDistance(service.getLatitude(),service.getLongitude(),loggedInUser.get().getLatitude(),loggedInUser.get().getLongitude());
+            distanceToUser = df.format(distance);
+        }
+        else{
+            distanceToUser = "";
+        }
         var approvals = service.getApprovalSet();
         var attending = approvals.stream().filter(x-> x.getApprovalStatus() == ApprovalStatus.APPROVED).count();
         var pending = approvals.stream().filter(x-> x.getApprovalStatus() == ApprovalStatus.PENDING).count();
-        return new ServiceDto(service.getId(), service.getHeader(), service.getDescription(), service.getLocation(), service.getTime(), service.getCredit(), service.getQuota(), attending, service.getCreatedUser().getId(), service.getCreatedUser().getUsername(), service.getLatitude(), service.getLongitude(), list, service.getStatus(), pending);
+        return new ServiceDto(service.getId(), service.getHeader(), service.getDescription(), service.getLocation(), service.getTime(), service.getCredit(), service.getQuota(), attending, service.getCreatedUser().getId(), service.getCreatedUser().getUsername(), service.getLatitude(), service.getLongitude(), list, service.getStatus(), pending, distanceToUser);
     }
 
 
     private Service mapToEntity(ServiceDto dto) {
         return new Service(null, dto.getHeader(), dto.getDescription(), dto.getLocation(), dto.getTime(), dto.getMinutes(), dto.getQuota(), 0, null, dto.getLatitude(), dto.getLongitude(), null);
+    }
+
+    private double getDistance(double lat1, double lng1, String lat2, String lng2) {
+        double lat2Double = Double.parseDouble(lat2);
+        double lng2Double = Double.parseDouble(lng2);
+        double earthRadius = 6371000; //meters
+        double dLat = Math.toRadians(lat2Double-lat1);
+        double dLng = Math.toRadians(lng2Double-lng1);
+        double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2Double)) *
+                        Math.sin(dLng/2) * Math.sin(dLng/2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        float dist = (float) (earthRadius * c);
+
+        return dist  * 0.001;
     }
 
 

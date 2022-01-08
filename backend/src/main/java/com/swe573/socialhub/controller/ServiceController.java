@@ -26,10 +26,9 @@ public class ServiceController {
     @GetMapping("/{getOngoingOnly}/{filter}")
     @ResponseBody
     public List<ServiceDto> findAllServices(@RequestParam (required = false) ServiceSortBy sortBy, Principal principal, @PathVariable Boolean getOngoingOnly, @PathVariable(value = "filter") ServiceFilter filter) {
-        var foo = sortBy;
 
         try {
-            return serviceService.findAllServices(principal,getOngoingOnly,filter);
+            return serviceService.findAllServices(principal,getOngoingOnly,filter,sortBy);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getLocalizedMessage());
         }

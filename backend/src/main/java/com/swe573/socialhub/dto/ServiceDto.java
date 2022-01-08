@@ -26,8 +26,9 @@ public class ServiceDto implements Serializable {
     private final String TimeString;
     private final Boolean ShowServiceOverButton;
     private final Long PendingUserCount;
+    private final String DistanceToUser;
 
-    public ServiceDto(Long id, String header, String description, String location, LocalDateTime time, int minutes, int quota, long attendingUserCount, Long createdUserIdId, String createdUserName, Double latitude, Double longitude, List<TagDto> serviceTags, ServiceStatus status, Long pendingUserCount) {
+    public ServiceDto(Long id, String header, String description, String location, LocalDateTime time, int minutes, int quota, long attendingUserCount, Long createdUserIdId, String createdUserName, Double latitude, Double longitude, List<TagDto> serviceTags, ServiceStatus status, Long pendingUserCount, String distanceToUser) {
         this.id = id;
         Header = header;
         Description = description;
@@ -43,6 +44,7 @@ public class ServiceDto implements Serializable {
         ServiceTags = serviceTags;
         Status = status;
         PendingUserCount = pendingUserCount;
+        DistanceToUser = distanceToUser;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E, dd MMM yyyy HH:mm");
 
         String formattedDateTime = time.format(formatter); // "1986-04-08 12:30"
@@ -100,6 +102,10 @@ public class ServiceDto implements Serializable {
 
     public Long getPendingUserCount() {
         return PendingUserCount;
+    }
+
+    public String getDistanceToUser() {
+        return DistanceToUser;
     }
 
     @Override
