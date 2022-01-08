@@ -94,7 +94,6 @@ export default {
         })
     },
     put(url, data, handleOnError, errorMessage,successMessage) {
-        debugger;
         return new Promise((resolve, reject) => {
             axios({
                 method: 'PUT',

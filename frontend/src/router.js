@@ -20,7 +20,6 @@ Vue.use(Router);
 
 const ifNotAuthenticated = (to, from, next) => {
   let token = JSON.parse(localStorage.getItem("token"));
-  debugger;
   if (!token) {   
     next()
 
@@ -29,7 +28,6 @@ const ifNotAuthenticated = (to, from, next) => {
 }
 
 const ifAuthenticated = (to, from, next) => {
-  debugger;
 
   let token = JSON.parse(localStorage.getItem("token"));
   if (token) {

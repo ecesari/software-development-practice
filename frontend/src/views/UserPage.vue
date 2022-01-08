@@ -155,7 +155,6 @@ export default {
         this.userData.balanceOnHold = r.balanceOnHold;
         this.userData.following = r.following;
         this.userData.followedBy = r.followedBy;
-        debugger;
         this.userData.tags = r.tags;
         console.log("ok.");
       });

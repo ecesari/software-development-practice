@@ -22,7 +22,6 @@ export default {
         }
     },
     show: function (status, onSuccess) {
-        debugger;
         if (status.message) {
             swal.fire({
                 title: statuses.isSuccess(status)
@@ -83,7 +82,6 @@ export default {
     },
     showError: function(message)
     {
-        debugger;
         var text;
         if(message) text = message;
         else text = 'Something went wrong!'
@@ -96,7 +94,6 @@ export default {
     },
     showSuccess: function(message)
     {
-        debugger;
         var text;
         if(message) text = message;
         else text = ''

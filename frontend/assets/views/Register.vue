@@ -103,7 +103,6 @@ export default {
     },
     methods: {        
         SendRegister () {
-            debugger;
             apiRegister.Register(this.registerInputs).then(r => {
                 console.log('ok.')
             })

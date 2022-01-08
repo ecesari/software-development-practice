@@ -163,7 +163,7 @@
             <span class="btn-inner--icon">
               <i class="fa fa-magic mr-2"></i>
             </span>
-            <span class="nav-link-inner--text">Log In</span>
+            <span class="nav-link-inner--text">Log In </span>
           </a>
         </li>
         <li>
@@ -173,7 +173,7 @@
               type="secondary"
               class="dropdown-toggle btn btn-neutral btn-icon"
             >
-              Me
+              Me 
             </base-button>
             <router-link to="/profile" class="dropdown-item"
               >My Profile</router-link
@@ -223,12 +223,14 @@ export default {
     };
   },
   mounted() {
+    var foo = process.env.VUE_APP_GOOGLE_MAP_KEY;
+    console.log("google key");
+    console.log(foo);
     let token = JSON.parse(localStorage.getItem("token"));
 
     if (token) {
       this.userLoggedIn = true;
       apiRegister.GetNotificationDetails().then((notificationList) => {
-        debugger;
         var unreadCount = notificationList.filter(
           (notificationList) => notificationList.read === false
         ).length;

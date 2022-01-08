@@ -139,7 +139,6 @@ export default {
   },
   methods: {
     GetApprovalList() {
-      debugger;
       apiRegister.GetApprovalListByUser().then((response) => {
         this.result = response;
         this.nestedArray = this.SplitList();
@@ -171,7 +170,6 @@ export default {
       }
     },
     Approve(userId, serviceId) {
-      debugger;
       this.approveItem.userId = userId;
       this.approveItem.serviceId = serviceId;
       apiRegister.ApproveRequest(this.approveItem).then((response) => {
@@ -180,7 +178,6 @@ export default {
       });
     },
     Deny(userId, serviceId) {
-      debugger;
       this.approveItem.userId = userId;
       this.approveItem.serviceId = serviceId;
       apiRegister.DenyRequest(this.approveItem).then((response) => {
