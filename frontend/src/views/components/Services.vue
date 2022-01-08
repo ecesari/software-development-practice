@@ -1,23 +1,24 @@
 <template>
   <div class="container">
-
     <div class="row justify-content-center">
-
-          <div v-if="this.filter == 'all'" class="row pull-left">
-      <base-dropdown>
-        <base-button
-          slot="title"
-          type="warning"
-          class="dropdown-toggle float-right"
-        >
-          Sort By
-        </base-button>
-        <a class="dropdown-item" href="#" v-on:click="SortByDistance()">Distance</a>
-        <a class="dropdown-item" href="#" v-on:click="SortByServiceDate()">Service Date</a>
-        <a class="dropdown-item" href="#" v-on:click="SortByCreatedDate()">Created Date</a>
-      </base-dropdown>
-    </div>
-
+      <div v-if="this.filter == 'all'" class="row pull-left">
+        <base-dropdown>
+          <base-button
+            slot="title"
+            type="warning"
+            class="dropdown-toggle float-right"
+          >
+            Sort By
+          </base-button>
+          <a class="dropdown-item" href="#" v-on:click="SortBy('distance')">Distance</a>
+          <a class="dropdown-item" href="#" v-on:click="SortBy('serviceDate')"
+            >Service Date</a
+          >
+          <a class="dropdown-item" href="#" v-on:click="SortBy('createdDate')"
+            >Created Date</a
+          >
+        </base-dropdown>
+      </div>
 
       <div class="col-lg-12 pt-100">
         <div
@@ -157,6 +158,14 @@ export default {
       } else {
         return "text-warning text-uppercase";
       }
+    },
+    SortBy(sortBy) {
+      apiRegister
+        .GetAllServicesSorted(this.getOngoingOnly, this.filter, sortBy)
+        .then((response) => {
+          this.serviceResult = response;
+          this.nestedServiceArray = this.SplitList();
+        });
     },
   },
   props: {
