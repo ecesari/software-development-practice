@@ -3,6 +3,7 @@ package com.swe573.socialhub.dto;
 import com.swe573.socialhub.enums.ServiceStatus;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -26,9 +27,10 @@ public class ServiceDto implements Serializable {
     private final String TimeString;
     private final Boolean ShowServiceOverButton;
     private final Long PendingUserCount;
-    private final String DistanceToUser;
+    private final String DistanceToUserString;
+    private final Double DistanceToUser;
 
-    public ServiceDto(Long id, String header, String description, String location, LocalDateTime time, int minutes, int quota, long attendingUserCount, Long createdUserIdId, String createdUserName, Double latitude, Double longitude, List<TagDto> serviceTags, ServiceStatus status, Long pendingUserCount, String distanceToUser) {
+    public ServiceDto(Long id, String header, String description, String location, LocalDateTime time, int minutes, int quota, long attendingUserCount, Long createdUserIdId, String createdUserName, Double latitude, Double longitude, List<TagDto> serviceTags, ServiceStatus status, Long pendingUserCount, Double distanceToUser) {
         this.id = id;
         Header = header;
         Description = description;
@@ -44,7 +46,17 @@ public class ServiceDto implements Serializable {
         ServiceTags = serviceTags;
         Status = status;
         PendingUserCount = pendingUserCount;
+
         DistanceToUser = distanceToUser;
+        if (DistanceToUser != null && DistanceToUser != 0)
+        {
+            DecimalFormat df = new DecimalFormat("0.00");
+            DistanceToUserString = df.format(DistanceToUser) + " KM";
+        }
+        else
+        {
+            DistanceToUserString = "";
+        }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E, dd MMM yyyy HH:mm");
 
         String formattedDateTime = time.format(formatter); // "1986-04-08 12:30"
@@ -104,7 +116,12 @@ public class ServiceDto implements Serializable {
         return PendingUserCount;
     }
 
-    public String getDistanceToUser() {
+
+    public String getDistanceToUserString() {
+        return DistanceToUserString;
+    }
+
+    public Double getDistanceToUser() {
         return DistanceToUser;
     }
 

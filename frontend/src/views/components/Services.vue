@@ -10,15 +10,37 @@
           >
             Sort By
           </base-button>
-          <a class="dropdown-item" href="#" v-on:click="SortBy('distance')">Distance</a>
-          <a class="dropdown-item" href="#" v-on:click="SortBy('distance')">Distance     <span class="btn-inner--icon">
-              <i class="fa fa-user mr-2"></i>
+          <a class="dropdown-item" href="#" v-on:click="SortBy('distanceAsc')">Distance <span class="btn-inner--icon">
+              <i class="fa fa- fa-sort-amount-asc
+ mr-2"></i>
+            </span></a>
+          <a class="dropdown-item" href="#" v-on:click="SortBy('distanceDesc')">Distance <span class="btn-inner--icon">
+              <i class="fa fa- fa-sort-amount-desc
+ mr-2"></i>
             </span> </a>
-          <a class="dropdown-item" href="#" v-on:click="SortBy('serviceDate')"
-            >Service Date</a
+          <a class="dropdown-item" href="#" v-on:click="SortBy('serviceDateAsc')"
+            >Service Date <span class="btn-inner--icon">
+              <i class="fa fa- fa-sort-amount-asc
+ mr-2"></i>
+            </span></a
           >
-          <a class="dropdown-item" href="#" v-on:click="SortBy('createdDate')"
-            >Created Date</a
+              <a class="dropdown-item" href="#" v-on:click="SortBy('serviceDateDesc')"
+            >Service Date <span class="btn-inner--icon">
+              <i class="fa fa- fa-sort-amount-desc
+ mr-2"></i>
+            </span></a
+          >
+          <a class="dropdown-item" href="#" v-on:click="SortBy('createdDateAsc')"
+            >Created Date <span class="btn-inner--icon">
+              <i class="fa fa- fa-sort-amount-asc
+ mr-2"></i>
+            </span></a
+          >
+             <a class="dropdown-item" href="#" v-on:click="SortBy('createdDateDesc')"
+            >Created Date <span class="btn-inner--icon">
+              <i class="fa fa- fa-sort-amount-desc
+ mr-2"></i>
+            </span></a
           >
         </base-dropdown>
       </div>
@@ -49,6 +71,9 @@
               <div>
                 <badge v-bind:type="GetClass(index)" rounded
                   >{{ service.minutes }} credits</badge
+                >
+                <badge v-bind:type="GetClass(index)" rounded
+                  >{{ service.distanceToUser }}</badge
                 >
               </div>
               <base-button

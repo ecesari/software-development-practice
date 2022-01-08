@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
-import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -50,9 +49,9 @@ public class ServiceService {
 
     public List<ServiceDto> findAllServices() {
         var entities = serviceRepository.findAll();
-        entities = entities.stream().filter(x-> x.getTime().isAfter(LocalDateTime.now())).limit(3).collect(Collectors.toUnmodifiableList());
+        entities = entities.stream().filter(x -> x.getTime().isAfter(LocalDateTime.now())).limit(3).collect(Collectors.toUnmodifiableList());
 
-        var list = entities.stream().map(service -> mapToDto(service,Optional.empty())).collect(Collectors.toUnmodifiableList());
+        var list = entities.stream().map(service -> mapToDto(service, Optional.empty())).collect(Collectors.toUnmodifiableList());
 
 
         return list;
@@ -66,20 +65,19 @@ public class ServiceService {
         final User loggedInUser = userRepository.findUserByUsername(principal.getName()).get();
 
         //filter if getongoingonly
-        if (getOngoingOnly)
-        {
-            entities = entities.stream().filter(x-> x.getTime().isAfter(LocalDateTime.now())).collect(Collectors.toUnmodifiableList());
+        if (getOngoingOnly) {
+            entities = entities.stream().filter(x -> x.getTime().isAfter(LocalDateTime.now())).collect(Collectors.toUnmodifiableList());
         }
         //filter by filter
-        switch(filter) {
+        switch (filter) {
             case createdByUser:
-                entities = entities.stream().filter(x->x.getCreatedUser() == loggedInUser).collect(Collectors.toUnmodifiableList());
+                entities = entities.stream().filter(x -> x.getCreatedUser() == loggedInUser).collect(Collectors.toUnmodifiableList());
                 break;
             case first3:
                 entities = entities.stream().limit(3).collect(Collectors.toUnmodifiableList());
                 break;
             case attending:
-                entities = entities.stream().filter(x->x.getApprovalSet().stream().anyMatch(y->y.getUser() == loggedInUser && y.getApprovalStatus() == ApprovalStatus.APPROVED)).collect(Collectors.toUnmodifiableList());
+                entities = entities.stream().filter(x -> x.getApprovalSet().stream().anyMatch(y -> y.getUser() == loggedInUser && y.getApprovalStatus() == ApprovalStatus.APPROVED)).collect(Collectors.toUnmodifiableList());
 
                 break;
             default:
@@ -94,25 +92,36 @@ public class ServiceService {
         if (sortBy != null)
         //if sortBy is not null, sort
         {
-            switch (sortBy)
-            {
+            switch (sortBy) {
                 case distanceAsc:
-                    list.sort(Comparator.comparing(ServiceDto::getDistanceToUser));
+                    list = list.stream()
+                            .sorted(Comparator.comparing(ServiceDto::getDistanceToUser))
+                            .collect(Collectors.toList());
                     break;
                 case distanceDesc:
-                    list.sort(Comparator.comparing(ServiceDto::getDistanceToUser).reversed());
+                    list = list.stream()
+                            .sorted(Comparator.comparing(ServiceDto::getDistanceToUser).reversed())
+                            .collect(Collectors.toList());
                     break;
                 case createdDateDesc:
-                    list.sort(Comparator.comparing(ServiceDto::getId).reversed());
+                    list = list.stream()
+                            .sorted(Comparator.comparing(ServiceDto::getId))
+                            .collect(Collectors.toList());
                     break;
                 case createdDateAsc:
-                    list.sort(Comparator.comparing(ServiceDto::getId));
+                    list = list.stream()
+                            .sorted(Comparator.comparing(ServiceDto::getId).reversed())
+                            .collect(Collectors.toList());
                     break;
                 case serviceDateDesc:
-                    list.sort(Comparator.comparing(ServiceDto::getTime).reversed());
+                    list = list.stream()
+                            .sorted(Comparator.comparing(ServiceDto::getTime))
+                            .collect(Collectors.toList());
                     break;
                 case serviceDateAsc:
-                    list.sort(Comparator.comparing(ServiceDto::getTime));
+                    list = list.stream()
+                            .sorted(Comparator.comparing(ServiceDto::getTime).reversed())
+                            .collect(Collectors.toList());
                     break;
             }
         }
@@ -175,7 +184,7 @@ public class ServiceService {
             throw new IllegalArgumentException("User doesn't exist.");
         try {
             var entities = serviceRepository.findServiceByCreatedUser(loggedInUser);
-            var dtoList = entities.stream().map(service -> mapToDto(service,Optional.empty())).collect(Collectors.toUnmodifiableList());
+            var dtoList = entities.stream().map(service -> mapToDto(service, Optional.empty())).collect(Collectors.toUnmodifiableList());
             return dtoList;
         } catch (DataException e) {
             throw new IllegalArgumentException("There was a problem trying to save service to db");
@@ -205,7 +214,7 @@ public class ServiceService {
             for (UserServiceApproval approvedUserRequest : approvedUserRequests) {
                 var balance = approvedUserRequest.getUser().getBalance();
                 approvedUserRequest.getUser().setBalance(balance - approvedUserRequest.getService().getCredit());
-                notificationService.sendNotification(String.format("Your request for service " + entity.getHeader()+ " has been approved."),
+                notificationService.sendNotification(String.format("Your request for service " + entity.getHeader() + " has been approved."),
                         "/service/" + entity.getId(), approvedUserRequest.getUser());
             }
             var createdUser = service.get().getCreatedUser();
@@ -228,20 +237,18 @@ public class ServiceService {
             }
         }
 
-        String distanceToUser;
+        Double distanceToUser;
 
-        if (loggedInUser.isPresent())
-        {
-            DecimalFormat df = new DecimalFormat("0.00");
-            var distance = getDistance(service.getLatitude(),service.getLongitude(),loggedInUser.get().getLatitude(),loggedInUser.get().getLongitude());
-            distanceToUser = df.format(distance);
-        }
-        else{
-            distanceToUser = "";
+        if (loggedInUser.isPresent()) {
+
+            distanceToUser = getDistance(service.getLatitude(), service.getLongitude(), loggedInUser.get().getLatitude(), loggedInUser.get().getLongitude());
+
+        } else {
+            distanceToUser = null;
         }
         var approvals = service.getApprovalSet();
-        var attending = approvals.stream().filter(x-> x.getApprovalStatus() == ApprovalStatus.APPROVED).count();
-        var pending = approvals.stream().filter(x-> x.getApprovalStatus() == ApprovalStatus.PENDING).count();
+        var attending = approvals.stream().filter(x -> x.getApprovalStatus() == ApprovalStatus.APPROVED).count();
+        var pending = approvals.stream().filter(x -> x.getApprovalStatus() == ApprovalStatus.PENDING).count();
         return new ServiceDto(service.getId(), service.getHeader(), service.getDescription(), service.getLocation(), service.getTime(), service.getCredit(), service.getQuota(), attending, service.getCreatedUser().getId(), service.getCreatedUser().getUsername(), service.getLatitude(), service.getLongitude(), list, service.getStatus(), pending, distanceToUser);
     }
 
@@ -254,15 +261,15 @@ public class ServiceService {
         double lat2Double = Double.parseDouble(lat2);
         double lng2Double = Double.parseDouble(lng2);
         double earthRadius = 6371000; //meters
-        double dLat = Math.toRadians(lat2Double-lat1);
-        double dLng = Math.toRadians(lng2Double-lng1);
-        double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+        double dLat = Math.toRadians(lat2Double - lat1);
+        double dLng = Math.toRadians(lng2Double - lng1);
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
                 Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2Double)) *
-                        Math.sin(dLng/2) * Math.sin(dLng/2);
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+                        Math.sin(dLng / 2) * Math.sin(dLng / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         float dist = (float) (earthRadius * c);
 
-        return dist  * 0.001;
+        return dist * 0.001;
     }
 
 
