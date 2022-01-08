@@ -1,7 +1,25 @@
 <template>
   <div class="container">
+
     <div class="row justify-content-center">
-      <div class="col-lg-12">
+
+          <div v-if="this.filter == 'all'" class="row pull-left">
+      <base-dropdown>
+        <base-button
+          slot="title"
+          type="warning"
+          class="dropdown-toggle float-right"
+        >
+          Sort By
+        </base-button>
+        <a class="dropdown-item" href="#">Distance</a>
+        <a class="dropdown-item" href="#">Service Date</a>
+        <a class="dropdown-item" href="#">Created Date</a>
+      </base-dropdown>
+    </div>
+
+
+      <div class="col-lg-12 pt-100">
         <div
           v-for="(serviceArray, index) in nestedServiceArray"
           :key="index"
@@ -25,9 +43,9 @@
                 {{ service.description }}
               </p>
               <div>
-                <badge v-bind:type="GetClass(index)" rounded>{{
-                  service.minutes
-                }} credits</badge>
+                <badge v-bind:type="GetClass(index)" rounded
+                  >{{ service.minutes }} credits</badge
+                >
               </div>
               <base-button
                 tag="a"
@@ -38,7 +56,7 @@
               >
                 Learn more
               </base-button>
-                     <base-button
+              <base-button
                 tag="a"
                 v-if="!isLoggedIn"
                 :href="'#/register/'"
@@ -58,6 +76,7 @@
 <script>
 import Hero from "./Hero";
 import apiRegister from "@/api/register";
+import BaseDropdown from "@/components/BaseDropdown";
 
 export default {
   name: "services",
@@ -66,15 +85,18 @@ export default {
       serviceResult: [],
       nestedServiceArray: [],
       getOngoingOnly: false,
-      isLoggedIn: false
+      isLoggedIn: false,
     };
   },
   mounted() {
     this.GetServices();
-        let token = JSON.parse(localStorage.getItem("token"));
+    let token = JSON.parse(localStorage.getItem("token"));
 
-    if (token) {this.isLoggedIn = true}
-    else {this.isLoggedIn = false;}
+    if (token) {
+      this.isLoggedIn = true;
+    } else {
+      this.isLoggedIn = false;
+    }
   },
   methods: {
     GetServices() {
@@ -143,6 +165,7 @@ export default {
   },
   components: {
     Hero,
+    BaseDropdown,
   },
 };
 </script>

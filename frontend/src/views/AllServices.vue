@@ -47,7 +47,7 @@
     </div>
     
     <section class="section section-lg pt-lg-0 mt--400 ">
-        <!-- <services :getByUser=true></services> -->
+
         <services :filter="'all'"></services>
 
     </section>
@@ -88,10 +88,12 @@
 
 <script>
 import Services from "./components/Services.vue";
+import BaseDropdown from "@/components/BaseDropdown";
 
 export default {
   components: {
     Services,
+    BaseDropdown
   },
 };
 

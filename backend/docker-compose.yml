@@ -33,7 +33,7 @@ services:
     depends_on:
       - app
     environment:
-        - VUE_APP_API=http://ec2-3-238-14-131.compute-1.amazonaws.com:8081/
+        - VUE_APP_API=http://localhost:8081/
         - VUE_APP_GOOGLE_MAP_KEY = 'AIzaSyCPe9MVNFIUhRwnQExIPZoIuA02a-o9gkU'
     ports:
       - "8080:8080"

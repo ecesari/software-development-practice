@@ -32,8 +32,10 @@ public class ServiceController {
     }
 
     @GetMapping
-    public List<ServiceDto> findAllServices()  {
+    @ResponseBody
+    public List<ServiceDto> findAllServices(@RequestParam String sortBy)  {
         try {
+            var foo = sortBy;
             return serviceService.findAllServices();
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getLocalizedMessage());
