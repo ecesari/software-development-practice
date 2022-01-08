@@ -11,6 +11,9 @@
             Sort By
           </base-button>
           <a class="dropdown-item" href="#" v-on:click="SortBy('distance')">Distance</a>
+          <a class="dropdown-item" href="#" v-on:click="SortBy('distance')">Distance     <span class="btn-inner--icon">
+              <i class="fa fa-user mr-2"></i>
+            </span> </a>
           <a class="dropdown-item" href="#" v-on:click="SortBy('serviceDate')"
             >Service Date</a
           >

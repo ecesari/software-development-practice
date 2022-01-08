@@ -91,27 +91,30 @@ public class ServiceService {
         var list = entities.stream().map(service -> mapToDto(service, Optional.of(loggedInUser))).collect(Collectors.toUnmodifiableList());
 
 
+        if (sortBy != null)
         //if sortBy is not null, sort
-        switch (sortBy)
         {
-            case distanceAsc:
-                list.sort(Comparator.comparing(ServiceDto::getDistanceToUser));
-                break;
-            case distanceDesc:
-                list.sort(Comparator.comparing(ServiceDto::getDistanceToUser).reversed());
-                break;
-            case createdDateDesc:
-                list.sort(Comparator.comparing(ServiceDto::getId).reversed());
-                break;
-            case createdDateAsc:
-                list.sort(Comparator.comparing(ServiceDto::getId));
-                break;
-            case serviceDateDesc:
-                list.sort(Comparator.comparing(ServiceDto::getTime).reversed());
-                break;
-            case serviceDateAsc:
-                list.sort(Comparator.comparing(ServiceDto::getTime));
-                break;
+            switch (sortBy)
+            {
+                case distanceAsc:
+                    list.sort(Comparator.comparing(ServiceDto::getDistanceToUser));
+                    break;
+                case distanceDesc:
+                    list.sort(Comparator.comparing(ServiceDto::getDistanceToUser).reversed());
+                    break;
+                case createdDateDesc:
+                    list.sort(Comparator.comparing(ServiceDto::getId).reversed());
+                    break;
+                case createdDateAsc:
+                    list.sort(Comparator.comparing(ServiceDto::getId));
+                    break;
+                case serviceDateDesc:
+                    list.sort(Comparator.comparing(ServiceDto::getTime).reversed());
+                    break;
+                case serviceDateAsc:
+                    list.sort(Comparator.comparing(ServiceDto::getTime));
+                    break;
+            }
         }
         return list;
     }
