@@ -33,7 +33,7 @@ public class ServiceController {
 
     @GetMapping
     @ResponseBody
-    public List<ServiceDto> findAllServices(@RequestParam String sortBy)  {
+    public List<ServiceDto> findAllServices(@RequestParam (required = false) String sortBy)  {
         try {
             var foo = sortBy;
             return serviceService.findAllServices();
