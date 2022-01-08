@@ -103,22 +103,22 @@ public class ServiceService {
                             .sorted(Comparator.comparing(ServiceDto::getDistanceToUser).reversed())
                             .collect(Collectors.toList());
                     break;
-                case createdDateDesc:
+                case createdDateAsc:
                     list = list.stream()
                             .sorted(Comparator.comparing(ServiceDto::getId))
                             .collect(Collectors.toList());
                     break;
-                case createdDateAsc:
+                case createdDateDesc:
                     list = list.stream()
                             .sorted(Comparator.comparing(ServiceDto::getId).reversed())
                             .collect(Collectors.toList());
                     break;
-                case serviceDateDesc:
+                case serviceDateAsc:
                     list = list.stream()
                             .sorted(Comparator.comparing(ServiceDto::getTime))
                             .collect(Collectors.toList());
                     break;
-                case serviceDateAsc:
+                case serviceDateDesc:
                     list = list.stream()
                             .sorted(Comparator.comparing(ServiceDto::getTime).reversed())
                             .collect(Collectors.toList());

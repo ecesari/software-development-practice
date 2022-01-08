@@ -73,7 +73,7 @@
                   >{{ service.minutes }} credits</badge
                 >
                 <badge v-bind:type="GetClass(index)" rounded
-                  >{{ service.distanceToUser }}</badge
+                  >{{ service.distanceToUserString }}</badge
                 >
               </div>
               <base-button
