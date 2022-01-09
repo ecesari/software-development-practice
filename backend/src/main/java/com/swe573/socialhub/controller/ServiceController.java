@@ -80,8 +80,19 @@ public class ServiceController {
     }
 
 
-    @GetMapping("/complete/{serviceId}")
+    @GetMapping("/approve/{serviceId}")
     public void App(Principal principal, @PathVariable Long serviceId) {
+        try {
+            serviceService.approve(principal,serviceId);
+        }
+        catch (RuntimeException e)
+        {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getLocalizedMessage());
+        }
+    }
+
+    @GetMapping("/complete/{serviceId}")
+    public void Complete(Principal principal, @PathVariable Long serviceId) {
         try {
             serviceService.complete(principal,serviceId);
         }

@@ -97,7 +97,6 @@
               <div>
                 <!-- <i class="ni ni-square-pin"></i> : {{ serviceData.location }} -->
                 <i class="ni ni-time-alarm"></i>: {{ serviceData.timeString }}
-             
               </div>
               <!-- <div>
                 <i class="ni ni-single-02"></i>: {{ serviceData.quota }} people
@@ -122,12 +121,12 @@
             </div>
 
             <div
-              v-if="userData.ownsService && serviceData.showServiceButton"
+              v-if="userData.ownsService && serviceData.datePassed && serviceData.status === 'ONGOING'"
               class="mt-2 py-5 border-top text-center"
             >
               <div class="row justify-content-center">
                 <div class="col-lg-9">
-                  <base-button @click="ConfirmServiceOver" type="success"
+                  <base-button @click="ConfirmServiceOverCreator" type="success"
                     >Service Is Over?</base-button
                   >
                 </div>
@@ -161,7 +160,7 @@ export default {
         createdUserName: "",
         serviceTags: [],
         status: "",
-        showServiceButton: false,
+        datePassed: false,
       },
       userData: {
         hasServiceRequest: "",
@@ -194,7 +193,7 @@ export default {
         this.serviceData.serviceTags = r.serviceTags;
         this.serviceData.attendingUserCount = r.attendingUserCount;
         this.serviceData.status = r.status;
-        this.serviceData.showServiceButton = r.showServiceOverButton;
+        this.serviceData.datePassed = r.showServiceOverButton;
 
         this.coordinates.lat = r.latitude;
         this.coordinates.lng = r.longitude;
@@ -231,16 +230,18 @@ export default {
         location.reload();
       });
     },
-    ConfirmServiceOver() {
+    ConfirmServiceOverCreator() {
       modal.confirm(
         "Do you accept that the service is over?",
-        "The participants' and your balance will be updated",
-        this.SendServiceOverApproval
+        // "The participants' and your balance will be updated",
+        "A notification will be sent to attendees to request their approval for system completion",
+
+        this.SendServiceOverApprovalForCreator
       );
     },
-    SendServiceOverApproval() {
+    SendServiceOverApprovalForCreator() {
       var serviceId = this.$route.params.service_id;
-      apiRegister.SendServiceOverApproval(serviceId).then((r) => {
+      apiRegister.SendServiceOverApprovalForCreator(serviceId).then((r) => {
         location.reload();
       });
     },

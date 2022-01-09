@@ -61,7 +61,7 @@ public class ServiceDto implements Serializable {
 
         String formattedDateTime = time.format(formatter); // "1986-04-08 12:30"
         TimeString = formattedDateTime;
-        ShowServiceOverButton = time.isBefore(LocalDateTime.now()) && status == ServiceStatus.ONGOING;
+        ShowServiceOverButton = time.isBefore(LocalDateTime.now()) ;
     }
 
     public Long getId() {

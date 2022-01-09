@@ -52,8 +52,8 @@ export default {
     DenyRequest(data) {
         return http.post(process.env.VUE_APP_API + 'approval/deny', data, true, 'Request Denied Successfully')
     },
-    SendServiceOverApproval(serviceId) {
-        return http.get(process.env.VUE_APP_API + 'service/complete/' + serviceId,true, 'Service has been completed. Thank you!')
+    SendServiceOverApprovalForCreator(serviceId) {
+        return http.get(process.env.VUE_APP_API + 'service/approve/' + serviceId,true, 'A notification will be sent to all attendees. Thank you!')
     },
     GetNotificationDetails() {
         return http.get(process.env.VUE_APP_API + 'notification/getByUser')

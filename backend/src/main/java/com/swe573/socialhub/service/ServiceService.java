@@ -195,31 +195,75 @@ public class ServiceService {
 
     @Transactional
     public void complete(Principal principal, Long serviceId) {
+        //get logged in user
         final User loggedInUser = userRepository.findUserByUsername(principal.getName()).get();
         if (loggedInUser == null)
             throw new IllegalArgumentException("User doesn't exist.");
+        //get service by id
         Optional<Service> service = serviceRepository.findById(serviceId);
 
+        //service null check
         if (service.isPresent()) {
+            //set to approve
+            var entity = service.get();
+            entity.setStatus(ServiceStatus.COMPLETED);
+
+
+            //send notification to attendees
+            var approvedUserRequests = approvalRepository.findUserServiceApprovalByService_IdAndApprovalStatus(serviceId, ApprovalStatus.PENDING);
+            for (UserServiceApproval approvedUserRequest : approvedUserRequests) {
+                var balance = approvedUserRequest.getUser().getBalance();
+                approvedUserRequest.getUser().setBalance(balance - approvedUserRequest.getService().getCredit());
+                notificationService.sendNotification(String.format("The service " + entity.getHeader() + " is complete. Your balance has been updated"),
+                        "/service/" + entity.getId(), approvedUserRequest.getUser());
+            }
+
+            //send notification to creator
+            var creator = service.get().getCreatedUser();
+            notificationService.sendNotification(String.format("The service " + entity.getHeader() + " is complete. Your balance has been updated"),
+                    "/service/" + entity.getId(), creator);
+
+            //set balance
+            var createdUser = service.get().getCreatedUser();
+            var createdUserBalance = createdUser.getBalance();
+            createdUser.setBalance(createdUserBalance + service.get().getCredit());
+
+
+        } else {
+            throw new IllegalArgumentException("No services have been found");
+        }
+
+    }
+
+    @Transactional
+    public void approve(Principal principal, Long serviceId) {
+        //get logged in user
+        final User loggedInUser = userRepository.findUserByUsername(principal.getName()).get();
+        if (loggedInUser == null)
+            throw new IllegalArgumentException("User doesn't exist.");
+        //get service by id
+        Optional<Service> service = serviceRepository.findById(serviceId);
+
+        //service null check
+        if (service.isPresent()) {
+            //set to approve
             var entity = service.get();
             entity.setStatus(ServiceStatus.APPROVED);
 
+            //get all attendees
             var pendingUserRequests = approvalRepository.findUserServiceApprovalByService_IdAndApprovalStatus(serviceId, ApprovalStatus.PENDING);
+            //if there are pending requests set them as denied and send notification
             for (UserServiceApproval pendingUserRequest : pendingUserRequests) {
                 pendingUserRequest.setApprovalStatus(ApprovalStatus.DENIED);
                 notificationService.sendNotification("Your request for service " + entity.getHeader() + " has been denied.",
                         "/service/" + entity.getId(), pendingUserRequest.getUser());
             }
+            //send notification to attendees
             var approvedUserRequests = approvalRepository.findUserServiceApprovalByService_IdAndApprovalStatus(serviceId, ApprovalStatus.PENDING);
             for (UserServiceApproval approvedUserRequest : approvedUserRequests) {
-                var balance = approvedUserRequest.getUser().getBalance();
-                approvedUserRequest.getUser().setBalance(balance - approvedUserRequest.getService().getCredit());
-                notificationService.sendNotification(String.format("Your request for service " + entity.getHeader() + " has been approved."),
+                notificationService.sendNotification(String.format("It looks like " + entity.getHeader() + " has been over. Please confirm it to complete this service."),
                         "/service/" + entity.getId(), approvedUserRequest.getUser());
             }
-            var createdUser = service.get().getCreatedUser();
-            var createdUserBalance = createdUser.getBalance();
-            createdUser.setBalance(createdUserBalance + service.get().getCredit());
 
 
         } else {
