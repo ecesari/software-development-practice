@@ -22,7 +22,6 @@ class User {
 User "1" *-- "*" Service : creates
 User "*" -- "*" User : follows
 User "*" -- "*" Tag : interests
-User "1" -- "*" Approval
 User "1" -- "*" Notification
 
 
@@ -85,10 +84,10 @@ class UserServiceApproval{
     void Approve(int requestId)
     void Deny(int requestId)
 }
-User "1" *-- "*" Request : requests
-Service "1" *-- "*" Request
-User "1" *-- "*" Request : approves
-ApprovalStatus "1" *-- "*" Request
+User "1" *-- "*" UserServiceApproval : requests
+Service "1" *-- "*" UserServiceApproval
+User "1" *-- "*" UserServiceApproval : approves
+ApprovalStatus "1" *-- "*" UserServiceApproval
 
 enum ApprovalStatus {
     Pending
