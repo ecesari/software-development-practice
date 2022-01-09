@@ -5,41 +5,26 @@ class User {
     string EmailAddress
     string Password
     string Bio
-    string PhotoUrl
-    UserRole Role
-    void CreateEvent(string title, string description, string location, datetime time)
-    void CreateService(string title, string description, string location, datetime time, int hours)
-    void RequestServiceParticipation(int eventId)
-    void ApproveServiceParticipation(int requestId)
+    double Latitude
+    double Longitude
+    string FormattedAddress
+    int Credits
+   
     void FollowUser(int userId)
+    void Register(string username,string email,string bio,string password,string tags,string latitude,string longitude,string formattedAddress)
+    void Login (string username, string password)
+    User GetUser(int userId)
+    List<User> GetAllUsers(int userId)
 
 }
 
-User "1" *-- "*" Event : creates  
-User "1" *-- "*" Service : creates  
-User "*" -- "*" User : follows  
 
+User "1" *-- "*" Service : creates
+User "*" -- "*" User : follows
+User "*" -- "*" Tag : interests
+User "1" -- "*" Approval
+User "1" -- "*" Notification
 
-enum UserRole {
-    Admin
-    User
-}
-
-User  *--  UserRole 
-
-class Event {
-    string Id
-    string Header
-    string Description
-    string Location
-    DateTime Time
-    ' int Hours
-    DateTime CreatedDateTime
-    int CreatedUserId
-    ' int Quota
-    ' TypeEvent Type 
-    ' int FlagCount
-}
 
 class Service {
     string Id
@@ -47,43 +32,63 @@ class Service {
     string Description
     string Location
     DateTime Time
-    int Hours
+    int Credits
     DateTime CreatedDateTime
     int CreatedUserId
-    int Quota
-    ' TypeEvent Type 
-    int FlagCount
+    int Quota    
+    double Latitude
+    double Longitude
+    string FormattedAddress
+    ServiceStatus Status
+    List<Service> GetAll()
+    List<Service> GetSorted(SortType sortType)
+    Service GetById(int serviceId)
+    void Complete(int serviceId)
+    void Create(string title, string description, string location, datetime time, int hours, List<Tag> tags, int createdUserId)
+   
 }
 
+Service "*" *-- "*" Tag 
+Service "1" *-- "*" ServiceStatus 
 
-' User "1" *-- "*" Event : creates  
-' Event  *--  TypeEvent 
+enum ServiceStatus
+{
+    ONGOING,
+    CREATOR_APPROVED,
+    COMPLETED,
+    CANCELLED
+}
 
-' enum TypeEvent {
-'     Service
-'     Event
-' }
+enum SortType
+{
+    distanceAsc,
+    distanceDesc,
+    serviceDateDesc,
+    createdDateDesc,
+    serviceDateAsc,
+    createdDateAsc
+}
 
 class Tag{
     int Id
     string Name
 }
 
-User "*" -- "*" Tag   
-Event "*" -- "*" Tag  
-Service "*" -- "*" Tag  
-
-class Request{
+class UserServiceApproval{
     int Id
     int RequesterUserId
-    int RequestedEventId
+    int RequestedServiceId
     int ApprovedByUserId
     ApprovalStatus ApprovalStatus
+    void RequestServiceParticipation(int serviceId, int requesterId )
+    List<UserServiceApproval> GetApprovalListRequestByUser(int userId)
+    void Approve(int requestId)
+    void Deny(int requestId)
 }
-User "1" *-- "*" Request : requests   
-Service "1" *-- "*" Request  
-User "1" *-- "*" Request : approves   
-ApprovalStatus "1" *-- "*" Request    
+User "1" *-- "*" Request : requests
+Service "1" *-- "*" Request
+User "1" *-- "*" Request : approves
+ApprovalStatus "1" *-- "*" Request
 
 enum ApprovalStatus {
     Pending
@@ -96,9 +101,11 @@ class Notification {
     string UserId
     string Message
     bool Read
+    List<Notification> GetNotificationsByUser(int userId)
+
 }
 
 
-User "1" --* "*" Notification   
+User "1" --* "*" Notification
 
 @enduml
