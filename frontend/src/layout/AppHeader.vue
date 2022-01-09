@@ -69,9 +69,27 @@
                 <i class="ni ni-badge"></i>
               </div>
               <div class="media-body ml-3">
-                <h5 class="heading text-success mb-md-1">My Services</h5>
+                <h5 class="heading text-success mb-md-1">Created Services</h5>
                 <p class="description d-none d-md-inline-block mb-0">
                   List all the services that you have created so far
+                </p>
+              </div>
+            </a>
+                      <a href="#/attendingServices" class="media d-flex align-items-center">
+              <div
+                class="
+                  icon icon-shape
+                  bg-gradient-success
+                  rounded-circle
+                  text-white
+                "
+              >
+                <i class="ni ni-badge"></i>
+              </div>
+              <div class="media-body ml-3">
+                <h5 class="heading text-success mb-md-1">Attending Services</h5>
+                <p class="description d-none d-md-inline-block mb-0">
+                  List all the services that you are attending so far
                 </p>
               </div>
             </a>
