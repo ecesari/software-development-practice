@@ -22,7 +22,11 @@
               >
                 <div class="card-profile-actions py-4 mt-lg-0">
                   <base-button
-                    v-if="!userData.hasServiceRequest && !userData.ownsService && !serviceData.showServiceButton"
+                    v-if="
+                      !userData.hasServiceRequest &&
+                      !userData.ownsService &&
+                      !serviceData.showServiceButton
+                    "
                     @click="ConfirmRequest"
                     type="info"
                     size="sm"
@@ -31,15 +35,17 @@
                   >
                   <base-button
                     disabled
-                    v-if="userData.hasServiceRequest "
+                    v-if="userData.hasServiceRequest"
                     type="info"
                     size="sm"
                     class="mr-4"
                     >Already requested to join</base-button
                   >
-                     <base-button
+                  <base-button
                     disabled
-                    v-if="serviceData.showServiceButton && !userData.ownsService"
+                    v-if="
+                      serviceData.showServiceButton && !userData.ownsService
+                    "
                     type="warning"
                     size="sm"
                     class="mr-4"
@@ -63,7 +69,7 @@
                     <span class="description">Quota</span>
                   </div>
                   <div>
-                    <span class="heading">{{serviceData.minutes}}</span>
+                    <span class="heading">{{ serviceData.minutes }}</span>
                     <span class="description">Credits</span>
                   </div>
                 </div>
@@ -81,7 +87,10 @@
               <div></div>
               <br />
               <div class="text-center">
-                <base-button v-if="serviceData.formattedAddress != ''" type="secondary">
+                <base-button
+                  v-if="serviceData.formattedAddress != ''"
+                  type="secondary"
+                >
                   <GmapMap
                     :center="coordinates"
                     :zoom="13"
@@ -93,7 +102,7 @@
                   </GmapMap>
                 </base-button>
               </div>
-              <br>
+              <br />
               <div>
                 <!-- <i class="ni ni-square-pin"></i> : {{ serviceData.location }} -->
                 <i class="ni ni-time-alarm"></i>: {{ serviceData.timeString }}
@@ -121,7 +130,11 @@
             </div>
 
             <div
-              v-if="userData.ownsService && serviceData.datePassed && serviceData.status === 'ONGOING'"
+              v-if="
+                userData.ownsService &&
+                serviceData.datePassed &&
+                serviceData.status === 'ONGOING'
+              "
               class="mt-2 py-5 border-top text-center"
             >
               <div class="row justify-content-center">
@@ -134,12 +147,18 @@
             </div>
 
             <div
-              v-if="userData.attendsService && serviceData.datePassed && serviceData.status === 'APPROVED'"
+              v-if="
+                userData.attendsService &&
+                serviceData.datePassed &&
+                serviceData.status === 'APPROVED'
+              "
               class="mt-2 py-5 border-top text-center"
             >
               <div class="row justify-content-center">
                 <div class="col-lg-9">
-                  <base-button @click="ConfirmServiceOverCreator" type="success"
+                  <base-button
+                    @click="ConfirmServiceOverAttendee"
+                    type="success"
                     >Service Is Over?</base-button
                   >
                 </div>
@@ -179,7 +198,7 @@ export default {
         hasServiceRequest: "",
         ownsService: "",
         attendsService: false,
-      },      
+      },
       coordinates: {
         lat: 0,
         lng: 0,
@@ -257,6 +276,21 @@ export default {
     SendServiceOverApprovalForCreator() {
       var serviceId = this.$route.params.service_id;
       apiRegister.SendServiceOverApprovalForCreator(serviceId).then((r) => {
+        location.reload();
+      });
+    },
+    ConfirmServiceOverAttendee() {
+      modal.confirm(
+        "Do you accept that the service is over?",
+        // "The participants' and your balance will be updated",
+        "A notification will be sent to the creator and the service will be complete",
+
+        this.SendServiceOverApprovalForAttendee
+      );
+    },
+    SendServiceOverApprovalForAttendee() {
+      var serviceId = this.$route.params.service_id;
+      apiRegister.SendServiceOverApprovalForAttendee(serviceId).then((r) => {
         location.reload();
       });
     },
