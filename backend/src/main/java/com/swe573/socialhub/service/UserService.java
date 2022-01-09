@@ -216,7 +216,8 @@ public class UserService {
         var service = serviceOptional.get();
         var ownsService = service.getCreatedUser().getId() == loggedInUser.getId();
         var userServiceApproval = userServiceApprovalRepository.findUserServiceApprovalByServiceAndUser(service, loggedInUser);
-        var dto = new UserServiceDto(userServiceApproval != null && !userServiceApproval.isEmpty(), ownsService);
+        var attendsService = userServiceApproval.isPresent() && userServiceApproval.get().getApprovalStatus().name() == "APPROVED";
+        var dto = new UserServiceDto(userServiceApproval != null && !userServiceApproval.isEmpty(), ownsService, attendsService);
         return dto;
 
     }

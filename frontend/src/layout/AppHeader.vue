@@ -90,7 +90,7 @@
                 <i class="ni ni-world-2"></i>
               </div>
               <div class="media-body ml-3">
-                <h5 class="heading text-success mb-md-1">Attending Services</h5>
+                <h5 class="heading text-warning mb-md-1">Attending Services</h5>
                 <p class="description d-none d-md-inline-block mb-0">
                   List all the services that you are attending so far
                 </p>

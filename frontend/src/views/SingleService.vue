@@ -132,6 +132,19 @@
                 </div>
               </div>
             </div>
+
+            <div
+              v-if="userData.attendsService && serviceData.datePassed && serviceData.status === 'APPROVED'"
+              class="mt-2 py-5 border-top text-center"
+            >
+              <div class="row justify-content-center">
+                <div class="col-lg-9">
+                  <base-button @click="ConfirmServiceOverCreator" type="success"
+                    >Service Is Over?</base-button
+                  >
+                </div>
+              </div>
+            </div>
           </div>
         </card>
       </div>
@@ -165,6 +178,7 @@ export default {
       userData: {
         hasServiceRequest: "",
         ownsService: "",
+        attendsService: false,
       },      
       coordinates: {
         lat: 0,
@@ -204,6 +218,7 @@ export default {
       apiRegister.GetUserServiceDetails(id).then((r) => {
         this.userData.hasServiceRequest = r.hasServiceRequest;
         this.userData.ownsService = r.ownsService;
+        this.userData.attendsService = r.attendsService;
       });
     },
     GetClass(index) {

@@ -55,6 +55,9 @@ export default {
     SendServiceOverApprovalForCreator(serviceId) {
         return http.get(process.env.VUE_APP_API + 'service/approve/' + serviceId,true, 'A notification will be sent to all attendees. Thank you!')
     },
+    SendServiceOverApprovalForAttendee(serviceId) {
+        return http.get(process.env.VUE_APP_API + 'service/complete/' + serviceId,true, 'Service is now complete. Thank you!')
+    },
     GetNotificationDetails() {
         return http.get(process.env.VUE_APP_API + 'notification/getByUser')
     },

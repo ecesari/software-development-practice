@@ -210,7 +210,7 @@ public class ServiceService {
 
 
             //send notification to attendees
-            var approvedUserRequests = approvalRepository.findUserServiceApprovalByService_IdAndApprovalStatus(serviceId, ApprovalStatus.PENDING);
+            var approvedUserRequests = approvalRepository.findUserServiceApprovalByService_IdAndApprovalStatus(serviceId, ApprovalStatus.APPROVED);
             for (UserServiceApproval approvedUserRequest : approvedUserRequests) {
                 var balance = approvedUserRequest.getUser().getBalance();
                 approvedUserRequest.getUser().setBalance(balance - approvedUserRequest.getService().getCredit());
@@ -259,7 +259,7 @@ public class ServiceService {
                         "/service/" + entity.getId(), pendingUserRequest.getUser());
             }
             //send notification to attendees
-            var approvedUserRequests = approvalRepository.findUserServiceApprovalByService_IdAndApprovalStatus(serviceId, ApprovalStatus.PENDING);
+            var approvedUserRequests = approvalRepository.findUserServiceApprovalByService_IdAndApprovalStatus(serviceId, ApprovalStatus.APPROVED);
             for (UserServiceApproval approvedUserRequest : approvedUserRequests) {
                 notificationService.sendNotification(String.format("It looks like " + entity.getHeader() + " has been over. Please confirm it to complete this service."),
                         "/service/" + entity.getId(), approvedUserRequest.getUser());

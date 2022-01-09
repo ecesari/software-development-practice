@@ -3,10 +3,12 @@ package com.swe573.socialhub.dto;
 public class UserServiceDto {
     private Boolean hasServiceRequest;
     private Boolean ownsService;
+    private Boolean attendsService;
 
-    public UserServiceDto(Boolean hasServiceRequest, Boolean ownsService) {
+    public UserServiceDto(Boolean hasServiceRequest, Boolean ownsService, Boolean attendsService) {
         this.hasServiceRequest = hasServiceRequest;
         this.ownsService = ownsService;
+        this.attendsService = attendsService;
     }
 
     public Boolean getHasServiceRequest() {
@@ -17,6 +19,7 @@ public class UserServiceDto {
         return ownsService;
     }
 
-
-
+    public Boolean getAttendsService() {
+        return attendsService;
+    }
 }
