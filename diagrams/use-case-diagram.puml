@@ -4,12 +4,8 @@ User --> (Create events)
 User --> (Request event participation)
 User --> (Approve event participation)
 User --> (Follow users)
-User --> (Search events)
 User --> (View events)
-
-:Admin: ---> (Reviews event flags) : Review event \nwith certain \n # of flags
-:Admin: ---> (Remove event)
-:Admin: ---> (Remove user)
-:Admin: --> (View events)
+User --> (View event details)
+Reader --> (View events)
 
 @enduml
