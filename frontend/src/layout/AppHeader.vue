@@ -75,16 +75,19 @@
                 </p>
               </div>
             </a>
-                      <a href="#/attendingServices" class="media d-flex align-items-center">
+            <a
+              href="#/attendingServices"
+              class="media d-flex align-items-center"
+            >
               <div
                 class="
                   icon icon-shape
-                  bg-gradient-success
+                  bg-gradient-warning
                   rounded-circle
                   text-white
                 "
               >
-                <i class="ni ni-badge"></i>
+                <i class="ni ni-world-2"></i>
               </div>
               <div class="media-body ml-3">
                 <h5 class="heading text-success mb-md-1">Attending Services</h5>
@@ -191,7 +194,7 @@
               type="secondary"
               class="dropdown-toggle btn btn-neutral btn-icon"
             >
-              Me 
+              Me
             </base-button>
             <router-link to="/profile" class="dropdown-item"
               >My Profile</router-link
