@@ -5,4 +5,5 @@ This is a repository for the SWE 573 Software Development as Practice class.
 The application is deployed and can be viewed at URL's below.
 
 Application URL: http://ec2-3-239-28-109.compute-1.amazonaws.com:8080/ 
+
 Backend Rest API URL: http://ec2-3-239-28-109.compute-1.amazonaws.com:8081/ 
