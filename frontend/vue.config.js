@@ -4,7 +4,11 @@ const vueSrc = "./src";
 
 module.exports = {
   devServer: {
-    disableHostCheck: true
+    disableHostCheck: true,    
+    headers: {
+      'Access-Control-Allow-Private-Network': true,
+      'Access-Control-Allow-Origin': '*',
+    }
   },
   configureWebpack: {
     resolve: {
