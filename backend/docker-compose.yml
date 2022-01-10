@@ -33,7 +33,7 @@ services:
     depends_on:
       - app
     environment:
-        - VUE_APP_API=http://ec2-44-201-23-112.compute-1.amazonaws.com:8081/
+        - VUE_APP_API=http://ec2-44-201-10-41.compute-1.amazonaws.com:8081/
         - VUE_APP_GOOGLE_MAP_KEY = 'AIzaSyCPe9MVNFIUhRwnQExIPZoIuA02a-o9gkU'
         - VUE_APP_GOOGLE_MAP_KEY_2 = AIzaSyCPe9MVNFIUhRwnQExIPZoIuA02a-o9gkU
         - GOOGLE_MAP_KEY = AIzaSyCPe9MVNFIUhRwnQExIPZoIuA02a-o9gkU
