@@ -245,18 +245,8 @@ export default {
   },
   mounted() {
     var foo = process.env.VUE_APP_GOOGLE_MAP_KEY;
-    var foo2 = process.env.VUE_APP_GOOGLE_MAP_KEY_2;
-    var foo3 = process.env.GOOGLE_MAP_KEY_2;
-    var foo4 = process.env.GOOGLE_MAP_KEY;
-    var foo5 = process.env.VUE_APP_GOOGLE;
-    var foo6 = process.env.GOOGLE;
     console.log("google keys");
     console.log(foo);
-    console.log(foo2);
-    console.log(foo3);
-    console.log(foo4);
-    console.log(foo5);
-    console.log(foo6);
     let token = JSON.parse(localStorage.getItem("token"));
 
     if (token) {
