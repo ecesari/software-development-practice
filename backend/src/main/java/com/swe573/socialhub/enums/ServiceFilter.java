@@ -4,5 +4,6 @@ public enum ServiceFilter {
     all,
     createdByUser,
     first3,
-    attending
+    attending,
+    followingUser
 }

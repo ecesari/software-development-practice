@@ -1,9 +1,6 @@
 package com.swe573.socialhub.service;
 
-import com.swe573.socialhub.domain.Service;
-import com.swe573.socialhub.domain.Tag;
-import com.swe573.socialhub.domain.User;
-import com.swe573.socialhub.domain.UserServiceApproval;
+import com.swe573.socialhub.domain.*;
 import com.swe573.socialhub.dto.ServiceDto;
 import com.swe573.socialhub.dto.TagDto;
 import com.swe573.socialhub.enums.ApprovalStatus;
@@ -78,7 +75,18 @@ public class ServiceService {
                 break;
             case attending:
                 entities = entities.stream().filter(x -> x.getApprovalSet().stream().anyMatch(y -> y.getUser() == loggedInUser && y.getApprovalStatus() == ApprovalStatus.APPROVED)).collect(Collectors.toUnmodifiableList());
+                break;
+            case followingUser:
+                var followingUsers = loggedInUser.getFollowingUsers();
+                var tempList = new ArrayList<Service>();
 
+                for(UserFollowing followingUser: followingUsers)
+                {
+                    var user = followingUser.getFollowedUser();
+                    tempList.addAll(entities.stream().filter(x -> x.getCreatedUser() == user).collect(Collectors.toUnmodifiableList()));
+
+                }
+                entities = tempList;
                 break;
             default:
                 // code block

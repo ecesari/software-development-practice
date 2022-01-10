@@ -97,7 +97,7 @@
               </div>
             </a>
             <a
-              href="#/attendingServices"
+              href="#/followingUserServices"
               class="media d-flex align-items-center"
             >
               <div
