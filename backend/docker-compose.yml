@@ -2,7 +2,7 @@ version: '2'
 
 services:
   app:
-    image: 'docker-spring-boot-mysql:latest'
+    image: 'spring-boot-api:latest'
     build:
       context: .
     container_name: app
