@@ -29,3 +29,7 @@ After successfully getting the code, docker-compose can be run to deploy the sys
 * Enter the command `docker-compose up –build`
 
 After following all the steps, the system should successfully run on your computer. Frontend application that is visible to users will be at port 8080 and the backend api will be at port 8081 
+
+## Documentation
+Detailed documentation can be found at the [wiki](https://github.com/ecesari/software-development-practice/wiki)
+ page
