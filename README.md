@@ -21,6 +21,7 @@ To run the system, either the repo must first be cloned to the local machine or 
 * Go to https://github.com/ecesari/software-development-practice/releases/tag/v.09
 * Go to the assets tab
 * Click on one of the release files provided
+* Extract the downloaded file to your computer
 
 ### Docker Compose 
 After successfully getting the code, docker-compose can be run to deploy the system on docker. The steps to deploy on docker are as follows:
