@@ -18,7 +18,7 @@ To run the system, either the repo must first be cloned to the local machine or 
 * Press enter
 
 ### Release download
-* Go to https://github.com/ecesari/software-development-practice/releases/tag/publish 
+* Go to https://github.com/ecesari/software-development-practice/releases/tag/v.09
 * Go to the assets tab
 * Click on one of the release files provided
 
