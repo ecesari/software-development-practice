@@ -27,7 +27,7 @@ To run the system, either the repo must first be cloned to the local machine or 
 After successfully getting the code, docker-compose can be run to deploy the system on docker. The steps to deploy on docker are as follows:
 * Go to the backend folder on your terminal
 *  `cd software-development-practice/backend` if you've cloned the repo
-*  `cd backend` if you've cloned the repo
+*  `cd backend` if you've downloaded the release
 * Enter the command `docker-compose up –-build`
 
 After following all the steps, the system should successfully run on your computer. Frontend application that is visible to users will be at port 8080 and the backend api will be at port 8081 
