@@ -128,7 +128,30 @@
                 </div>
               </div>
             </div>
+            <div class="mt-2 py-5 border-top text-center">
+              <div class="row justify-content-center">
+                <div class="col-lg-9">
+                  <p>
+                    Want to get more information about the tags? Click on the
+                    tag that you would like to get more information about.
+                  </p>
 
+                  <div>
+                    <base-button
+                      block
+                      type="primary"
+                      class="mb-3"
+                       v-for="(tag, index) in serviceData.serviceTags"
+                      :key="index"
+                      @click="GetTagInfo(tag.name)"
+                    >
+                      {{tag.name}}
+                    </base-button>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
             <div
               v-if="
                 userData.ownsService &&
@@ -174,6 +197,8 @@
 import BaseButton from "../../assets/components/BaseButton.vue";
 import apiRegister from "../api/register";
 import modal from "../utils/modal";
+import swal from 'sweetalert2'
+import register from '../api/register';
 
 export default {
   components: { BaseButton },
@@ -293,6 +318,14 @@ export default {
       apiRegister.SendServiceOverApprovalForAttendee(serviceId).then((r) => {
         location.reload();
       });
+    },
+    GetTagInfo(tag) {
+      debugger;
+      register.GetTagInfo(tag).then((r) => {
+           swal.fire({
+            text: r
+          })
+      });;
     },
   },
 };
