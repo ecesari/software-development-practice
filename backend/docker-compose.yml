@@ -34,6 +34,5 @@ services:
       - app
     environment:
         - VUE_APP_API=http://localhost:8081/
-        - VUE_APP_GOOGLE_MAP_KEY = 'AIzaSyCPe9MVNFIUhRwnQExIPZoIuA02a-o9gkU'
     ports:
       - "8080:8080"
